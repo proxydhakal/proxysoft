@@ -51,3 +51,4 @@ mcps/
 public/
 temp/
 passenger_wsgi.py
+stderr.log 
