@@ -1,0 +1,14 @@
+{{ site_name }} — New contact inquiry
+
+Someone submitted the contact form. Please check and reply.
+
+Name:    {{ name }}
+Email:   {{ email }}
+Subject: {{ subject }}
+
+Message:
+{{ message }}
+
+View submissions: {{ submissions_url }}
+
+(Reply-To is set to the visitor's email so you can reply directly from your mail app.)

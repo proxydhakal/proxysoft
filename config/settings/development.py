@@ -19,8 +19,17 @@ DATABASES = {
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# Email (console for dev)
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# Email: console by default; set EMAIL_BACKEND + SMTP in .env to test real delivery locally
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend",
+)
+if EMAIL_BACKEND == "django.core.mail.backends.smtp.EmailBackend":
+    EMAIL_HOST = os.environ.get("EMAIL_HOST", "localhost")
+    EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
+    EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "true").lower() in ("1", "true", "yes")
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 
 # Disable WhiteNoise compression in dev for easier debugging (optional)
 # STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"

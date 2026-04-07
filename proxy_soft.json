@@ -1,0 +1,364 @@
+[
+{
+  "model": "sites.site",
+  "fields": {
+    "domain": "example.com",
+    "name": "Proxy Soft"
+  }
+},
+{
+  "model": "core.siteconfiguration",
+  "pk": 1,
+  "fields": {
+    "site_name": "Proxy Soft Pvt. Ltd.",
+    "tagline": "",
+    "logo": "",
+    "logo_url": "",
+    "meta_title": "Proxy Soft Pvt. Ltd. | Leading Tech Solutions",
+    "meta_description": "",
+    "meta_keywords": "",
+    "og_image": "",
+    "og_image_url": "",
+    "address": "Likhu -1, Nuwakot Dhikure, Nepal",
+    "email": "proxysoft2026@gmail.com",
+    "phone": "9840177381, 9705177381",
+    "facebook_url": "",
+    "linkedin_url": "",
+    "twitter_url": "",
+    "instagram_url": "",
+    "hero_badge_text": "Innovative Tech Solutions",
+    "hero_title": "Securing Your Digital Future",
+    "hero_title_highlight": "Digital",
+    "hero_description": "Proxy Soft Pvt. Ltd. provides scalable, result-oriented solutions in Web, Mobile, and Software Development for international growth.",
+    "hero_image_url": "",
+    "hero_image": "site/Gemini_Generated_Image_pmscripmscripmsc.png",
+    "hero_cta_primary_text": "Explore Services",
+    "hero_cta_secondary_text": "Contact Us",
+    "hero_stat_value": "100%",
+    "hero_stat_label": "Result Oriented",
+    "about_section_label": "Our Foundation",
+    "about_section_heading": "The Proxy Soft Vision",
+    "about_vision_quote": "To establish a technology-driven company providing innovative, scalable, and result-oriented digital solutions.",
+    "about_owner_name": "Shekhar Dhakal",
+    "about_body": "our company aims to operate as a bridge for foreign projects into Nepal, contributing to local economic growth and employment.",
+    "about_bullets": "International Clients, Tech R&D, Remote Operations, SaaS Platforms",
+    "about_core_values_heading": "Our Core Values",
+    "services_section_heading": "Service Stack",
+    "services_section_subheading": "Expert solutions for every digital need.",
+    "tech_section_label": "Technologies We Use",
+    "tech_section_heading": "The Tech Stack",
+    "testimonials_heading": "",
+    "clients_section_label": "Trusted Partnerships",
+    "clients_section_heading": "Our Valued Clients",
+    "clients_section_subheading": "We are proud to partner with businesses worldwide, delivering solutions that drive growth and innovation.",
+    "contact_heading": "Let's Connect",
+    "contact_intro": "Generate foreign currency revenue in Nepal with our outsourcing services.",
+    "contact_form_subject_choices": "Development, Digital Marketing, Outsourcing",
+    "footer_tagline": "Contributing to economic growth and employment opportunities within Nepal.",
+    "establishment_year": "2026",
+    "compliance_number": "",
+    "company_registration_number": "387235/82/83",
+    "pan_number": "623565535",
+    "footer_copyright": "Proxy Soft Pvt. Ltd. All Rights Reserved. | Designed for Global Growth.",
+    "nav_get_started_text": "Get Started"
+  }
+},
+{
+  "model": "core.corevalue",
+  "pk": 4,
+  "fields": {
+    "site_config": 1,
+    "order": 0,
+    "title": "",
+    "description": "Comprehensive Social Media & Content Marketing strategy."
+  }
+},
+{
+  "model": "core.corevalue",
+  "pk": 5,
+  "fields": {
+    "site_config": 1,
+    "order": 1,
+    "title": "",
+    "description": "Responsive E-commerce and dynamic platform development."
+  }
+},
+{
+  "model": "core.corevalue",
+  "pk": 6,
+  "fields": {
+    "site_config": 1,
+    "order": 2,
+    "title": "",
+    "description": "Collaboration with domestic and international institutions."
+  }
+},
+{
+  "model": "core.service",
+  "pk": 6,
+  "fields": {
+    "site_config": 1,
+    "order": 0,
+    "title": "Development",
+    "description": "Web applications, responsive websites, and mobile apps for Android, iOS, and cross-platform environments.",
+    "icon_class": "fa-solid fa-laptop-code text-2xl",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.service",
+  "pk": 7,
+  "fields": {
+    "site_config": 1,
+    "order": 1,
+    "title": "Digital Strategy",
+    "description": "Comprehensive Social Media Marketing, SEO (Technical/On-page), and detailed keyword analytics.",
+    "icon_class": "fa-solid fa-chart-pie text-2xl",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.service",
+  "pk": 8,
+  "fields": {
+    "site_config": 1,
+    "order": 2,
+    "title": "Creative UI/UX",
+    "description": "Expert logo design, branding materials, and user-centric multimedia creatives.",
+    "icon_class": "fa-solid fa-palette text-2xl",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.service",
+  "pk": 9,
+  "fields": {
+    "site_config": 1,
+    "order": 3,
+    "title": "Enterprise & SaaS",
+    "description": "Enterprise systems, cloud-based dashboards, and custom SaaS platform maintenance.",
+    "icon_class": "fa-solid fa-cloud-arrow-up text-2xl",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.service",
+  "pk": 10,
+  "fields": {
+    "site_config": 1,
+    "order": 4,
+    "title": "IT Consultancy",
+    "description": "Technical support, system integration, and technology advisory services.",
+    "icon_class": "fa-solid fa-gears text-2xl",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.techstackitem",
+  "pk": 11,
+  "fields": {
+    "site_config": 1,
+    "order": 0,
+    "name": "Python",
+    "icon_class": "fa-brands fa-python text-3xl text-proxyBlue group-hover:scale-110 transition-transform",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.techstackitem",
+  "pk": 12,
+  "fields": {
+    "site_config": 1,
+    "order": 1,
+    "name": "Django",
+    "icon_class": "fa-solid fa-bolt text-2xl text-proxyBlue group-hover:scale-110 transition-transform",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.techstackitem",
+  "pk": 13,
+  "fields": {
+    "site_config": 1,
+    "order": 2,
+    "name": "FastAPI",
+    "icon_class": "fa-solid fa-rocket text-2xl text-proxyCyan group-hover:scale-110 transition-transform",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.techstackitem",
+  "pk": 14,
+  "fields": {
+    "site_config": 1,
+    "order": 3,
+    "name": "Postgres",
+    "icon_class": "fa-solid fa-database text-2xl text-proxyBlue group-hover:scale-110 transition-transform",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.techstackitem",
+  "pk": 15,
+  "fields": {
+    "site_config": 1,
+    "order": 4,
+    "name": "MySQL",
+    "icon_class": "fa-solid fa-database text-2xl text-proxyBlue group-hover:scale-110 transition-transform",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.techstackitem",
+  "pk": 16,
+  "fields": {
+    "site_config": 1,
+    "order": 5,
+    "name": "Bootstrap",
+    "icon_class": "fa-brands fa-bootstrap text-2xl text-proxyBlue group-hover:scale-110 transition-transform",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.techstackitem",
+  "pk": 17,
+  "fields": {
+    "site_config": 1,
+    "order": 6,
+    "name": "Tailwind",
+    "icon_class": "fa-solid fa-wind text-2xl text-proxyCyan group-hover:scale-110 transition-transform",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.techstackitem",
+  "pk": 18,
+  "fields": {
+    "site_config": 1,
+    "order": 7,
+    "name": "DevOps",
+    "icon_class": "fa-solid fa-code-branch text-2xl text-proxyBlue group-hover:scale-110 transition-transform",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.techstackitem",
+  "pk": 19,
+  "fields": {
+    "site_config": 1,
+    "order": 8,
+    "name": "Docker",
+    "icon_class": "fa-brands fa-docker text-2xl text-proxyBlue group-hover:scale-110 transition-transform",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.techstackitem",
+  "pk": 20,
+  "fields": {
+    "site_config": 1,
+    "order": 9,
+    "name": "Cloud Hosting",
+    "icon_class": "fa-solid fa-cloud text-2xl text-proxyCyan group-hover:scale-110 transition-transform",
+    "icon_style": "blue"
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 4,
+  "fields": {
+    "site_config": 1,
+    "order": 0,
+    "quote": "Delivering results that matter for global clients."
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 5,
+  "fields": {
+    "site_config": 1,
+    "order": 1,
+    "quote": "Pioneering technical SEO and responsive design in Nepal."
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 6,
+  "fields": {
+    "site_config": 1,
+    "order": 2,
+    "quote": "Leading the way in SaaS and enterprise innovation."
+  }
+},
+{
+  "model": "core.client",
+  "pk": 5,
+  "fields": {
+    "site_config": 1,
+    "order": 0,
+    "name": "Client",
+    "logo": "",
+    "url": ""
+  }
+},
+{
+  "model": "core.client",
+  "pk": 6,
+  "fields": {
+    "site_config": 1,
+    "order": 1,
+    "name": "Client",
+    "logo": "",
+    "url": ""
+  }
+},
+{
+  "model": "core.client",
+  "pk": 7,
+  "fields": {
+    "site_config": 1,
+    "order": 2,
+    "name": "Client",
+    "logo": "",
+    "url": ""
+  }
+},
+{
+  "model": "core.client",
+  "pk": 8,
+  "fields": {
+    "site_config": 1,
+    "order": 3,
+    "name": "Client",
+    "logo": "",
+    "url": ""
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$720000$j0NhoRluNfAUaZvMZAoURO$BPsNGOiaREFy0o6ieyc0QI6aI52bdHuI6FSoZ9fm8qA=",
+    "last_login": "2026-04-07T06:25:22.545Z",
+    "is_superuser": true,
+    "username": "proxydhakal",
+    "first_name": "",
+    "last_name": "",
+    "email": "proxydhakal@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-02-27T06:42:26.628Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "proxydhakal"
+    ],
+    "full_name": "Shekhar Dhakal"
+  }
+}
+]

@@ -136,7 +136,7 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
 
 @admin.register(ContactSubmission)
 class ContactSubmissionAdmin(admin.ModelAdmin):
-    list_display = ["name", "subject", "created_at"]
+    list_display = ["name", "email", "subject", "created_at"]
     list_filter = ["created_at"]
-    search_fields = ["name", "subject", "message"]
-    readonly_fields = ["name", "subject", "message", "created_at"]
+    search_fields = ["name", "email", "subject", "message"]
+    readonly_fields = ["name", "email", "subject", "message", "created_at"]

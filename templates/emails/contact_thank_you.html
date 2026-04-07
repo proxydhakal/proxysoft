@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site_name }}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f1f5f9;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f1f5f9;padding:24px 12px;">
+        <tr>
+            <td align="center">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(10,29,55,0.08);">
+                    <tr>
+                        <td style="background:linear-gradient(135deg,{{ primary_dark }} 0%,{{ primary }} 100%);padding:28px 32px;text-align:center;">
+                            <p style="margin:0 0 8px 0;color:{{ accent }};font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;">{{ site_name }}</p>
+                            <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;line-height:1.35;">Thank you for reaching out</h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:32px 32px 8px 32px;color:#334155;font-size:16px;line-height:1.65;">
+                            <p style="margin:0 0 16px 0;">Hi {{ recipient_name }},</p>
+                            <p style="margin:0 0 16px 0;">Thank you for writing to us. We have received your message and our team will get back to you as soon as possible.</p>
+                            <p style="margin:0;">We appreciate your interest in <strong style="color:{{ primary }};">{{ site_name }}</strong>.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px 32px 32px 32px;color:#64748b;font-size:14px;line-height:1.5;">
+                            <p style="margin:0;">Best regards,<br><strong style="color:{{ primary_dark }};">{{ site_name }} Team</strong></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:{{ primary_dark }};padding:28px 24px;text-align:center;border-top:3px solid {{ accent }};">
+                            <img src="{{ logo_url }}" alt="{{ site_name }}" width="160" style="max-width:200px;height:auto;display:block;margin:0 auto 16px auto;border:0;outline:none;">
+                            {% if tagline %}
+                            <p style="margin:0 0 12px 0;color:#94a3b8;font-size:13px;line-height:1.5;max-width:420px;margin-left:auto;margin-right:auto;">{{ tagline }}</p>
+                            {% endif %}
+                            {% if site_email %}
+                            <p style="margin:0;color:{{ accent }};font-size:13px;">
+                                <a href="mailto:{{ site_email }}" style="color:{{ accent }};text-decoration:none;">{{ site_email }}</a>
+                            </p>
+                            {% endif %}
+                            <p style="margin:16px 0 0 0;color:#64748b;font-size:11px;">&copy; {{ year }} {{ site_name }}. All rights reserved.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

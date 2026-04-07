@@ -50,7 +50,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django.middleware.security.SecurityMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -107,6 +106,16 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_HTTPONLY = True
+
+# Email (defaults; development/production override backend & SMTP)
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="webmaster@localhost")
+SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+EMAIL_SUBJECT_PREFIX = env("EMAIL_SUBJECT_PREFIX", default="[Proxy Soft] ")
+# Comma-separated in .env; default notifies this inbox when the contact form is used
+CONTACT_INQUIRY_NOTIFICATION_EMAILS = env.list(
+    "CONTACT_INQUIRY_NOTIFICATION_EMAILS",
+    default=["proxydhakal@gmail.com"],
+)
 
 # CKEditor (rich text for pages & blog)
 CKEDITOR_UPLOAD_PATH = "uploads/"

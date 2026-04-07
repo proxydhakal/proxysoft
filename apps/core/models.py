@@ -266,6 +266,7 @@ class Client(models.Model):
 class ContactSubmission(models.Model):
     """Inquiry from the contact form."""
     name = models.CharField(max_length=200)
+    email = models.EmailField(max_length=254, blank=True, help_text="Visitor email (for auto-reply)")
     subject = models.CharField(max_length=200)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
