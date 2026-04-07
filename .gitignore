@@ -48,3 +48,6 @@ build/
 
 # Cursor / tooling (optional local paths)
 mcps/
+public/
+temp/
+passenger_wsgi.py
