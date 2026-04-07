@@ -1,0 +1,417 @@
+{% load core_filters static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if site_config %}{% if site_config.meta_title %}{{ site_config.meta_title }}{% else %}{{ site_config.site_name }} | Leading Tech Solutions{% endif %}{% else %}Proxy Soft | Leading Tech Solutions{% endif %}</title>
+    {% if site_config %}{% if site_config.meta_description %}<meta name="description" content="{{ site_config.meta_description }}">{% endif %}
+    {% if site_config.meta_keywords %}<meta name="keywords" content="{{ site_config.meta_keywords }}">{% endif %}
+    {% if site_config.og_image %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site_config.og_image.url }}">{% elif site_config.og_image_url %}<meta property="og:image" content="{{ site_config.og_image_url }}">{% endif %}{% endif %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        proxyDark: '#0a1d37',
+                        proxyBlue: '#1e40af',
+                        proxyCyan: '#38bdf8',
+                        proxySilver: '#94a3b8',
+                    },
+                    fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .glass-nav { background: rgba(10, 29, 55, 0.8); backdrop-filter: blur(12px); }
+        .circuit-bg {
+            background-image: radial-gradient(#38bdf8 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.1;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #0a1d37 0%, #1e40af 100%);
+        }
+        .shield-clip { clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
+        /* Maintain spacing: nav and section padding */
+        .nav-padding { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+        .nav-padding-scrolled { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .section-top-space { padding-top: 7rem; }
+        .about-heading-spacing { margin-bottom: 4rem; }
+        .about-label-to-title { margin-bottom: 0.5rem; }
+        .about-title-spacing { margin-top: 0.75rem; }
+        .hero-cta-gap { gap: 1.25rem; }
+    </style>
+</head>
+<body class="font-poppins bg-slate-50 text-proxyDark overflow-x-hidden" x-data="{ mobileMenu: false, scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 50)">
+    {% if messages %}
+    <div class="fixed top-20 left-1/2 -translate-x-1/2 z-[60] max-w-md mx-auto px-4">
+        {% for message in messages %}
+        <div class="py-3 px-4 rounded-xl shadow-lg {% if message.tags == 'error' %}bg-red-600 text-white{% else %}bg-proxyCyan text-proxyDark{% endif %} mb-2" role="alert">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <nav :class="scrolled ? 'glass-nav nav-padding-scrolled border-b border-white/10' : 'bg-transparent nav-padding'" class="fixed w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center min-h-[4rem]">
+            <a href="{% url 'core:home' %}#home" class="flex items-center gap-3">
+                {% if site_config.logo %}
+                <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[220px] object-contain object-left">
+                {% elif site_config.logo_url %}
+                <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[220px] object-contain object-left">
+                {% else %}
+                <img src="{% static 'img/logo.png' %}" alt="{{ site_config.site_name|default:'Proxy Soft' }}" class="h-12 w-auto max-w-[220px] object-contain object-left">
+                {% endif %}
+            </a>
+
+            <div class="hidden md:flex items-center gap-6 lg:gap-8 text-white/90 font-medium flex-wrap justify-end">
+                <a href="{% url 'core:home' %}#home" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-house text-proxyCyan/80"></i> Home</a>
+                <a href="{% url 'core:home' %}#about" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-users text-proxyCyan/80"></i> About</a>
+                <a href="{% url 'core:home' %}#services" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-briefcase text-proxyCyan/80"></i> Services</a>
+                <a href="{% url 'core:home' %}#outsourcing" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-globe text-proxyCyan/80"></i> Outsourcing</a>
+                <a href="{% url 'blog:list' %}" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-newspaper text-proxyCyan/80"></i> Blog</a>
+                {% for p in nav_pages %}
+                <a href="{{ p.get_absolute_url }}" class="hover:text-proxyCyan transition">{{ p.title }}</a>
+                {% endfor %}
+                <a href="{% url 'core:home' %}#contact" class="bg-proxyCyan hover:bg-white hover:text-proxyBlue text-proxyDark px-6 py-2 rounded-full transition-all shadow-lg font-bold flex items-center gap-2"><i class="fa-solid fa-rocket"></i> {{ site_config.nav_get_started_text|default:"Get Started" }}</a>
+            </div>
+
+            <button @click="mobileMenu = !mobileMenu" class="md:hidden text-white" aria-label="Menu">
+                <svg x-show="!mobileMenu" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <svg x-show="mobileMenu" x-cloak class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <div x-show="mobileMenu" x-cloak x-transition.opacity class="fixed inset-0 bg-proxyDark z-40 md:hidden flex flex-col items-center justify-center gap-8 text-2xl text-white font-bold">
+            <button @click="mobileMenu = false" type="button" class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full border-2 border-white/30 hover:bg-white/10 hover:border-proxyCyan text-white transition-colors" aria-label="Close menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <a @click="mobileMenu = false" href="{% url 'core:home' %}#home">Home</a>
+            <a @click="mobileMenu = false" href="{% url 'core:home' %}#about">About</a>
+            <a @click="mobileMenu = false" href="{% url 'core:home' %}#services">Services</a>
+            <a @click="mobileMenu = false" href="{% url 'blog:list' %}">Blog</a>
+            {% for p in nav_pages %}
+            <a @click="mobileMenu = false" href="{{ p.get_absolute_url }}">{{ p.title }}</a>
+            {% endfor %}
+            <a @click="mobileMenu = false" href="{% url 'core:home' %}#contact" class="text-proxyCyan">Contact</a>
+        </div>
+    </nav>
+
+    <section id="home" class="relative min-h-screen flex items-center pt-20 hero-gradient text-white overflow-hidden">
+        <div class="absolute inset-0 circuit-bg"></div>
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
+            <div class="animate__animated animate__fadeInLeft">
+                <div class="inline-block px-4 py-1 rounded-full bg-proxyCyan/20 text-proxyCyan text-sm font-bold mb-6 border border-proxyCyan/30 flex items-center gap-2 w-fit">
+                    <i class="fa-solid fa-lightbulb"></i> {{ site_config.hero_badge_text|default:"Innovative Tech Solutions" }}
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-6">
+                    {% if site_config and site_config.hero_title %}{{ site_config.hero_title|highlight:site_config.hero_title_highlight }}{% else %}Securing Your <span class="text-proxyCyan">Digital</span> Future{% endif %}
+                </h1>
+                <p class="text-lg text-slate-300 mb-8 max-w-lg">
+                    {{ site_config.hero_description|default:"Proxy Soft Pvt. Ltd. provides scalable, result-oriented solutions in Web, Mobile, and Software Development for international growth." }}
+                </p>
+                <div class="flex flex-wrap hero-cta-gap pt-1">
+                    <a href="#services" class="bg-proxyCyan text-proxyDark px-8 py-4 rounded-xl font-bold hover:scale-105 transition shadow-xl shadow-proxyCyan/20 flex items-center gap-2"><i class="fa-solid fa-arrow-right"></i> {{ site_config.hero_cta_primary_text|default:"Explore Services" }}</a>
+                    <a href="#contact" class="border border-white/30 hover:bg-white/10 px-8 py-4 rounded-xl font-bold transition flex items-center gap-2"><i class="fa-solid fa-envelope"></i> {{ site_config.hero_cta_secondary_text|default:"Contact Us" }}</a>
+                </div>
+            </div>
+            <div class="relative animate__animated animate__zoomIn">
+                <div class="relative z-0 rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                    {% if site_config.hero_image %}<img src="{{ site_config.hero_image.url }}" alt="Hero" class="w-full h-full object-cover opacity-80" loading="lazy">
+                    {% elif site_config.hero_image_url %}<img src="{{ site_config.hero_image_url }}" alt="Hero" class="w-full h-full object-cover opacity-80" loading="lazy">
+                    {% else %}<img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80" alt="Cyber Security" class="w-full h-full object-cover opacity-80" loading="lazy">{% endif %}
+                </div>
+                <div class="absolute -bottom-10 -left-10 z-20 bg-white p-6 rounded-2xl shadow-2xl animate-bounce" style="animation-duration: 4s">
+                    <p class="text-proxyDark font-bold text-3xl flex items-center gap-2"><i class="fa-solid fa-chart-line text-proxyCyan"></i> {{ site_config.hero_stat_value|default:"100%" }}</p>
+                    <p class="text-proxySilver text-xs uppercase tracking-widest font-bold">{{ site_config.hero_stat_label|default:"Result Oriented" }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="bg-white relative section-top-space pb-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center about-heading-spacing">
+                <h2 class="text-proxySilver font-bold tracking-widest uppercase text-sm about-label-to-title flex items-center justify-center gap-2"><i class="fa-solid fa-building-columns"></i> {{ site_config.about_section_label|default:"Our Foundation" }}</h2>
+                <h3 class="text-4xl font-bold about-title-spacing">{{ site_config.about_section_heading|default:"The Proxy Soft Vision" }}</h3>
+            </div>
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="space-y-6 text-lg text-slate-600">
+                    <p class="border-l-4 border-proxyBlue pl-6 italic font-medium text-proxyDark">"{{ site_config.about_vision_quote|default:"To establish a technology-driven company providing innovative, scalable, and result-oriented digital solutions." }}"</p>
+                    <p>Owned by <strong>{{ site_config.about_owner_name|default:"Shekhar Dhakal" }}</strong>, {{ site_config.about_body|default:"our company aims to operate as a bridge for foreign projects into Nepal, contributing to local economic growth and employment." }}</p>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm font-bold text-proxyBlue">
+                        {% for bullet in site_config.about_bullets_list %}
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-proxyCyan text-lg"></i> {{ bullet }}</li>
+                        {% empty %}
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-proxyCyan text-lg"></i> International Clients</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-proxyCyan text-lg"></i> Tech R&D</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-proxyCyan text-lg"></i> Remote Operations</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-proxyCyan text-lg"></i> SaaS Platforms</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="bg-slate-100 p-8 rounded-3xl shadow-inner border border-slate-200">
+                    <h4 class="font-bold text-xl mb-4 text-proxyBlue">{{ site_config.about_core_values_heading|default:"Our Core Values" }}</h4>
+                    <div class="space-y-4">
+                        {% for value in site_config.core_values.all %}
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 bg-proxyBlue shield-clip flex-shrink-0 flex items-center justify-center text-white">{{ forloop.counter|stringformat:"02d" }}</div>
+                            <p class="text-sm">{{ value.description }}</p>
+                        </div>
+                        {% empty %}
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 bg-proxyBlue shield-clip flex-shrink-0 flex items-center justify-center text-white">01</div>
+                            <p class="text-sm">Comprehensive Social Media & Content Marketing strategy.</p>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 bg-proxyBlue shield-clip flex-shrink-0 flex items-center justify-center text-white">02</div>
+                            <p class="text-sm">Responsive E-commerce and dynamic platform development.</p>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 bg-proxyBlue shield-clip flex-shrink-0 flex items-center justify-center text-white">03</div>
+                            <p class="text-sm">Collaboration with domestic and international institutions.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-4xl font-bold mb-2 flex items-center gap-3"><i class="fa-solid fa-layer-group text-proxyBlue"></i> {{ site_config.services_section_heading|default:"Service Stack" }}</h2>
+                    <p class="text-proxySilver font-medium">{{ site_config.services_section_subheading|default:"Expert solutions for every digital need." }}</p>
+                </div>
+                <div class="hidden md:block h-[2px] bg-proxySilver/20 flex-grow mx-8 mb-4"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for service in site_config.services.all %}
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-blue-50 text-proxyBlue rounded-xl flex items-center justify-center mb-6 group-hover:bg-proxyBlue group-hover:text-white transition">
+                        <i class="{{ service.icon_class }} text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">{{ service.title }}</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">{{ service.description }}</p>
+                </div>
+                {% empty %}
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-blue-50 text-proxyBlue rounded-xl flex items-center justify-center mb-6 group-hover:bg-proxyBlue group-hover:text-white transition"><i class="fa-solid fa-laptop-code text-2xl"></i></div>
+                    <h4 class="text-xl font-bold mb-3">Development</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Web applications, responsive websites, and mobile apps for Android, iOS, and cross-platform environments.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-cyan-50 text-proxyCyan rounded-xl flex items-center justify-center mb-6 group-hover:bg-proxyCyan group-hover:text-white transition"><i class="fa-solid fa-chart-pie text-2xl"></i></div>
+                    <h4 class="text-xl font-bold mb-3">Digital Strategy</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Comprehensive Social Media Marketing, SEO (Technical/On-page), and detailed keyword analytics.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-slate-50 text-proxyDark rounded-xl flex items-center justify-center mb-6 group-hover:bg-proxyDark group-hover:text-white transition"><i class="fa-solid fa-palette text-2xl"></i></div>
+                    <h4 class="text-xl font-bold mb-3">Creative UI/UX</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Expert logo design, branding materials, and user-centric multimedia creatives.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section id="tech-stack" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-14">
+                <h2 class="text-proxySilver font-bold tracking-widest uppercase text-sm mb-2 flex items-center justify-center gap-2"><i class="fa-solid fa-microchip"></i> {{ site_config.tech_section_label|default:"Technologies We Use" }}</h2>
+                <h3 class="text-4xl font-bold text-proxyDark">{{ site_config.tech_section_heading|default:"The Tech Stack" }}</h3>
+            </div>
+            <div class="flex flex-wrap justify-center gap-4 md:gap-6">
+                {% for item in site_config.tech_stack_items.all %}
+                <div class="flex items-center gap-3 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-proxyCyan hover:shadow-lg hover:shadow-proxyCyan/10 transition-all duration-300 group">
+                    <i class="{{ item.icon_class }} text-3xl text-proxyBlue group-hover:scale-110 transition-transform"></i>
+                    <span class="font-bold text-proxyDark">{{ item.name }}</span>
+                </div>
+                {% empty %}
+                <div class="flex items-center gap-3 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-proxyCyan hover:shadow-lg transition-all duration-300 group">
+                    <i class="fa-brands fa-python text-3xl text-proxyBlue group-hover:scale-110 transition-transform"></i>
+                    <span class="font-bold text-proxyDark">Python</span>
+                </div>
+                <div class="flex items-center gap-3 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-proxyCyan hover:shadow-lg transition-all duration-300 group">
+                    <i class="fa-solid fa-bolt text-2xl text-proxyBlue group-hover:scale-110 transition-transform"></i>
+                    <span class="font-bold text-proxyDark">Django</span>
+                </div>
+                <div class="flex items-center gap-3 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-proxyCyan hover:shadow-lg transition-all duration-300 group">
+                    <i class="fa-solid fa-wind text-2xl text-proxyCyan group-hover:scale-110 transition-transform"></i>
+                    <span class="font-bold text-proxyDark">Tailwind</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    {# x-data must use single-quoted HTML attribute: JSON arrays use double quotes and would break x-data="..." #}
+    <section class="py-24 bg-proxyDark text-white overflow-hidden" x-data='{ "active": 0, "testimonials": {{ testimonials_json|safe }} }' x-init="setInterval(() => { if ($data.testimonials && $data.testimonials.length) { $data.active = ($data.active + 1) % $data.testimonials.length } }, 4000)">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            {% if site_config.testimonials_heading %}<h2 class="text-proxySilver font-bold tracking-widest uppercase text-sm mb-6">{{ site_config.testimonials_heading }}</h2>{% endif %}
+            <i class="fa-solid fa-quote-left text-5xl text-proxyCyan mx-auto mb-8 opacity-50 block"></i>
+            <div class="relative min-h-[8rem] mb-8" x-show="testimonials.length">
+                <template x-for="(t, index) in testimonials" :key="index">
+                    <p x-show="active === index" x-transition.opacity class="text-2xl md:text-3xl font-medium italic absolute inset-0 flex items-center justify-center px-2" x-text="t"></p>
+                </template>
+            </div>
+            <p class="text-slate-400 text-lg" x-show="!testimonials.length">Add testimonials in the admin to show quotes here.</p>
+            <div class="flex justify-center gap-3" x-show="testimonials.length > 1">
+                <template x-for="(t, index) in testimonials" :key="index">
+                    <button type="button" @click="active = index" :class="active === index ? 'bg-proxyCyan w-8' : 'bg-slate-600 w-3'" class="h-3 rounded-full transition-all duration-300"></button>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <section id="clients" class="py-24 bg-slate-50 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-14">
+                <h2 class="text-proxySilver font-bold tracking-widest uppercase text-sm mb-2 flex items-center justify-center gap-2"><i class="fa-solid fa-handshake"></i> {{ site_config.clients_section_label|default:"Trusted Partnerships" }}</h2>
+                <h3 class="text-4xl font-bold text-proxyDark">{{ site_config.clients_section_heading|default:"Our Valued Clients" }}</h3>
+                <p class="text-slate-600 mt-4 max-w-2xl mx-auto">{{ site_config.clients_section_subheading|default:"We are proud to partner with businesses worldwide, delivering solutions that drive growth and innovation." }}</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+                {% for client in site_config.clients.all %}
+                <div class="bg-white rounded-2xl border border-slate-200 p-8 flex items-center justify-center min-h-[140px] hover:border-proxyCyan hover:shadow-lg hover:shadow-proxyCyan/5 transition-all duration-300 group">
+                    <div class="text-center">
+                        {% if client.logo %}<img src="{{ client.logo.url }}" alt="{{ client.name }}" class="max-h-16 mx-auto object-contain group-hover:opacity-80">
+                        {% else %}<i class="fa-solid fa-building text-4xl text-proxySilver group-hover:text-proxyBlue transition-colors mb-2"></i>{% endif %}
+                        <span class="text-sm font-bold text-proxyDark">{{ client.name }}</span>
+                    </div>
+                </div>
+                {% empty %}
+                {% for i in "1234" %}
+                <div class="bg-white rounded-2xl border border-slate-200 p-8 flex items-center justify-center min-h-[140px] hover:border-proxyCyan hover:shadow-lg transition-all duration-300 group">
+                    <div class="text-center">
+                        <i class="fa-solid fa-building text-4xl text-proxySilver group-hover:text-proxyBlue transition-colors mb-2"></i>
+                        <span class="text-sm font-bold text-proxyDark">Client</span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16">
+            <div>
+                <h2 class="text-4xl font-bold mb-6">{{ site_config.contact_heading|default:"Let's Connect" }}</h2>
+                <p class="text-slate-600 mb-10">{{ site_config.contact_intro|default:"Generate foreign currency revenue in Nepal with our outsourcing services." }}</p>
+                <div class="space-y-8">
+                    <div class="flex items-start gap-6">
+                        <div class="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-proxyBlue flex-shrink-0"><i class="fa-solid fa-location-dot text-2xl"></i></div>
+                        <div>
+                            <h4 class="font-bold text-lg">Address</h4>
+                            <p class="text-slate-500">{{ site_config.address|default:"Likhu -1, Nuwakot Dhikure, Nepal" }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-6">
+                        <div class="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-proxyBlue flex-shrink-0"><i class="fa-solid fa-envelope text-2xl"></i></div>
+                        <div>
+                            <h4 class="font-bold text-lg">Email</h4>
+                            <p class="text-slate-500">{{ site_config.email|default:"proxysoft2026@gmail.com" }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-6">
+                        <div class="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-proxyBlue flex-shrink-0"><i class="fa-solid fa-phone text-2xl"></i></div>
+                        <div>
+                            <h4 class="font-bold text-lg">Phone</h4>
+                            <p class="text-slate-500">{{ site_config.phone|default:"9840177381" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form class="bg-slate-50 p-10 rounded-3xl border border-slate-200 shadow-sm" method="post" action="{% url 'core:home' %}#contact">
+                {% csrf_token %}
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Name</label>
+                        <input type="text" name="name" class="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-proxyBlue outline-none transition" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Subject</label>
+                        <select name="subject" class="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-proxyBlue outline-none transition">
+                            {% for choice in site_config.contact_form_subject_list %}
+                            <option value="{{ choice }}">{{ choice }}</option>
+                            {% empty %}
+                            <option>Development</option>
+                            <option>Digital Marketing</option>
+                            <option>Outsourcing</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-bold mb-2">Message</label>
+                    <textarea name="message" rows="4" class="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-proxyBlue outline-none transition" required></textarea>
+                </div>
+                <button type="submit" class="w-full bg-proxyBlue text-white font-bold py-5 rounded-xl hover:bg-proxyDark transition-all shadow-lg shadow-proxyBlue/20 flex items-center justify-center gap-2"><i class="fa-solid fa-paper-plane"></i> Send Inquiry</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="bg-proxyDark py-16 text-slate-400 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-2">
+                    <div class="text-white mb-6">
+                        {% if site_config.logo %}
+                        <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[240px] object-contain object-left">
+                        {% elif site_config.logo_url %}
+                        <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[240px] object-contain object-left">
+                        {% else %}
+                        <img src="{% static 'img/logo.png' %}" alt="{{ site_config.site_name|default:'Proxy Soft' }}" class="h-12 w-auto max-w-[240px] object-contain object-left">
+                        {% endif %}
+                    </div>
+                    <p class="max-w-xs mb-6">{{ site_config.footer_tagline|default:"Contributing to economic growth and employment opportunities within Nepal." }}</p>
+                    <div class="flex gap-4">
+                        {% if site_config.linkedin_url %}<a href="{{ site_config.linkedin_url }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-proxyBlue hover:border-proxyBlue transition text-white"><i class="fa-brands fa-linkedin-in"></i></a>{% endif %}
+                        {% if site_config.facebook_url %}<a href="{{ site_config.facebook_url }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-proxyBlue hover:border-proxyBlue transition text-white"><i class="fa-brands fa-facebook-f"></i></a>{% endif %}
+                        {% if site_config.twitter_url %}<a href="{{ site_config.twitter_url }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-proxyBlue hover:border-proxyBlue transition text-white"><i class="fa-brands fa-twitter"></i></a>{% endif %}
+                        {% if site_config.instagram_url %}<a href="{{ site_config.instagram_url }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-proxyBlue hover:border-proxyBlue transition text-white"><i class="fa-brands fa-instagram"></i></a>{% endif %}
+                    </div>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold mb-6">Quick Links</h5>
+                    <ul class="space-y-4 text-sm font-medium">
+                        <li><a href="{% url 'core:home' %}#about" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> About Us</a></li>
+                        <li><a href="{% url 'core:home' %}#services" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> Services</a></li>
+                        <li><a href="{% url 'blog:list' %}" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> Blog</a></li>
+                        <li><a href="{% url 'core:home' %}#contact" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> Contact</a></li>
+                        {% for p in footer_pages %}
+                        <li><a href="{{ p.get_absolute_url }}" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> {{ p.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold mb-6">Compliance</h5>
+                    {% if site_config.company_registration_number %}
+                    <p class="text-xs mb-2">Registration No.: {{ site_config.company_registration_number }}</p>
+                    {% endif %}
+                    {% if site_config.pan_number %}
+                    <p class="text-xs mb-2">PAN: {{ site_config.pan_number }}</p>
+                    {% endif %}
+                    {% if site_config.compliance_number %}<p class="text-xs mb-2 italic">{{ site_config.compliance_number }}</p>{% endif %}
+                    <p class="text-xs">Establishment Year: {{ site_config.establishment_year|default:"2026" }}</p>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/5 text-center text-sm">
+                &copy; {% now "Y" %} {{ site_config.site_name|default:"Proxy Soft" }} Pvt. Ltd. {{ site_config.footer_copyright|default:"All Rights Reserved. | Designed for Global Growth." }}
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

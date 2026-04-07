@@ -1,0 +1,51 @@
+{% load static %}
+<footer class="bg-proxyDark py-16 text-slate-400 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-4 gap-12 mb-12">
+            <div class="col-span-2">
+                <div class="text-white mb-6">
+                    {% if site_config.logo %}
+                    <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[240px] object-contain object-left">
+                    {% elif site_config.logo_url %}
+                    <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[240px] object-contain object-left">
+                    {% else %}
+                    <img src="{% static 'img/logo.png' %}" alt="{{ site_config.site_name|default:'Proxy Soft' }}" class="h-12 w-auto max-w-[240px] object-contain object-left">
+                    {% endif %}
+                </div>
+                <p class="max-w-xs mb-6">{{ site_config.footer_tagline|default:"Contributing to economic growth and employment opportunities within Nepal." }}</p>
+                <div class="flex gap-4">
+                    {% if site_config.linkedin_url %}<a href="{{ site_config.linkedin_url }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-proxyBlue hover:border-proxyBlue transition text-white"><i class="fa-brands fa-linkedin-in"></i></a>{% endif %}
+                    {% if site_config.facebook_url %}<a href="{{ site_config.facebook_url }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-proxyBlue hover:border-proxyBlue transition text-white"><i class="fa-brands fa-facebook-f"></i></a>{% endif %}
+                    {% if site_config.twitter_url %}<a href="{{ site_config.twitter_url }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-proxyBlue hover:border-proxyBlue transition text-white"><i class="fa-brands fa-twitter"></i></a>{% endif %}
+                    {% if site_config.instagram_url %}<a href="{{ site_config.instagram_url }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-proxyBlue hover:border-proxyBlue transition text-white"><i class="fa-brands fa-instagram"></i></a>{% endif %}
+                </div>
+            </div>
+            <div>
+                <h5 class="text-white font-bold mb-6">Quick Links</h5>
+                <ul class="space-y-4 text-sm font-medium">
+                    <li><a href="{% url 'core:home' %}#about" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> About Us</a></li>
+                    <li><a href="{% url 'core:home' %}#services" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> Services</a></li>
+                    <li><a href="{% url 'blog:list' %}" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> Blog</a></li>
+                    <li><a href="{% url 'core:home' %}#contact" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> Contact</a></li>
+                    {% for p in footer_pages %}
+                    <li><a href="{{ p.get_absolute_url }}" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> {{ p.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-white font-bold mb-6">Compliance</h5>
+                {% if site_config.company_registration_number %}
+                <p class="text-xs mb-2">Registration No.: {{ site_config.company_registration_number }}</p>
+                {% endif %}
+                {% if site_config.pan_number %}
+                <p class="text-xs mb-2">PAN: {{ site_config.pan_number }}</p>
+                {% endif %}
+                {% if site_config.compliance_number %}<p class="text-xs mb-2 italic">{{ site_config.compliance_number }}</p>{% endif %}
+                <p class="text-xs">Establishment Year: {{ site_config.establishment_year|default:"2026" }}</p>
+            </div>
+        </div>
+        <div class="pt-8 border-t border-white/5 text-center text-sm">
+            &copy; {% now "Y" %} {{ site_config.site_name|default:"Proxy Soft" }} Pvt. Ltd. {{ site_config.footer_copyright|default:"All Rights Reserved. | Designed for Global Growth." }}
+        </div>
+    </div>
+</footer>

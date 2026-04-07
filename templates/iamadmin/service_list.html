@@ -1,0 +1,31 @@
+{% extends "iamadmin/base_dashboard.html" %}
+{% block title %}Services | Proxy Soft Portal{% endblock %}
+{% block page_heading %}Services{% endblock %}
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <p class="text-slate-500 text-sm">{{ services.count }} item(s)</p>
+    <a href="{% url 'iamadmin:service_create' %}" class="bg-proxyBlue text-white font-bold py-2 px-6 rounded-xl hover:bg-proxyDark transition">Add Service</a>
+</div>
+<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    <table class="w-full text-left">
+        <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+            <tr><th class="px-6 py-4">Order</th><th class="px-6 py-4">Title</th><th class="px-6 py-4">Description</th><th class="px-6 py-4 text-right">Actions</th></tr>
+        </thead>
+        <tbody class="text-sm">
+            {% for s in services %}
+            <tr class="border-b border-slate-50">
+                <td class="px-6 py-4">{{ s.order }}</td>
+                <td class="px-6 py-4 font-medium">{{ s.title }}</td>
+                <td class="px-6 py-4 text-slate-600 max-w-md truncate">{{ s.description|truncatewords:15 }}</td>
+                <td class="px-6 py-4 text-right">
+                    <a href="{% url 'iamadmin:service_edit' s.pk %}" class="text-proxyBlue hover:underline mr-3">Edit</a>
+                    <form method="post" action="{% url 'iamadmin:service_delete' s.pk %}" class="inline" onsubmit="return confirm('Delete this service?');">{% csrf_token %}<button type="submit" class="text-red-600 hover:underline">Delete</button></form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="px-6 py-8 text-slate-400 text-center">No services. <a href="{% url 'iamadmin:service_create' %}" class="text-proxyBlue">Add one</a>.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

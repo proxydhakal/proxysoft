@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ meta_title|default:"Proxy Soft" }}{% endblock %}</title>
+    {% if meta_description %}<meta name="description" content="{{ meta_description }}">{% endif %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        proxyDark: '#0a1d37',
+                        proxyBlue: '#1e40af',
+                        proxyCyan: '#38bdf8',
+                        proxySilver: '#94a3b8',
+                    },
+                    fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-nav { background: rgba(10, 29, 55, 0.92); backdrop-filter: blur(12px); }
+        .nav-padding { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+        .prose-content h1, .prose-content h2, .prose-content h3 { font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #0a1d37; }
+        .prose-content p { margin-bottom: 1rem; line-height: 1.7; }
+        .prose-content ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+        .prose-content a { color: #1e40af; text-decoration: underline; }
+        .prose-content img { max-width: 100%; height: auto; border-radius: 0.5rem; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="font-poppins bg-slate-50 text-proxyDark">
+{% include "includes/public_nav_inner.html" %}
+<main class="max-w-4xl mx-auto px-6 py-12 pt-28 min-h-[60vh]">
+    {% block content %}{% endblock %}
+</main>
+{% include "includes/public_footer_inner.html" %}
+</body>
+</html>

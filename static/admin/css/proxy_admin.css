@@ -1,0 +1,117 @@
+/* Proxy Soft theme for Django Admin - matches main site (proxyDark, proxyBlue, proxyCyan) */
+
+:root {
+  --proxy-dark: #0a1d37;
+  --proxy-blue: #1e40af;
+  --proxy-cyan: #38bdf8;
+  --proxy-silver: #94a3b8;
+}
+
+/* Header */
+#header {
+  background: var(--proxy-dark) !important;
+  color: #fff !important;
+}
+
+#branding h1 a:link, #branding h1 a:visited {
+  color: #fff !important;
+}
+
+#branding h1 a:hover {
+  color: var(--proxy-cyan) !important;
+}
+
+/* User tools and links */
+#user-tools a:link, #user-tools a:visited {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+#user-tools a:hover {
+  color: var(--proxy-cyan) !important;
+}
+
+/* Sidebar */
+#content-main {
+  background: #f8fafc;
+}
+
+#content {
+  background: #fff;
+}
+
+/* Module captions and current app */
+.module h2, .module caption, .inline-group h2 {
+  background: var(--proxy-dark) !important;
+  color: #fff !important;
+}
+
+/* Links */
+a:link, a:visited {
+  color: var(--proxy-blue) !important;
+}
+
+a:hover {
+  color: var(--proxy-cyan) !important;
+}
+
+/* Buttons - primary (Save, etc.) */
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+  background: var(--proxy-blue) !important;
+  color: #fff !important;
+}
+
+.button:active, input[type=submit]:active, input[type=button]:active,
+.button:hover, input[type=submit]:hover, input[type=button]:hover, a.button:hover {
+  background: var(--proxy-dark) !important;
+  color: #fff !important;
+}
+
+/* Default button (secondary) */
+.default .button, .default input[type=submit], .default input[type=button] {
+  background: var(--proxy-cyan) !important;
+  color: var(--proxy-dark) !important;
+}
+
+.default .button:hover, .default input[type=submit]:hover, .default input[type=button]:hover {
+  background: #7dd3fc !important;
+  color: var(--proxy-dark) !important;
+}
+
+/* Delete button */
+.deletelink-box .deletelink, .deletelink:link, .deletelink:visited {
+  background: #dc2626 !important;
+  color: #fff !important;
+}
+
+.deletelink:hover {
+  background: #b91c1c !important;
+  color: #fff !important;
+}
+
+/* Breadcrumbs */
+#breadcrumbs a:link, #breadcrumbs a:visited {
+  color: var(--proxy-cyan) !important;
+}
+
+#breadcrumbs {
+  color: var(--proxy-silver) !important;
+}
+
+/* Selected row / active nav */
+.selector .active label {
+  color: var(--proxy-blue) !important;
+}
+
+.dashboard #content {
+  background: #f1f5f9;
+}
+
+/* Change form / add form - section headers */
+.form-row label {
+  color: var(--proxy-dark);
+}
+
+/* Login page - overridden in admin/login.html with full theme */
+body.login {
+  background: linear-gradient(135deg, var(--proxy-dark) 0%, var(--proxy-blue) 100%) !important;
+}

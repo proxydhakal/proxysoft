@@ -1,0 +1,14 @@
+{% extends "base_public.html" %}
+{% block title %}{{ meta_title|default:post.title }} | {{ site_config.site_name|default:"Proxy Soft" }}{% endblock %}
+{% block content %}
+<article class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    {% if post.featured_image %}
+    <img src="{{ post.featured_image.url }}" alt="" class="w-full max-h-96 object-cover">
+    {% endif %}
+    <div class="p-8 md:p-12">
+        <p class="text-sm text-proxySilver mb-4">{{ post.published_at|date:"F j, Y" }}{% if post.author %} · {{ post.author.get_full_name|default:post.author.username }}{% endif %}</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-proxyDark mb-8">{{ post.title }}</h1>
+        <div class="prose-content text-slate-700">{{ post.content|safe }}</div>
+    </div>
+</article>
+{% endblock %}

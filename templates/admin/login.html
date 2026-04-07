@@ -1,0 +1,95 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  body.login { background: linear-gradient(135deg, #0a1d37 0%, #1e40af 100%) !important; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+  body.login #header { display: none; }
+  body.login #branding { display: none; }
+  body.login #content { margin: 0 !important; padding: 0 !important; max-width: 28rem; width: 100%; }
+  body.login #content-main { background: #fff !important; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); padding: 2.5rem !important; }
+  body.login .login-brand { text-align: center; margin-bottom: 2rem; }
+  body.login .login-brand .logo { width: 3rem; height: 3rem; background: #1e40af; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 0.75rem; font-weight: bold; }
+  body.login .login-brand h2 { margin: 0.5rem 0 0; font-size: 1.5rem; color: #0a1d37; }
+  body.login .login-brand p { margin: 0; font-size: 0.875rem; color: #64748b; }
+  body.login #login-form .form-row { margin-bottom: 1.25rem; }
+  body.login #login-form label { display: block; font-weight: 600; color: #0a1d37; margin-bottom: 0.5rem; font-size: 0.875rem; }
+  body.login #login-form input[type="text"], body.login #login-form input[type="password"] { width: 100%; padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; font-size: 1rem; }
+  body.login #login-form input:focus { outline: none; border-color: #1e40af; box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.2); }
+  body.login #login-form .submit-row { margin-top: 1.5rem; margin-bottom: 0; padding: 0; border: none; background: transparent !important; }
+  body.login #login-form .submit-row input[type="submit"] { width: 100%; padding: 0.75rem 1.5rem; background: #1e40af !important; color: #fff !important; border: none; border-radius: 0.5rem; font-weight: 600; font-size: 1rem; cursor: pointer; }
+  body.login #login-form .submit-row input[type="submit"]:hover { background: #0a1d37 !important; }
+  body.login .errornote { background: #fef2f2 !important; color: #dc2626 !important; border: 1px solid #fecaca; padding: 0.75rem 1rem; border-radius: 0.5rem; margin-bottom: 1rem; }
+  body.login .password-reset-link { margin-top: 1rem; text-align: center; }
+  body.login .password-reset-link a { color: #38bdf8 !important; }
+  body.login .password-reset-link a:hover { color: #1e40af !important; }
+</style>
+{{ form.media }}
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+
+{% block usertools %}{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block nav-breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div class="login-brand">
+  <div class="logo">PS</div>
+  <h2>Proxy Soft</h2>
+  <p>Administration</p>
+</div>
+
+{% if form.errors and not form.non_field_errors %}
+<p class="errornote">
+  {% blocktranslate count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktranslate %}
+</p>
+{% endif %}
+
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+<p class="errornote">{{ error }}</p>
+{% endfor %}
+{% endif %}
+
+<div id="content-main">
+  {% if user.is_authenticated %}
+  <p class="errornote">
+    {% blocktranslate trimmed %}
+      You are authenticated as {{ username }}, but are not authorized to
+      access this page. Would you like to login to a different account?
+    {% endblocktranslate %}
+  </p>
+  {% endif %}
+
+  <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+    <div class="form-row">
+      {{ form.username.errors }}
+      {{ form.username.label_tag }}
+      {{ form.username }}
+    </div>
+    <div class="form-row">
+      {{ form.password.errors }}
+      {{ form.password.label_tag }}
+      {{ form.password }}
+      <input type="hidden" name="next" value="{{ next }}">
+    </div>
+    {% url 'admin_password_reset' as password_reset_url %}
+    {% if password_reset_url %}
+    <div class="password-reset-link">
+      <a href="{{ password_reset_url }}">{% translate 'Forgotten your password or username?' %}</a>
+    </div>
+    {% endif %}
+    <div class="submit-row">
+      <input type="submit" value="{% translate 'Log in' %}">
+    </div>
+  </form>
+</div>
+{% endblock %}

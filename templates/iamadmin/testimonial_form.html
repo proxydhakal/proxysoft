@@ -1,0 +1,17 @@
+{% extends "iamadmin/base_dashboard.html" %}
+{% block title %}Testimonial | Proxy Soft Portal{% endblock %}
+{% block page_heading %}{% if instance %}Edit Testimonial{% else %}New Testimonial{% endif %}{% endblock %}
+{% block content %}
+<form method="post" class="iam-form max-w-2xl space-y-4">
+    {% csrf_token %}
+    {% for field in form %}
+    <div>
+        <label class="block text-sm font-bold mb-1">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}<p class="text-red-600 text-xs">{{ field.errors.0 }}</p>{% endif %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="bg-proxyBlue text-white font-bold py-2 px-6 rounded-xl">Save</button>
+    <a href="{% url 'iamadmin:testimonial_list' %}" class="bg-slate-200 font-bold py-2 px-6 rounded-xl">Cancel</a>
+</form>
+{% endblock %}

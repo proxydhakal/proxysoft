@@ -1,0 +1,21 @@
+{% extends "iamadmin/base_dashboard.html" %}
+{% block title %}Site Config | Proxy Soft Portal{% endblock %}
+{% block page_heading %}Site Configuration{% endblock %}
+{% block content %}
+<form method="post" enctype="multipart/form-data" class="iam-form space-y-6">
+    {% csrf_token %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for field in form %}
+        <div class="space-y-1 {% if field.name == 'logo' or field.name == 'og_image' or field.name == 'hero_image' %}md:col-span-2{% endif %}">
+            <label for="{{ field.id_for_label }}" class="block text-sm font-bold text-slate-700">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<p class="text-slate-500 text-xs">{{ field.help_text }}</p>{% endif %}
+            {% if field.errors %}<p class="text-red-600 text-xs">{{ field.errors.0 }}</p>{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="flex gap-4 pt-2">
+        <button type="submit" class="bg-proxyBlue text-white font-bold py-3 px-8 rounded-xl hover:bg-proxyDark transition shadow-md hover:shadow-lg">Save configuration</button>
+    </div>
+</form>
+{% endblock %}

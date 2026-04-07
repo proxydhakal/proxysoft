@@ -1,0 +1,41 @@
+{% extends "iamadmin/base_dashboard.html" %}
+{% block title %}Blog | Proxy Soft Portal{% endblock %}
+{% block page_heading %}Blog{% endblock %}
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <p class="text-slate-500 text-sm">{{ posts.count }} post(s) — public: <code class="text-xs bg-slate-100 px-1 rounded">/blog/</code></p>
+    <a href="{% url 'iamadmin:blog_create' %}" class="bg-proxyBlue text-white font-bold py-2 px-6 rounded-xl hover:bg-proxyDark transition">Add Post</a>
+</div>
+<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
+    <table class="w-full text-left min-w-[640px]">
+        <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+            <tr>
+                <th class="px-6 py-4">Title</th>
+                <th class="px-6 py-4">Slug</th>
+                <th class="px-6 py-4">Author</th>
+                <th class="px-6 py-4">Published</th>
+                <th class="px-6 py-4">Live</th>
+                <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="text-sm">
+            {% for post in posts %}
+            <tr class="border-b border-slate-50">
+                <td class="px-6 py-4 font-medium">{{ post.title }}</td>
+                <td class="px-6 py-4 text-slate-600 font-mono text-xs">{{ post.slug }}</td>
+                <td class="px-6 py-4">{% if post.author %}{{ post.author.get_full_name|default:post.author.username }}{% else %}—{% endif %}</td>
+                <td class="px-6 py-4 text-slate-600">{% if post.published_at %}{{ post.published_at|date:"M j, Y H:i" }}{% else %}—{% endif %}</td>
+                <td class="px-6 py-4">{% if post.is_published %}<span class="text-emerald-600">Yes</span>{% else %}<span class="text-amber-600">No</span>{% endif %}</td>
+                <td class="px-6 py-4 text-right whitespace-nowrap">
+                    <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener" class="text-slate-500 hover:text-proxyBlue mr-3">View</a>
+                    <a href="{% url 'iamadmin:blog_edit' post.pk %}" class="text-proxyBlue hover:underline mr-3">Edit</a>
+                    <form method="post" action="{% url 'iamadmin:blog_delete' post.pk %}" class="inline" onsubmit="return confirm('Delete this post?');">{% csrf_token %}<button type="submit" class="text-red-600 hover:underline">Delete</button></form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="px-6 py-8 text-slate-400 text-center">No posts yet. <a href="{% url 'iamadmin:blog_create' %}" class="text-proxyBlue">Add one</a>.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "iamadmin/base_dashboard.html" %}
+{% block title %}Page Configurations | Proxy Soft Portal{% endblock %}
+{% block page_heading %}Page Configurations{% endblock %}
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <p class="text-slate-500 text-sm">{{ pages.count }} page(s) — URLs: <code class="text-xs bg-slate-100 px-1 rounded">/pages/&lt;slug&gt;/</code></p>
+    <a href="{% url 'iamadmin:page_create' %}" class="bg-proxyBlue text-white font-bold py-2 px-6 rounded-xl hover:bg-proxyDark transition">Add Page</a>
+</div>
+<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
+    <table class="w-full text-left min-w-[720px]">
+        <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+            <tr>
+                <th class="px-6 py-4">Order</th>
+                <th class="px-6 py-4">Title</th>
+                <th class="px-6 py-4">Slug</th>
+                <th class="px-6 py-4">Nav</th>
+                <th class="px-6 py-4">Footer</th>
+                <th class="px-6 py-4">Published</th>
+                <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="text-sm">
+            {% for p in pages %}
+            <tr class="border-b border-slate-50">
+                <td class="px-6 py-4">{{ p.order }}</td>
+                <td class="px-6 py-4 font-medium">{{ p.title }}</td>
+                <td class="px-6 py-4 text-slate-600 font-mono text-xs">{{ p.slug }}</td>
+                <td class="px-6 py-4">{% if p.show_in_nav %}<span class="text-emerald-600">Yes</span>{% else %}—{% endif %}</td>
+                <td class="px-6 py-4">{% if p.show_in_footer %}<span class="text-emerald-600">Yes</span>{% else %}—{% endif %}</td>
+                <td class="px-6 py-4">{% if p.is_published %}<span class="text-emerald-600">Yes</span>{% else %}<span class="text-amber-600">No</span>{% endif %}</td>
+                <td class="px-6 py-4 text-right whitespace-nowrap">
+                    <a href="{{ p.get_absolute_url }}" target="_blank" rel="noopener" class="text-slate-500 hover:text-proxyBlue mr-3">View</a>
+                    <a href="{% url 'iamadmin:page_edit' p.pk %}" class="text-proxyBlue hover:underline mr-3">Edit</a>
+                    <form method="post" action="{% url 'iamadmin:page_delete' p.pk %}" class="inline" onsubmit="return confirm('Delete this page?');">{% csrf_token %}<button type="submit" class="text-red-600 hover:underline">Delete</button></form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7" class="px-6 py-8 text-slate-400 text-center">No pages yet. <a href="{% url 'iamadmin:page_create' %}" class="text-proxyBlue">Add one</a>.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

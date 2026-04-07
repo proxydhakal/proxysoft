@@ -1,0 +1,25 @@
+{% load static %}
+<nav class="fixed w-full z-50 glass-nav nav-padding border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center min-h-[4rem]">
+        <a href="{% url 'core:home' %}" class="flex items-center gap-3">
+            {% if site_config.logo %}
+            <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[220px] object-contain object-left">
+            {% elif site_config.logo_url %}
+            <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[220px] object-contain object-left">
+            {% else %}
+            <img src="{% static 'img/logo.png' %}" alt="{{ site_config.site_name|default:'Proxy Soft' }}" class="h-12 w-auto max-w-[220px] object-contain object-left">
+            {% endif %}
+        </a>
+        <div class="hidden md:flex items-center gap-6 lg:gap-8 text-white/90 font-medium flex-wrap justify-end">
+            <a href="{% url 'core:home' %}" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-house text-proxyCyan/80"></i> Home</a>
+            <a href="{% url 'core:home' %}#about" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-users text-proxyCyan/80"></i> About</a>
+            <a href="{% url 'core:home' %}#services" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-briefcase text-proxyCyan/80"></i> Services</a>
+            <a href="{% url 'core:home' %}#outsourcing" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-globe text-proxyCyan/80"></i> Outsourcing</a>
+            <a href="{% url 'blog:list' %}" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-newspaper text-proxyCyan/80"></i> Blog</a>
+            {% for p in nav_pages %}
+            <a href="{{ p.get_absolute_url }}" class="hover:text-proxyCyan transition">{{ p.title }}</a>
+            {% endfor %}
+            <a href="{% url 'core:home' %}#contact" class="bg-proxyCyan hover:bg-white hover:text-proxyBlue text-proxyDark px-6 py-2 rounded-full transition-all shadow-lg font-bold flex items-center gap-2"><i class="fa-solid fa-rocket"></i> {{ site_config.nav_get_started_text|default:"Get Started" }}</a>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,22 @@
+{% extends "base_public.html" %}
+{% block title %}Blog | {{ site_config.site_name|default:"Proxy Soft" }}{% endblock %}
+{% block content %}
+<h1 class="text-3xl md:text-4xl font-bold text-proxyDark mb-10">Blog</h1>
+<div class="space-y-8">
+    {% for post in posts %}
+    <article class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition">
+        {% if post.featured_image %}
+        <a href="{{ post.get_absolute_url }}"><img src="{{ post.featured_image.url }}" alt="" class="w-full h-48 object-cover"></a>
+        {% endif %}
+        <div class="p-8">
+            <p class="text-sm text-proxySilver mb-2">{{ post.published_at|date:"F j, Y" }}</p>
+            <h2 class="text-xl font-bold text-proxyDark mb-3"><a href="{{ post.get_absolute_url }}" class="hover:text-proxyBlue">{{ post.title }}</a></h2>
+            {% if post.excerpt %}<p class="text-slate-600 mb-4">{{ post.excerpt|truncatewords:40 }}</p>{% endif %}
+            <a href="{{ post.get_absolute_url }}" class="text-proxyBlue font-bold hover:underline">Read more</a>
+        </div>
+    </article>
+    {% empty %}
+    <p class="text-slate-500">No posts published yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "iamadmin/base_dashboard.html" %}
+{% block title %}Overview | Proxy Soft Portal{% endblock %}
+{% block page_heading %}Overview{% endblock %}
+{% block content %}
+<div class="space-y-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <p class="text-slate-500 text-xs font-bold uppercase mb-2">Contact Submissions</p>
+            <h3 class="text-3xl font-bold text-proxyBlue">{{ stats.total_submissions|default:0 }}</h3>
+            <div class="mt-4"><a href="{% url 'iamadmin:submissions_list' %}" class="text-proxyCyan text-xs font-bold hover:underline">View all</a></div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <p class="text-slate-500 text-xs font-bold uppercase mb-2">Services</p>
+            <h3 class="text-3xl font-bold text-proxyDark">{{ stats.services_count|default:0 }}</h3>
+            <div class="mt-4"><a href="{% url 'iamadmin:service_list' %}" class="text-proxyCyan text-xs font-bold hover:underline">Manage</a></div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <p class="text-slate-500 text-xs font-bold uppercase mb-2">Clients</p>
+            <h3 class="text-3xl font-bold text-proxyDark">{{ stats.clients_count|default:0 }}</h3>
+            <div class="mt-4"><a href="{% url 'iamadmin:client_list' %}" class="text-proxyCyan text-xs font-bold hover:underline">Manage</a></div>
+        </div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+            <h4 class="font-bold">Recent Contact Submissions</h4>
+            <a href="{% url 'iamadmin:submissions_list' %}" class="text-proxyBlue text-sm font-bold hover:underline">View All</a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                    <tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Subject</th><th class="px-6 py-4">Date</th><th class="px-6 py-4 text-right">Action</th></tr>
+                </thead>
+                <tbody class="text-sm">
+                    {% for s in recent_submissions %}
+                    <tr class="border-b border-slate-50">
+                        <td class="px-6 py-4 font-medium">{{ s.name }}</td>
+                        <td class="px-6 py-4">{{ s.subject }}</td>
+                        <td class="px-6 py-4">{{ s.created_at|date:"M d, Y" }}</td>
+                        <td class="px-6 py-4 text-right"><a href="{% url 'iamadmin:submissions_list' %}" class="text-proxyBlue hover:underline">View</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="px-6 py-8 text-slate-400 text-center">No submissions yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

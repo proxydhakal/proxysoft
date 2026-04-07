@@ -1,0 +1,19 @@
+{% extends "iamadmin/base_dashboard.html" %}
+{% block title %}{% if instance %}Edit{% else %}New{% endif %} Service | Proxy Soft Portal{% endblock %}
+{% block page_heading %}{% if instance %}Edit Service{% else %}New Service{% endif %}{% endblock %}
+{% block content %}
+<form method="post" class="iam-form max-w-2xl space-y-4">
+    {% csrf_token %}
+    {% for field in form %}
+    <div>
+        <label class="block text-sm font-bold text-slate-700 mb-1">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}<p class="text-red-600 text-xs mt-1">{{ field.errors.0 }}</p>{% endif %}
+    </div>
+    {% endfor %}
+    <div class="flex gap-4 pt-4">
+        <button type="submit" class="bg-proxyBlue text-white font-bold py-2 px-6 rounded-xl hover:bg-proxyDark transition">Save</button>
+        <a href="{% url 'iamadmin:service_list' %}" class="bg-slate-200 text-proxyDark font-bold py-2 px-6 rounded-xl hover:bg-slate-300 transition">Cancel</a>
+    </div>
+</form>
+{% endblock %}
