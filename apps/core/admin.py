@@ -54,7 +54,7 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
     ]
 
     fieldsets = (
-        ("Branding", {"fields": ("site_name", "tagline", "logo", "logo_url")}),
+        ("Branding", {"fields": ("site_name", "tagline", "logo", "logo_url", "favicon", "favicon_url")}),
         (
             "SEO",
             {

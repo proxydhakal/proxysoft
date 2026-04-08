@@ -8,6 +8,7 @@
     {% if site_config %}{% if site_config.meta_description %}<meta name="description" content="{{ site_config.meta_description }}">{% endif %}
     {% if site_config.meta_keywords %}<meta name="keywords" content="{{ site_config.meta_keywords }}">{% endif %}
     {% if site_config.og_image %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site_config.og_image.url }}">{% elif site_config.og_image_url %}<meta property="og:image" content="{{ site_config.og_image_url }}">{% endif %}{% endif %}
+    {% include "includes/favicon_links.html" %}
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>

@@ -52,6 +52,7 @@ class SiteConfigForm(forms.ModelForm):
         fields = [
             "site_name", "tagline",
             "logo", "logo_url",
+            "favicon", "favicon_url",
             "meta_title", "meta_description", "meta_keywords",
             "og_image", "og_image_url",
             "address", "email", "phone",
@@ -74,6 +75,8 @@ class SiteConfigForm(forms.ModelForm):
             "tagline": forms.TextInput(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200"}),
             "logo": forms.ClearableFileInput(attrs={"class": "block w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-proxyBlue file:text-white file:font-medium"}),
             "logo_url": forms.URLInput(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200", "placeholder": "https://…"}),
+            "favicon": forms.ClearableFileInput(attrs={"class": "block w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-proxyBlue file:text-white file:font-medium"}),
+            "favicon_url": forms.URLInput(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200", "placeholder": "https://…"}),
             "meta_description": forms.Textarea(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200", "rows": 2}),
             "og_image": forms.ClearableFileInput(attrs={"class": "block w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-proxyBlue file:text-white file:font-medium"}),
             "og_image_url": forms.URLInput(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200", "placeholder": "https://…"}),

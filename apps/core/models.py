@@ -18,6 +18,17 @@ class SiteConfiguration(models.Model):
         blank=True,
         help_text="Or paste an external logo image URL (used only if no file is uploaded above)",
     )
+    favicon = models.ImageField(
+        upload_to="site/",
+        blank=True,
+        null=True,
+        help_text="Browser tab icon (.ico or .png, e.g. 32×32). Leave blank to use static/img/favicon.ico or URL below.",
+    )
+    favicon_url = models.URLField(
+        max_length=500,
+        blank=True,
+        help_text="Or external favicon URL (used only if no favicon file is uploaded)",
+    )
 
     # SEO
     meta_title = models.CharField(max_length=70, blank=True)

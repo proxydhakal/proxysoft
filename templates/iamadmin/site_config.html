@@ -6,7 +6,7 @@
     {% csrf_token %}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {% for field in form %}
-        <div class="space-y-1 {% if field.name == 'logo' or field.name == 'og_image' or field.name == 'hero_image' %}md:col-span-2{% endif %}">
+        <div class="space-y-1 {% if field.name == 'logo' or field.name == 'og_image' or field.name == 'hero_image' or field.name == 'favicon' %}md:col-span-2{% endif %}">
             <label for="{{ field.id_for_label }}" class="block text-sm font-bold text-slate-700">{{ field.label }}</label>
             {{ field }}
             {% if field.help_text %}<p class="text-slate-500 text-xs">{{ field.help_text }}</p>{% endif %}

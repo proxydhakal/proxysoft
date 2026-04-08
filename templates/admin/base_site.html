@@ -7,6 +7,11 @@
 <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
 {% endblock %}
 
+{% block extrahead %}
+{{ block.super }}
+{% include "includes/favicon_links.html" %}
+{% endblock %}
+
 {% block extrastyle %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static 'admin/css/proxy_admin.css' %}">
