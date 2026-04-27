@@ -54,7 +54,13 @@ yarn-error.log*
 pnpm-debug.log*
 .parcel-cache/
 .turbo/
-static/dist/
+# NOTE: do NOT ignore static/dist/ because production uses ManifestStaticFilesStorage
+# and needs these files present during collectstatic.
+#
+# If you don't want to commit built assets, ensure your deploy pipeline runs:
+#   npm ci && npm run build && python manage.py collectstatic
+#
+# (You may still ignore sourcemaps if you generate them)
 
 # Cursor / tooling (optional local paths)
 mcps/
