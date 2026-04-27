@@ -86,6 +86,14 @@ class SiteConfiguration(models.Model):
     )
     about_core_values_heading = models.CharField(max_length=100, default="Our Core Values")
 
+    # New home design: stat counters (About / Highlights)
+    stats_projects_completed = models.PositiveIntegerField(default=150)
+    stats_happy_clients = models.PositiveIntegerField(default=80)
+    stats_years_experience = models.PositiveIntegerField(default=8)
+    stats_team_members = models.PositiveIntegerField(default=25)
+    stats_client_satisfaction_rate = models.PositiveIntegerField(default=98, help_text="Percentage without % sign")
+    stats_awards_count = models.PositiveIntegerField(default=15)
+
     # Services section
     services_section_heading = models.CharField(max_length=200, default="Service Stack")
     services_section_subheading = models.CharField(max_length=200, default="Expert solutions for every digital need.")
@@ -96,6 +104,22 @@ class SiteConfiguration(models.Model):
 
     # Testimonials section (heading; items in Testimonial model)
     testimonials_heading = models.CharField(max_length=200, blank=True)
+
+    # Why Choose Us section
+    why_section_label = models.CharField(max_length=100, default="Why Us")
+    why_section_heading = models.CharField(max_length=200, default="The Smart Choice for Digital Growth")
+    why_section_body = models.TextField(
+        default="We combine technical expertise with business acumen to deliver solutions that make a real difference. Here's what sets us apart:",
+        blank=True,
+    )
+
+    # Projects section
+    projects_section_heading = models.CharField(max_length=200, default="Featured Projects")
+    projects_section_subheading = models.CharField(
+        max_length=300,
+        default="A showcase of our best work across industries and technologies.",
+        blank=True,
+    )
 
     # Clients section
     clients_section_label = models.CharField(max_length=100, default="Trusted Partnerships")
@@ -205,6 +229,11 @@ class Service(models.Model):
         default="blue",
         help_text="One of: blue, cyan, dark, silver (for Tailwind group hover)",
     )
+    tags = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text="Comma-separated tech tags shown on the home page, e.g. React, Next.js, Node.js",
+    )
 
     class Meta:
         ordering = ["order"]
@@ -244,6 +273,14 @@ class Testimonial(models.Model):
         SiteConfiguration, on_delete=models.CASCADE, related_name="testimonials", editable=False, default=1
     )
     order = models.PositiveSmallIntegerField(default=0)
+    name = models.CharField(max_length=200, blank=True)
+    role = models.CharField(max_length=200, blank=True)
+    avatar = models.CharField(max_length=10, blank=True, help_text="Initials shown in the avatar, e.g. SJ")
+    color = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text="Tailwind gradient classes, e.g. from-brand-400 to-brand-700",
+    )
     quote = models.TextField()
 
     class Meta:
@@ -264,6 +301,91 @@ class Client(models.Model):
     name = models.CharField(max_length=200)
     logo = models.ImageField(upload_to="clients/", blank=True, null=True)
     url = models.URLField(blank=True)
+
+    class Meta:
+        ordering = ["order"]
+
+    def save(self, *args, **kwargs):
+        if not self.site_config_id:
+            self.site_config_id = 1
+        super().save(*args, **kwargs)
+
+
+class Project(models.Model):
+    """Featured project for the home page projects section."""
+
+    site_config = models.ForeignKey(
+        SiteConfiguration, on_delete=models.CASCADE, related_name="projects", editable=False, default=1
+    )
+    order = models.PositiveSmallIntegerField(default=0)
+    category = models.CharField(max_length=120, blank=True)
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    theme = models.CharField(
+        max_length=30,
+        default="brand",
+        help_text="Color theme: brand, emerald, violet, orange, cyan (used for gradients in the template)",
+    )
+    url = models.URLField(blank=True, help_text="Optional link to the project/case study")
+
+    class Meta:
+        ordering = ["order"]
+
+    def save(self, *args, **kwargs):
+        if not self.site_config_id:
+            self.site_config_id = 1
+        super().save(*args, **kwargs)
+
+
+class WhyChooseUsItem(models.Model):
+    """Item in the 'Why Choose Us' section."""
+    COLOR_CHOICES = [
+        ("blue", "Blue (Brand)"),
+        ("emerald", "Emerald (Green)"),
+        ("violet", "Violet (Purple)"),
+        ("orange", "Orange"),
+        ("cyan", "Cyan"),
+    ]
+    site_config = models.ForeignKey(
+        SiteConfiguration, on_delete=models.CASCADE, related_name="why_items", editable=False, default=1
+    )
+    order = models.PositiveSmallIntegerField(default=0)
+    title = models.CharField(max_length=200)
+    description = models.CharField(max_length=500)
+    color_theme = models.CharField(max_length=50, choices=COLOR_CHOICES, default="blue")
+    icon_svg_path = models.TextField(
+        blank=True,
+        help_text="SVG path d='...' value only. Used inside <path stroke-linecap='round' d='...'>.",
+    )
+
+    class Meta:
+        ordering = ["order"]
+
+    def save(self, *args, **kwargs):
+        if not self.site_config_id:
+            self.site_config_id = 1
+        super().save(*args, **kwargs)
+
+
+class HeroBadge(models.Model):
+    """Floating orbiting badge in the hero illustration (max 4, by order)."""
+    site_config = models.ForeignKey(
+        SiteConfiguration, on_delete=models.CASCADE, related_name="hero_badges", editable=False, default=1
+    )
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        help_text="Position slot: 1=top, 2=right, 3=left, 4=bottom",
+    )
+    label = models.CharField(max_length=100)
+    bg_color = models.CharField(
+        max_length=50,
+        default="bg-blue-500",
+        help_text="Tailwind bg class, e.g. bg-blue-500, bg-emerald-500, bg-violet-500, bg-orange-500",
+    )
+    icon_svg_path = models.TextField(
+        blank=True,
+        help_text="SVG path d='...' value only for the small badge icon.",
+    )
 
     class Meta:
         ordering = ["order"]

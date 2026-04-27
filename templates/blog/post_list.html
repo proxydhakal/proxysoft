@@ -1,22 +1,313 @@
-{% extends "base_public.html" %}
-{% block title %}Blog | {{ site_config.site_name|default:"Proxy Soft" }}{% endblock %}
-{% block content %}
-<h1 class="text-3xl md:text-4xl font-bold text-proxyDark mb-10">Blog</h1>
-<div class="space-y-8">
-    {% for post in posts %}
-    <article class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition">
-        {% if post.featured_image %}
-        <a href="{{ post.get_absolute_url }}"><img src="{{ post.featured_image.url }}" alt="" class="w-full h-48 object-cover"></a>
+{% load static core_filters %}
+<!DOCTYPE html>
+<html lang="en" x-data="{ darkMode: false, mobileMenu: false }" :class="{ 'dark': darkMode }">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog | {{ site_config.site_name|default:"Proxy Soft" }}</title>
+  {% if site_config.meta_description %}<meta name="description" content="{{ site_config.meta_description }}">{% endif %}
+  {% include "includes/favicon_links.html" %}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              50:'#eff8ff', 100:'#dbeffe', 200:'#bfe3fe', 300:'#93d1fd',
+              400:'#60b6fa', 500:'#3b97f6', 600:'#2579eb', 700:'#1d63d8',
+              800:'#1e50af', 900:'#1e448a',
+            }
+          },
+          animation: {
+            'float':'float 6s ease-in-out infinite',
+            'float2':'float 8s ease-in-out infinite 1s',
+            'slide-up':'slideUp 0.6s ease forwards',
+            'fade-in':'fadeIn 0.8s ease forwards',
+            'gradient':'gradientShift 8s ease infinite',
+          },
+          keyframes: {
+            float: { '0%,100%':{ transform:'translateY(0px)' }, '50%':{ transform:'translateY(-14px)' } },
+            gradientShift: { '0%,100%':{ backgroundPosition:'0% 50%' }, '50%':{ backgroundPosition:'100% 50%' } },
+            slideUp: { from:{ opacity:0, transform:'translateY(30px)' }, to:{ opacity:1, transform:'translateY(0)' } },
+            fadeIn: { from:{ opacity:0 }, to:{ opacity:1 } },
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    * { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; }
+    [x-cloak] { display: none !important; }
+
+    .hero-bg {
+      background: linear-gradient(-45deg, #0f172a, #1e3a5f, #1e50af, #0c2a5e, #0f172a);
+      background-size: 400% 400%; animation: gradientShift 10s ease infinite;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #2579eb 0%, #60b6fa 50%, #3b97f6 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .glass { background:rgba(255,255,255,0.08); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.15); }
+    .glass-light { background:rgba(255,255,255,0.7); backdrop-filter:blur(12px); border:1px solid rgba(59,151,246,0.15); }
+    .dark .glass-light { background:rgba(30,50,100,0.5); border:1px solid rgba(96,182,250,0.2); }
+    .nav-blur { background:rgba(255,255,255,0.85); backdrop-filter:blur(16px); border-bottom:1px solid rgba(59,151,246,0.12); }
+    .dark .nav-blur { background:rgba(10,18,40,0.88); border-bottom:1px solid rgba(96,182,250,0.12); }
+    .btn-primary { background:linear-gradient(135deg,#2579eb,#3b97f6); transition:all 0.3s ease; box-shadow:0 4px 20px rgba(37,121,235,0.35); }
+    .btn-primary:hover { background:linear-gradient(135deg,#1d63d8,#2579eb); box-shadow:0 8px 30px rgba(37,121,235,0.5); transform:translateY(-2px); }
+    .shape { position:absolute; border-radius:50%; opacity:0.12; filter:blur(1px); }
+    .post-card { transition:transform 0.3s ease, box-shadow 0.3s ease; }
+    .post-card:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(37,121,235,0.14); }
+    body, nav, section, footer, div, p, h1, h2, h3, h4, span, a { transition:background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:#3b97f6; border-radius:3px; }
+    .reveal { opacity:0; transform:translateY(30px); transition:opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+  </style>
+</head>
+
+<body class="bg-white dark:bg-gray-950 text-gray-800 dark:text-gray-100 font-poppins overflow-x-hidden">
+
+<!-- NAVBAR -->
+<nav class="nav-blur fixed top-0 left-0 right-0 z-50" x-data="{ scrolled: false }" @scroll.window="scrolled = window.scrollY > 40">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 group">
+        {% if site_config.logo %}
+          <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-9 w-auto max-w-[220px] object-contain">
+        {% elif site_config.logo_url %}
+          <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-9 w-auto max-w-[220px] object-contain">
+        {% else %}
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
         {% endif %}
-        <div class="p-8">
-            <p class="text-sm text-proxySilver mb-2">{{ post.published_at|date:"F j, Y" }}</p>
-            <h2 class="text-xl font-bold text-proxyDark mb-3"><a href="{{ post.get_absolute_url }}" class="hover:text-proxyBlue">{{ post.title }}</a></h2>
-            {% if post.excerpt %}<p class="text-slate-600 mb-4">{{ post.excerpt|truncatewords:40 }}</p>{% endif %}
-            <a href="{{ post.get_absolute_url }}" class="text-proxyBlue font-bold hover:underline">Read more</a>
+        <span class="font-bold text-xl tracking-tight text-gray-900 dark:text-white">{{ site_config.site_name|default:"ProxySoft" }}</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-8">
+        <a href="{% url 'core:home' %}#home" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">Home<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
+        <a href="{% url 'core:home' %}#services" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">Services<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
+        <a href="{% url 'core:home' %}#about" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">About<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
+        <a href="{% url 'core:home' %}#projects" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">Projects<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
+        <a href="{% url 'blog:list' %}" class="text-sm font-medium text-brand-600 dark:text-brand-400 relative group">Blog<span class="absolute -bottom-0.5 left-0 w-full h-0.5 bg-brand-500 rounded-full"></span></a>
+        {% for p in nav_pages %}
+          <a href="{{ p.get_absolute_url }}" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">{{ p.title }}<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
+        {% endfor %}
+        <a href="{% url 'core:home' %}#contact" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">Contact<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button @click="darkMode = !darkMode" class="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-50 dark:hover:bg-gray-800 transition-all" aria-label="Toggle dark mode">
+          <svg x-show="!darkMode" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg x-show="darkMode" x-cloak width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+        <a href="{% url 'core:home' %}#contact" class="hidden md:inline-flex btn-primary text-white text-sm font-semibold px-5 py-2.5 rounded-xl">{{ site_config.nav_get_started_text|default:"Get Started" }}</a>
+        <button @click="mobileMenu = !mobileMenu" class="md:hidden w-9 h-9 rounded-lg flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all" aria-label="Toggle menu">
+          <svg x-show="!mobileMenu" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg x-show="mobileMenu" x-cloak width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div x-show="mobileMenu" x-cloak x-transition.opacity class="md:hidden pb-4">
+      <div class="flex flex-col gap-1 pt-2 border-t border-gray-100 dark:border-gray-800">
+        <a href="{% url 'core:home' %}#home" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">Home</a>
+        <a href="{% url 'core:home' %}#services" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">Services</a>
+        <a href="{% url 'core:home' %}#about" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">About</a>
+        <a href="{% url 'core:home' %}#projects" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">Projects</a>
+        <a href="{% url 'blog:list' %}" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20 transition-all">Blog</a>
+        {% for p in nav_pages %}
+          <a href="{{ p.get_absolute_url }}" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">{{ p.title }}</a>
+        {% endfor %}
+        <a href="{% url 'core:home' %}#contact" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">Contact</a>
+        <a href="{% url 'core:home' %}#contact" @click="mobileMenu=false" class="mt-2 btn-primary text-white text-sm font-semibold px-5 py-3 rounded-xl text-center">{{ site_config.nav_get_started_text|default:"Get Started" }}</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="hero-bg pt-20 pb-16 relative overflow-hidden">
+  <div class="shape w-72 h-72 bg-brand-400 animate-float" style="top:-60px;right:-40px;"></div>
+  <div class="shape w-48 h-48 bg-blue-300 animate-float2" style="bottom:-20px;left:-30px;"></div>
+  <div class="absolute inset-0 opacity-5" style="background-image:linear-gradient(rgba(255,255,255,0.3) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.3) 1px,transparent 1px);background-size:60px 60px;"></div>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+    <div class="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-6 animate-fade-in">
+      <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+      <span class="text-xs font-medium text-blue-200 tracking-wider">Insights & Updates</span>
+    </div>
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-4 animate-slide-up">
+      Our <span class="text-brand-300">Blog</span>
+    </h1>
+    <p class="text-blue-200 text-lg max-w-xl mx-auto animate-slide-up" style="animation-delay:0.15s;">
+      Thoughts, stories, and ideas from the {{ site_config.site_name|default:"Proxy Soft" }} team.
+    </p>
+  </div>
+  <div class="absolute bottom-0 left-0 right-0">
+    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="dark:hidden">
+      <path d="M0 60L48 54C96 48 192 36 288 34C384 32 480 40 576 44C672 48 768 48 864 44C960 40 1056 32 1152 30C1248 28 1344 32 1392 34L1440 36V60H0Z" fill="white"/>
+    </svg>
+    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="hidden dark:block">
+      <path d="M0 60L48 54C96 48 192 36 288 34C384 32 480 40 576 44C672 48 768 48 864 44C960 40 1056 32 1152 30C1248 28 1344 32 1392 34L1440 36V60H0Z" fill="#030712"/>
+    </svg>
+  </div>
+</section>
+
+<!-- BLOG POSTS -->
+<section class="py-16 bg-white dark:bg-gray-950 min-h-[50vh]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    {% if posts %}
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for post in posts %}
+          <article class="post-card reveal bg-white dark:bg-gray-900 rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800 flex flex-col">
+            {% if post.featured_image %}
+              <a href="{{ post.get_absolute_url }}" class="block overflow-hidden h-52 flex-shrink-0">
+                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+              </a>
+            {% else %}
+              <a href="{{ post.get_absolute_url }}" class="block h-52 flex-shrink-0 bg-gradient-to-br from-brand-500 to-brand-800 flex items-center justify-center">
+                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"><path stroke-linecap="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+              </a>
+            {% endif %}
+
+            <div class="p-7 flex flex-col flex-grow">
+              <div class="flex items-center gap-3 mb-4">
+                {% if post.published_at %}
+                  <span class="inline-flex items-center gap-1.5 text-xs font-medium text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/30 px-3 py-1 rounded-full">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    {{ post.published_at|date:"M j, Y" }}
+                  </span>
+                {% endif %}
+                {% if post.author %}
+                  <span class="text-xs text-gray-400 dark:text-gray-500">{{ post.author.get_full_name|default:post.author.username }}</span>
+                {% endif %}
+              </div>
+              <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3 leading-snug flex-grow">
+                <a href="{{ post.get_absolute_url }}" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">{{ post.title }}</a>
+              </h2>
+              {% if post.excerpt %}
+                <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-5 line-clamp-3">{{ post.excerpt }}</p>
+              {% endif %}
+              <a href="{{ post.get_absolute_url }}" class="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors group">
+                Read Article
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="group-hover:translate-x-1 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+              </a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+
+    {% else %}
+      <div class="text-center py-24 reveal">
+        <div class="w-20 h-20 rounded-3xl bg-brand-50 dark:bg-brand-900/30 flex items-center justify-center mx-auto mb-6">
+          <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="#3b97f6" stroke-width="1.5"><path stroke-linecap="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
         </div>
-    </article>
-    {% empty %}
-    <p class="text-slate-500">No posts published yet.</p>
-    {% endfor %}
-</div>
-{% endblock %}
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">No posts yet</h3>
+        <p class="text-gray-500 dark:text-gray-400 mb-6">Check back soon — we're working on something great.</p>
+        <a href="{% url 'core:home' %}" class="btn-primary inline-flex items-center gap-2 text-white font-semibold px-6 py-3 rounded-2xl text-sm">
+          Back to Home
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section class="py-16 relative overflow-hidden bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+    <h2 class="text-2xl md:text-3xl font-black text-gray-900 dark:text-white mb-4">Ready to Start Your Project?</h2>
+    <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-lg mx-auto">Let's discuss your vision and build something remarkable together.</p>
+    <a href="{% url 'core:home' %}#contact" class="btn-primary inline-flex items-center gap-2 text-white font-bold px-8 py-4 rounded-2xl text-sm">
+      Get In Touch
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-gray-950 dark:bg-black text-gray-400 pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
+      <div>
+        <div class="flex items-center gap-2.5 mb-4">
+          {% if site_config.logo %}
+            <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-8 w-auto object-contain">
+          {% elif site_config.logo_url %}
+            <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-8 w-auto object-contain">
+          {% else %}
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          {% endif %}
+          <span class="font-bold text-xl text-white">{{ site_config.site_name|default:"ProxySoft" }}</span>
+        </div>
+        <p class="text-sm leading-relaxed mb-6">{{ site_config.footer_tagline|default:"Transforming ideas into digital solutions that drive growth and innovation." }}</p>
+        <div class="flex gap-3">
+          {% if site_config.twitter_url %}<a href="{{ site_config.twitter_url }}" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-brand-700 flex items-center justify-center text-gray-400 hover:text-white transition-all" aria-label="Twitter"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557a9.83 9.83 0 01-2.828.775 4.932 4.932 0 002.165-2.724c-.951.555-2.005.959-3.127 1.184a4.916 4.916 0 00-8.384 4.482C7.691 8.094 4.066 6.13 1.64 3.161a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.061a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.937 4.937 0 004.604 3.417 9.868 9.868 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63a9.936 9.936 0 002.46-2.548l-.047-.02z"/></svg></a>{% endif %}
+          {% if site_config.linkedin_url %}<a href="{{ site_config.linkedin_url }}" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-brand-700 flex items-center justify-center text-gray-400 hover:text-white transition-all" aria-label="LinkedIn"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>{% endif %}
+          {% if site_config.facebook_url %}<a href="{{ site_config.facebook_url }}" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-brand-700 flex items-center justify-center text-gray-400 hover:text-white transition-all" aria-label="Facebook"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>{% endif %}
+          {% if site_config.instagram_url %}<a href="{{ site_config.instagram_url }}" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-brand-700 flex items-center justify-center text-gray-400 hover:text-white transition-all" aria-label="Instagram"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>{% endif %}
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-5">Quick Links</h4>
+        <ul class="space-y-3">
+          <li><a href="{% url 'core:home' %}#home" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">Home</a></li>
+          <li><a href="{% url 'core:home' %}#services" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">Services</a></li>
+          <li><a href="{% url 'core:home' %}#about" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">About Us</a></li>
+          <li><a href="{% url 'core:home' %}#projects" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">Projects</a></li>
+          <li><a href="{% url 'blog:list' %}" class="text-sm text-brand-400 hover:translate-x-1 inline-block">Blog</a></li>
+          {% for p in footer_pages %}<li><a href="{{ p.get_absolute_url }}" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">{{ p.title }}</a></li>{% endfor %}
+          <li><a href="{% url 'core:home' %}#contact" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-5">Services</h4>
+        <ul class="space-y-3">
+          {% for service in site_config.services.all %}<li><a href="{% url 'core:home' %}#services" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">{{ service.title }}</a></li>
+          {% empty %}<li class="text-sm">Web Development</li><li class="text-sm">Digital Marketing</li><li class="text-sm">IT Consulting</li>{% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-5">Contact</h4>
+        <ul class="space-y-4 text-sm">
+          {% if site_config.email %}<li><a href="mailto:{{ site_config.email }}" class="hover:text-brand-400 transition-colors">{{ site_config.email }}</a></li>{% endif %}
+          {% if site_config.phone %}<li><a href="tel:{{ site_config.phone }}" class="hover:text-brand-400 transition-colors">{{ site_config.phone }}</a></li>{% endif %}
+          {% if site_config.address %}<li>{{ site_config.address }}</li>{% endif %}
+        </ul>
+        {% if site_config.company_registration_number or site_config.pan_number %}
+          <div class="mt-6 pt-6 border-t border-gray-800">
+            {% if site_config.company_registration_number %}<p class="text-xs mb-1">Reg. No.: {{ site_config.company_registration_number }}</p>{% endif %}
+            {% if site_config.pan_number %}<p class="text-xs mb-1">PAN: {{ site_config.pan_number }}</p>{% endif %}
+            <p class="text-xs">Est. {{ site_config.establishment_year|default:"2026" }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="border-t border-gray-800 pt-8">
+      <p class="text-xs text-center">© {% now "Y" %} <span class="text-brand-400 font-semibold">{{ site_config.site_name|default:"Proxy Soft" }}</span>. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>

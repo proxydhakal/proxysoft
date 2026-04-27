@@ -1,422 +1,890 @@
-{% load core_filters static %}
+{% load static core_filters %}
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" x-data="{ darkMode: false, mobileMenu: false }" :class="{ 'dark': darkMode }">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if site_config %}{% if site_config.meta_title %}{{ site_config.meta_title }}{% else %}{{ site_config.site_name }} | Leading Tech Solutions{% endif %}{% else %}Proxy Soft | Leading Tech Solutions{% endif %}</title>
-    {% if site_config %}{% if site_config.meta_description %}<meta name="description" content="{{ site_config.meta_description }}">{% endif %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>
+    {% if site_config %}{% if site_config.meta_title %}{{ site_config.meta_title }}{% else %}{{ site_config.site_name }} – Transforming Ideas into Digital Solutions{% endif %}{% else %}Proxy Soft – Transforming Ideas into Digital Solutions{% endif %}
+  </title>
+  {% if site_config %}
+    {% if site_config.meta_description %}<meta name="description" content="{{ site_config.meta_description }}">{% endif %}
     {% if site_config.meta_keywords %}<meta name="keywords" content="{{ site_config.meta_keywords }}">{% endif %}
-    {% if site_config.og_image %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site_config.og_image.url }}">{% elif site_config.og_image_url %}<meta property="og:image" content="{{ site_config.og_image_url }}">{% endif %}{% endif %}
-    {% include "includes/favicon_links.html" %}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        proxyDark: '#0a1d37',
-                        proxyBlue: '#1e40af',
-                        proxyCyan: '#38bdf8',
-                        proxySilver: '#94a3b8',
-                    },
-                    fontFamily: { poppins: ['Poppins', 'sans-serif'] },
-                }
+    {% if site_config.og_image %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site_config.og_image.url }}">{% elif site_config.og_image_url %}<meta property="og:image" content="{{ site_config.og_image_url }}">{% endif %}
+  {% endif %}
+  {% include "includes/favicon_links.html" %}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              50:'#eff8ff', 100:'#dbeffe', 200:'#bfe3fe', 300:'#93d1fd',
+              400:'#60b6fa', 500:'#3b97f6', 600:'#2579eb', 700:'#1d63d8',
+              800:'#1e50af', 900:'#1e448a',
             }
+          },
+          animation: {
+            'float':'float 6s ease-in-out infinite',
+            'float2':'float 8s ease-in-out infinite 1s',
+            'float3':'float 7s ease-in-out infinite 2s',
+            'pulse-slow':'pulse 4s ease-in-out infinite',
+            'spin-slow':'spin 20s linear infinite',
+            'gradient':'gradientShift 8s ease infinite',
+            'slide-up':'slideUp 0.6s ease forwards',
+            'fade-in':'fadeIn 0.8s ease forwards',
+          },
+          keyframes: {
+            float: { '0%,100%': { transform:'translateY(0px) rotate(0deg)' }, '50%': { transform:'translateY(-20px) rotate(5deg)' } },
+            gradientShift: { '0%,100%': { backgroundPosition:'0% 50%' }, '50%': { backgroundPosition:'100% 50%' } },
+            slideUp: { from: { opacity:0, transform:'translateY(40px)' }, to: { opacity:1, transform:'translateY(0)' } },
+            fadeIn: { from: { opacity:0 }, to: { opacity:1 } },
+          },
+          backdropBlur: { xs:'2px' },
         }
-    </script>
-    <style>
-        [x-cloak] { display: none !important; }
-        .glass-nav { background: rgba(10, 29, 55, 0.8); backdrop-filter: blur(12px); }
-        .circuit-bg {
-            background-image: radial-gradient(#38bdf8 0.5px, transparent 0.5px);
-            background-size: 24px 24px;
-            opacity: 0.1;
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, #0a1d37 0%, #1e40af 100%);
-        }
-        .shield-clip { clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
-        /* Maintain spacing: nav and section padding */
-        .nav-padding { padding-top: 1.25rem; padding-bottom: 1.25rem; }
-        .nav-padding-scrolled { padding-top: 0.75rem; padding-bottom: 0.75rem; }
-        .section-top-space { padding-top: 7rem; }
-        .about-heading-spacing { margin-bottom: 4rem; }
-        .about-label-to-title { margin-bottom: 0.5rem; }
-        .about-title-spacing { margin-top: 0.75rem; }
-        .hero-cta-gap { gap: 1.25rem; }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    * { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; }
+    [x-cloak] { display: none !important; }
+
+    .reveal { opacity:0; transform:translateY(40px); transition:opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-left { opacity:0; transform:translateX(-40px); transition:opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-left.visible { opacity:1; transform:translateX(0); }
+    .reveal-right { opacity:0; transform:translateX(40px); transition:opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-right.visible { opacity:1; transform:translateX(0); }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #2579eb 0%, #60b6fa 50%, #3b97f6 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .gradient-text-white {
+      background: linear-gradient(135deg, #ffffff 0%, #bfe3fe 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-bg {
+      background: linear-gradient(-45deg, #0f172a, #1e3a5f, #1e50af, #0c2a5e, #0f172a);
+      background-size: 400% 400%; animation: gradientShift 10s ease infinite;
+    }
+    .glass { background:rgba(255,255,255,0.08); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.15); }
+    .glass-light { background:rgba(255,255,255,0.7); backdrop-filter:blur(12px); border:1px solid rgba(59,151,246,0.15); }
+    .dark .glass-light { background:rgba(30,50,100,0.5); border:1px solid rgba(96,182,250,0.2); }
+    .nav-blur { background:rgba(255,255,255,0.85); backdrop-filter:blur(16px); border-bottom:1px solid rgba(59,151,246,0.12); }
+    .dark .nav-blur { background:rgba(10,18,40,0.88); border-bottom:1px solid rgba(96,182,250,0.12); }
+    .service-card { transition:transform 0.3s ease, box-shadow 0.3s ease; }
+    .service-card:hover { transform:translateY(-8px); box-shadow:0 25px 60px rgba(37,121,235,0.18); }
+    .project-card .overlay { opacity:0; transition:opacity 0.35s ease; }
+    .project-card:hover .overlay { opacity:1; }
+    .project-card:hover img { transform:scale(1.07); }
+    .project-card img { transition:transform 0.4s ease; }
+    .btn-primary { background:linear-gradient(135deg,#2579eb,#3b97f6); transition:all 0.3s ease; box-shadow:0 4px 20px rgba(37,121,235,0.35); }
+    .btn-primary:hover { background:linear-gradient(135deg,#1d63d8,#2579eb); box-shadow:0 8px 30px rgba(37,121,235,0.5); transform:translateY(-2px); }
+    .btn-outline { border:2px solid rgba(255,255,255,0.5); color:white; transition:all 0.3s ease; }
+    .btn-outline:hover { background:rgba(255,255,255,0.15); border-color:white; transform:translateY(-2px); }
+    .shape { position:absolute; border-radius:50%; opacity:0.12; filter:blur(1px); }
+    #loader { position:fixed; inset:0; background:#0f172a; display:flex; align-items:center; justify-content:center; z-index:9999; transition:opacity 0.6s ease, visibility 0.6s ease; }
+    #loader.hidden { opacity:0; visibility:hidden; }
+    .loader-ring { width:56px; height:56px; border:4px solid rgba(96,182,250,0.2); border-top-color:#3b97f6; border-radius:50%; animation:spin 0.9s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    body, nav, section, footer, div, p, h1, h2, h3, h4, span, a { transition:background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:#3b97f6; border-radius:3px; }
+    input:focus, textarea:focus { outline:none; border-color:#3b97f6; box-shadow:0 0 0 3px rgba(59,151,246,0.15); }
+    .why-card { transition:all 0.3s ease; }
+    .why-card:hover { transform:translateX(6px); border-left-color:#3b97f6; }
+  </style>
 </head>
-<body class="font-poppins bg-slate-50 text-proxyDark overflow-x-hidden" x-data="{ mobileMenu: false, scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 50)">
-    {% if messages %}
-    <div class="fixed top-20 left-1/2 -translate-x-1/2 z-[60] max-w-md mx-auto px-4">
-        {% for message in messages %}
-        <div class="py-3 px-4 rounded-xl shadow-lg {% if message.tags == 'error' %}bg-red-600 text-white{% else %}bg-proxyCyan text-proxyDark{% endif %} mb-2" role="alert">{{ message }}</div>
+
+<body class="bg-white dark:bg-gray-950 text-gray-800 dark:text-gray-100 font-poppins overflow-x-hidden">
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="text-center">
+    <div class="loader-ring mx-auto mb-4"></div>
+    <span class="text-brand-400 font-semibold text-sm tracking-widest">{{ site_config.site_name|default:"PROXY SOFT" }}</span>
+  </div>
+</div>
+
+{% if messages %}
+  <div class="fixed top-24 left-1/2 -translate-x-1/2 z-[60] max-w-md w-full px-4">
+    {% for message in messages %}
+      <div class="py-3 px-4 rounded-xl shadow-lg {% if message.tags == 'error' %}bg-red-600 text-white{% else %}bg-brand-600 text-white{% endif %} mb-2" role="alert">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- NAVBAR -->
+<nav class="nav-blur fixed top-0 left-0 right-0 z-50" x-data="{ scrolled: false }" @scroll.window="scrolled = window.scrollY > 40">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      <a href="{% url 'core:home' %}#home" class="flex items-center gap-2.5 group">
+        {% if site_config.logo %}
+          <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-9 w-auto max-w-[220px] object-contain">
+        {% elif site_config.logo_url %}
+          <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-9 w-auto max-w-[220px] object-contain">
+        {% else %}
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        {% endif %}
+        <span class="font-bold text-xl tracking-tight text-gray-900 dark:text-white">{{ site_config.site_name|default:"ProxySoft" }}</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-8">
+        <a href="{% url 'core:home' %}#home" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">Home<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
+        <a href="{% url 'core:home' %}#services" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">Services<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
+        <a href="{% url 'core:home' %}#about" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">About<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
+        <a href="{% url 'core:home' %}#projects" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">Projects<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
+        <a href="{% url 'blog:list' %}" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">Blog<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
+        {% for p in nav_pages %}
+          <a href="{{ p.get_absolute_url }}" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">{{ p.title }}<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
         {% endfor %}
+        <a href="{% url 'core:home' %}#contact" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative group">Contact<span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-500 rounded-full group-hover:w-full transition-all duration-300"></span></a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button @click="darkMode = !darkMode" class="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-50 dark:hover:bg-gray-800 transition-all" aria-label="Toggle dark mode">
+          <svg x-show="!darkMode" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg x-show="darkMode" x-cloak width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+        <a href="{% url 'core:home' %}#contact" class="hidden md:inline-flex btn-primary text-white text-sm font-semibold px-5 py-2.5 rounded-xl">{{ site_config.nav_get_started_text|default:"Get Started" }}</a>
+        <button @click="mobileMenu = !mobileMenu" class="md:hidden w-9 h-9 rounded-lg flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all" aria-label="Toggle mobile menu">
+          <svg x-show="!mobileMenu" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg x-show="mobileMenu" x-cloak width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
     </div>
-    {% endif %}
 
-    <nav :class="scrolled ? 'glass-nav nav-padding-scrolled border-b border-white/10' : 'bg-transparent nav-padding'" class="fixed w-full z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center min-h-[4rem]">
-            <a href="{% url 'core:home' %}#home" class="flex items-center gap-3">
-                {% if site_config.logo %}
-                <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[220px] object-contain object-left">
-                {% elif site_config.logo_url %}
-                <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[220px] object-contain object-left">
+    <div x-show="mobileMenu" x-cloak x-transition.opacity class="md:hidden pb-4">
+      <div class="flex flex-col gap-1 pt-2 border-t border-gray-100 dark:border-gray-800">
+        <a href="{% url 'core:home' %}#home" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">Home</a>
+        <a href="{% url 'core:home' %}#services" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">Services</a>
+        <a href="{% url 'core:home' %}#about" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">About</a>
+        <a href="{% url 'core:home' %}#projects" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">Projects</a>
+        <a href="{% url 'blog:list' %}" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">Blog</a>
+        {% for p in nav_pages %}
+          <a href="{{ p.get_absolute_url }}" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">{{ p.title }}</a>
+        {% endfor %}
+        <a href="{% url 'core:home' %}#contact" @click="mobileMenu=false" class="px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-800 hover:text-brand-600 transition-all">Contact</a>
+        <a href="{% url 'core:home' %}#contact" @click="mobileMenu=false" class="mt-2 btn-primary text-white text-sm font-semibold px-5 py-3 rounded-xl text-center">{{ site_config.nav_get_started_text|default:"Get Started" }}</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero-bg min-h-screen relative overflow-hidden flex items-center pt-20">
+  <div class="shape w-80 h-80 bg-brand-400 animate-float" style="top:-60px;right:-60px;"></div>
+  <div class="shape w-60 h-60 bg-blue-300 animate-float2" style="bottom:60px;left:-40px;"></div>
+  <div class="shape w-44 h-44 bg-brand-600 animate-float3" style="bottom:120px;right:15%;"></div>
+  <div class="shape w-32 h-32 bg-cyan-400 animate-float" style="top:30%;left:10%;animation-delay:3s;"></div>
+  <div class="absolute inset-0 opacity-5" style="background-image:linear-gradient(rgba(255,255,255,0.3) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.3) 1px,transparent 1px);background-size:60px 60px;"></div>
+  <div class="absolute top-1/3 left-1/4 w-96 h-96 bg-brand-600 rounded-full opacity-10 blur-3xl animate-pulse-slow"></div>
+  <div class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-cyan-500 rounded-full opacity-8 blur-3xl animate-pulse-slow" style="animation-delay:2s;"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="text-center lg:text-left">
+        <div class="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-6 animate-fade-in">
+          <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+          <span class="text-xs font-medium text-blue-200 tracking-wider">{{ site_config.hero_badge_text|default:"Available for new projects" }}</span>
+        </div>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight mb-6 animate-slide-up" style="animation-delay:0.1s;">
+          <span class="text-white">{{ site_config.hero_title|default:"Transforming Ideas into Digital Solutions" }}</span>
+        </h1>
+        <p class="text-blue-200 text-lg leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0 animate-slide-up" style="animation-delay:0.25s;">
+          {{ site_config.hero_description|default:"We craft cutting-edge web experiences, powerful digital strategies, and scalable IT solutions." }}
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-slide-up" style="animation-delay:0.4s;">
+          <a href="{% url 'core:home' %}#contact" class="btn-primary text-white font-semibold px-8 py-4 rounded-2xl text-base inline-flex items-center gap-2.5">
+            {{ site_config.hero_cta_primary_text|default:"Get Started" }}
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </a>
+          <a href="{% url 'core:home' %}#contact" class="btn-outline font-semibold px-8 py-4 rounded-2xl text-base inline-flex items-center gap-2.5">
+            {{ site_config.hero_cta_secondary_text|default:"Contact Us" }}
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          </a>
+        </div>
+        <div class="flex flex-wrap gap-6 mt-12 justify-center lg:justify-start animate-slide-up" style="animation-delay:0.55s;">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-white">{{ site_config.stats_projects_completed|default:150 }}+</div>
+            <div class="text-xs text-blue-300 font-medium">Projects Done</div>
+          </div>
+          <div class="w-px h-10 bg-white/20 self-center"></div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-white">{{ site_config.stats_years_experience|default:8 }}+</div>
+            <div class="text-xs text-blue-300 font-medium">Years Experience</div>
+          </div>
+          <div class="w-px h-10 bg-white/20 self-center"></div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-white">{{ site_config.stats_client_satisfaction_rate|default:98 }}%</div>
+            <div class="text-xs text-blue-300 font-medium">Client Satisfaction</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Illustration with orbiting badges -->
+      <div class="relative flex justify-center items-center animate-slide-up" style="animation-delay:0.35s;">
+        <div class="relative w-80 h-80 lg:w-[420px] lg:h-[420px]">
+          <div class="absolute inset-0 rounded-full border-2 border-dashed border-brand-400/30 animate-spin-slow"></div>
+          <div class="absolute inset-6 rounded-full border border-brand-300/20 animate-spin-slow" style="animation-direction:reverse;animation-duration:15s;"></div>
+          <div class="absolute inset-12 glass rounded-3xl flex flex-col items-center justify-center p-6">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-700 flex items-center justify-center mb-4 shadow-2xl">
+              <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <span class="text-white text-xs font-semibold text-center leading-snug">{{ site_config.tagline|default:"Digital Innovation Hub" }}</span>
+          </div>
+
+          <!-- Dynamic orbiting badges (max 4, position by order 1=top 2=right 3=left 4=bottom) -->
+          {% for badge in site_config.hero_badges.all %}
+            {% if forloop.counter == 1 %}
+              <div class="absolute -top-4 left-1/2 -translate-x-1/2 glass rounded-2xl px-4 py-2.5 flex items-center gap-2 animate-float" style="animation-delay:0s;">
+            {% elif forloop.counter == 2 %}
+              <div class="absolute -right-6 top-1/2 -translate-y-1/2 glass rounded-2xl px-4 py-2.5 flex items-center gap-2 animate-float2">
+            {% elif forloop.counter == 3 %}
+              <div class="absolute -left-8 top-1/3 glass rounded-2xl px-4 py-2.5 flex items-center gap-2 animate-float3">
+            {% else %}
+              <div class="absolute bottom-0 right-1/4 glass rounded-2xl px-4 py-2.5 flex items-center gap-2 animate-float" style="animation-delay:1.5s;">
+            {% endif %}
+                <div class="w-7 h-7 rounded-lg {{ badge.bg_color }} flex items-center justify-center">
+                  {% if badge.icon_svg_path %}
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.2"><path stroke-linecap="round" d="{{ badge.icon_svg_path }}"/></svg>
+                  {% else %}
+                    <svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                  {% endif %}
+                </div>
+                <span class="text-white text-xs font-semibold">{{ badge.label }}</span>
+            </div>
+            {% if forloop.counter >= 4 %}{% endif %}
+          {% empty %}
+            <!-- Fallback static badges -->
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 glass rounded-2xl px-4 py-2.5 flex items-center gap-2 animate-float" style="animation-delay:0s;">
+              <div class="w-7 h-7 rounded-lg bg-blue-500 flex items-center justify-center"><svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+              <span class="text-white text-xs font-semibold">Web Dev</span>
+            </div>
+            <div class="absolute -right-6 top-1/2 -translate-y-1/2 glass rounded-2xl px-4 py-2.5 flex items-center gap-2 animate-float2">
+              <div class="w-7 h-7 rounded-lg bg-emerald-500 flex items-center justify-center"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.2"><path stroke-linecap="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+              <span class="text-white text-xs font-semibold">Marketing</span>
+            </div>
+            <div class="absolute -left-8 top-1/3 glass rounded-2xl px-4 py-2.5 flex items-center gap-2 animate-float3">
+              <div class="w-7 h-7 rounded-lg bg-violet-500 flex items-center justify-center"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg></div>
+              <span class="text-white text-xs font-semibold">IT Consult</span>
+            </div>
+            <div class="absolute bottom-0 right-1/4 glass rounded-2xl px-4 py-2.5 flex items-center gap-2 animate-float" style="animation-delay:1.5s;">
+              <div class="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.2"><path stroke-linecap="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg></div>
+              <span class="text-white text-xs font-semibold">Quality</span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute bottom-0 left-0 right-0">
+    <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="dark:hidden">
+      <path d="M0 80L48 72C96 64 192 48 288 45.3C384 43 480 53 576 58.7C672 64 768 64 864 58.7C960 53 1056 43 1152 40C1248 37 1344 43 1392 45.3L1440 48V80H0Z" fill="white"/>
+    </svg>
+    <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="hidden dark:block">
+      <path d="M0 80L48 72C96 64 192 48 288 45.3C384 43 480 53 576 58.7C672 64 768 64 864 58.7C960 53 1056 43 1152 40C1248 37 1344 43 1392 45.3L1440 48V80H0Z" fill="#030712"/>
+    </svg>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="py-24 bg-white dark:bg-gray-950">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 reveal">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-xs font-semibold tracking-widest uppercase mb-4">What We Offer</span>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4">{{ site_config.services_section_heading|default:"Our Services" }}</h2>
+      <p class="text-gray-500 dark:text-gray-400 max-w-xl mx-auto leading-relaxed">{{ site_config.services_section_subheading|default:"Comprehensive digital solutions tailored to help your business grow, innovate, and succeed." }}</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      {% for service in site_config.services.all %}
+        {% with style=service.icon_style %}
+        <div class="service-card glass-light dark:glass rounded-3xl p-8 reveal group cursor-default" style="transition-delay:0.{{ forloop.counter0 }}s;">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300
+            {% if style == 'emerald' %}bg-gradient-to-br from-emerald-400 to-emerald-700
+            {% elif style == 'violet' %}bg-gradient-to-br from-violet-400 to-violet-700
+            {% elif style == 'orange' %}bg-gradient-to-br from-orange-400 to-orange-600
+            {% elif style == 'cyan' %}bg-gradient-to-br from-cyan-400 to-cyan-700
+            {% else %}bg-gradient-to-br from-brand-400 to-brand-700{% endif %}">
+            <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.8"><path stroke-linecap="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">{{ service.title }}</h3>
+          <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-5">{{ service.description }}</p>
+          {% with tags=service.tags|csv_list %}
+            {% if tags %}
+              <div class="flex flex-wrap gap-2">
+                {% for tag in tags %}
+                  <span class="px-3 py-1 text-xs font-medium rounded-full
+                    {% if style == 'emerald' %}bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400
+                    {% elif style == 'violet' %}bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400
+                    {% elif style == 'orange' %}bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400
+                    {% elif style == 'cyan' %}bg-cyan-50 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400
+                    {% else %}bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400{% endif %}">{{ tag }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endwith %}
+        </div>
+        {% endwith %}
+      {% empty %}
+        <div class="service-card glass-light dark:glass rounded-3xl p-8 reveal">
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">Add services in Admin</h3>
+          <p class="text-gray-500 dark:text-gray-400 text-sm">Site Configuration → Services.</p>
+        </div>
+      {% endfor %}
+
+      <div class="reveal rounded-3xl p-8 bg-gradient-to-br from-brand-600 to-brand-800 flex flex-col justify-between">
+        <div>
+          <h3 class="text-xl font-bold text-white mb-3">Need a custom solution?</h3>
+          <p class="text-blue-200 text-sm leading-relaxed">Let's discuss your project requirements and craft a tailored technology solution just for you.</p>
+        </div>
+        <a href="{% url 'core:home' %}#contact" class="mt-8 inline-flex items-center gap-2 bg-white text-brand-700 font-bold text-sm px-6 py-3 rounded-2xl hover:bg-blue-50 transition-all hover:shadow-lg hover:-translate-y-0.5">
+          Talk to Us
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="py-24 bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div class="relative reveal-left">
+        <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-brand-600 to-brand-900 p-1">
+          <div class="bg-gray-50 dark:bg-gray-900 rounded-[22px] p-10">
+            <div class="grid grid-cols-2 gap-6 mb-6">
+              <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm">
+                <div class="text-4xl font-black gradient-text mb-1" data-counter="{{ site_config.stats_projects_completed|default:150 }}" data-suffix="+">0</div>
+                <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Projects Completed</div>
+              </div>
+              <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm">
+                <div class="text-4xl font-black gradient-text mb-1" data-counter="{{ site_config.stats_happy_clients|default:80 }}" data-suffix="+">0</div>
+                <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Happy Clients</div>
+              </div>
+              <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm">
+                <div class="text-4xl font-black gradient-text mb-1" data-counter="{{ site_config.stats_years_experience|default:8 }}" data-suffix="+">0</div>
+                <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Years Experience</div>
+              </div>
+              <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm">
+                <div class="text-4xl font-black gradient-text mb-1" data-counter="{{ site_config.stats_team_members|default:25 }}" data-suffix="+">0</div>
+                <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Team Members</div>
+              </div>
+            </div>
+            <div class="bg-gradient-to-r from-brand-500 to-brand-700 rounded-2xl p-5 flex items-center gap-4">
+              <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+                <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+              </div>
+              <div>
+                <div class="text-white font-bold text-sm">Watch Our Story</div>
+                <div class="text-blue-200 text-xs">See how we've helped businesses grow</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-brand-100 dark:bg-brand-900/30 rounded-3xl -z-10 animate-float"></div>
+        <div class="absolute -top-6 -left-6 w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-2xl -z-10 animate-float2"></div>
+      </div>
+
+      <div class="reveal-right">
+        <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-xs font-semibold tracking-widest uppercase mb-6">{{ site_config.about_section_label|default:"About Us" }}</span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-6 leading-tight">{{ site_config.about_section_heading|default:"We Turn Vision Into Reality" }}</h2>
+        {% if site_config.about_vision_quote %}
+          <p class="text-gray-500 dark:text-gray-400 leading-relaxed mb-6">{{ site_config.about_vision_quote }}</p>
+        {% endif %}
+        {% if site_config.about_body %}
+          <p class="text-gray-500 dark:text-gray-400 leading-relaxed mb-8">{{ site_config.about_body }}</p>
+        {% endif %}
+
+        <div class="space-y-4">
+          {% for value in site_config.core_values.all %}
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#3b97f6" stroke-width="2.5"><path stroke-linecap="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div>
+                <div class="font-semibold text-gray-900 dark:text-white text-sm mb-1">{{ value.title|default:"Core Value" }}</div>
+                <div class="text-gray-500 dark:text-gray-400 text-sm">{{ value.description }}</div>
+              </div>
+            </div>
+          {% empty %}
+            <div class="text-gray-500 dark:text-gray-400 text-sm">Add core values in Admin → Site Configuration → Core Values.</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="py-24 bg-white dark:bg-gray-950">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 reveal">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-xs font-semibold tracking-widest uppercase mb-4">Our Work</span>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4">{{ site_config.projects_section_heading|default:"Featured" }} <span class="gradient-text">Projects</span></h2>
+      <p class="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">{{ site_config.projects_section_subheading|default:"A showcase of our best work across industries and technologies." }}</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for project in site_config.projects.all %}
+        <div class="project-card rounded-3xl overflow-hidden reveal group cursor-pointer" onclick="{% if project.url %}window.location.href='{{ project.url }}'{% else %}document.querySelector('#contact').scrollIntoView({behavior:'smooth'}){% endif %}">
+          <div class="relative h-56 overflow-hidden
+            {% if project.theme == 'emerald' %}bg-gradient-to-br from-emerald-500 to-teal-800
+            {% elif project.theme == 'violet' %}bg-gradient-to-br from-violet-500 to-purple-900
+            {% elif project.theme == 'orange' %}bg-gradient-to-br from-orange-500 to-red-700
+            {% elif project.theme == 'cyan' %}bg-gradient-to-br from-cyan-500 to-blue-800
+            {% else %}bg-gradient-to-br from-brand-500 to-brand-800{% endif %}">
+            <div class="absolute inset-0 flex items-center justify-center opacity-20">
+              <svg width="120" height="120" fill="white" viewBox="0 0 24 24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+            </div>
+            <div class="absolute inset-0 p-6 flex flex-col justify-end">
+              <div class="grid grid-cols-3 gap-2 opacity-40 mb-4">
+                <div class="h-2 bg-white/40 rounded"></div>
+                <div class="h-2 bg-white/60 rounded"></div>
+                <div class="h-2 bg-white/30 rounded"></div>
+                <div class="col-span-2 h-2 bg-white/50 rounded"></div>
+                <div class="h-2 bg-white/40 rounded"></div>
+              </div>
+            </div>
+            <div class="overlay absolute inset-0 bg-black/55 flex items-center justify-center">
+              <div class="text-center">
+                <div class="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center mx-auto mb-3">
+                  <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </div>
+                <span class="text-white font-semibold text-sm">{% if project.url %}View Project{% else %}View{% endif %}</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-gray-50 dark:bg-gray-900">
+            {% if project.category %}<span class="text-xs font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wider">{{ project.category }}</span>{% endif %}
+            <h3 class="font-bold text-gray-900 dark:text-white mb-2 mt-2">{{ project.title }}</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">{{ project.description }}</p>
+          </div>
+        </div>
+      {% empty %}{% endfor %}
+
+      <div class="reveal rounded-3xl overflow-hidden border-2 border-dashed border-brand-200 dark:border-brand-800 flex items-center justify-center p-8 text-center hover:border-brand-400 transition-colors group cursor-pointer" onclick="document.querySelector('#contact').scrollIntoView({behavior:'smooth'})">
+        <div>
+          <div class="w-14 h-14 rounded-2xl bg-brand-50 dark:bg-brand-900/30 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+            <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="#3b97f6" stroke-width="2"><path stroke-linecap="round" d="M12 4v16m8-8H4"/></svg>
+          </div>
+          <h3 class="font-bold text-gray-900 dark:text-white mb-2">Start Your Project</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Your project could be next. Let's create something amazing together.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="py-24 bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div class="reveal">
+        <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-xs font-semibold tracking-widest uppercase mb-6">{{ site_config.why_section_label|default:"Why Us" }}</span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
+          {{ site_config.why_section_heading|default:"The Smart Choice for Digital Growth" }}
+        </h2>
+        <p class="text-gray-500 dark:text-gray-400 leading-relaxed mb-10">
+          {{ site_config.why_section_body|default:"We combine technical expertise with business acumen to deliver solutions that make a real difference. Here's what sets us apart:" }}
+        </p>
+
+        <div class="space-y-4">
+          {% for item in site_config.why_items.all %}
+            <div class="why-card flex items-center gap-4 p-5 bg-white dark:bg-gray-800 rounded-2xl border-l-4 border-brand-200 dark:border-brand-800 shadow-sm">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0
+                {% if item.color_theme == 'emerald' %}bg-emerald-50 dark:bg-emerald-900/30
+                {% elif item.color_theme == 'violet' %}bg-violet-50 dark:bg-violet-900/30
+                {% elif item.color_theme == 'orange' %}bg-orange-50 dark:bg-orange-900/30
+                {% elif item.color_theme == 'cyan' %}bg-cyan-50 dark:bg-cyan-900/30
+                {% else %}bg-brand-50 dark:bg-brand-900/30{% endif %}">
+                {% if item.icon_svg_path %}
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="{% if item.color_theme == 'emerald' %}#10b981{% elif item.color_theme == 'violet' %}#8b5cf6{% elif item.color_theme == 'orange' %}#f97316{% elif item.color_theme == 'cyan' %}#06b6d4{% else %}#3b97f6{% endif %}" stroke-width="2.2"><path stroke-linecap="round" d="{{ item.icon_svg_path }}"/></svg>
                 {% else %}
-                <img src="{% static 'img/logo.png' %}" alt="{{ site_config.site_name|default:'Proxy Soft' }}" class="h-12 w-auto max-w-[220px] object-contain object-left">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#3b97f6" stroke-width="2.5"><path stroke-linecap="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 {% endif %}
-            </a>
-
-            <div class="hidden md:flex items-center gap-6 lg:gap-8 text-white/90 font-medium flex-wrap justify-end">
-                <a href="{% url 'core:home' %}#home" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-house text-proxyCyan/80"></i> Home</a>
-                <a href="{% url 'core:home' %}#about" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-users text-proxyCyan/80"></i> About</a>
-                <a href="{% url 'core:home' %}#services" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-briefcase text-proxyCyan/80"></i> Services</a>
-                <a href="{% url 'core:home' %}#outsourcing" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-globe text-proxyCyan/80"></i> Outsourcing</a>
-                <a href="{% url 'blog:list' %}" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-newspaper text-proxyCyan/80"></i> Blog</a>
-                {% for p in nav_pages %}
-                <a href="{{ p.get_absolute_url }}" class="hover:text-proxyCyan transition">{{ p.title }}</a>
-                {% endfor %}
-                <a href="{% url 'core:home' %}#contact" class="bg-proxyCyan hover:bg-white hover:text-proxyBlue text-proxyDark px-6 py-2 rounded-full transition-all shadow-lg font-bold flex items-center gap-2"><i class="fa-solid fa-rocket"></i> {{ site_config.nav_get_started_text|default:"Get Started" }}</a>
+              </div>
+              <div>
+                <div class="font-semibold text-gray-900 dark:text-white text-sm">{{ item.title }}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">{{ item.description }}</div>
+              </div>
             </div>
-
-            <button @click="mobileMenu = !mobileMenu" class="md:hidden text-white" aria-label="Menu">
-                <svg x-show="!mobileMenu" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                <svg x-show="mobileMenu" x-cloak class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
+          {% empty %}
+            <!-- Fallback hardcoded items -->
+            <div class="why-card flex items-center gap-4 p-5 bg-white dark:bg-gray-800 rounded-2xl border-l-4 border-brand-200 dark:border-brand-800 shadow-sm">
+              <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/30 flex items-center justify-center flex-shrink-0">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#3b97f6" stroke-width="2.2"><path stroke-linecap="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </div>
+              <div>
+                <div class="font-semibold text-gray-900 dark:text-white text-sm">Lightning-Fast Performance</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Sub-second load times and optimized user experiences by default.</div>
+              </div>
+            </div>
+            <div class="why-card flex items-center gap-4 p-5 bg-white dark:bg-gray-800 rounded-2xl border-l-4 border-brand-200 dark:border-brand-800 shadow-sm">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2.2"><path stroke-linecap="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+              </div>
+              <div>
+                <div class="font-semibold text-gray-900 dark:text-white text-sm">Infinite Scalability</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Cloud-native architectures that scale with your business growth.</div>
+              </div>
+            </div>
+            <div class="why-card flex items-center gap-4 p-5 bg-white dark:bg-gray-800 rounded-2xl border-l-4 border-brand-200 dark:border-brand-800 shadow-sm">
+              <div class="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-900/30 flex items-center justify-center flex-shrink-0">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#8b5cf6" stroke-width="2.2"><path stroke-linecap="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              </div>
+              <div>
+                <div class="font-semibold text-gray-900 dark:text-white text-sm">Enterprise-Grade Security</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Security-first development practices for your business.</div>
+              </div>
+            </div>
+            <div class="why-card flex items-center gap-4 p-5 bg-white dark:bg-gray-800 rounded-2xl border-l-4 border-brand-200 dark:border-brand-800 shadow-sm">
+              <div class="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#f97316" stroke-width="2.2"><path stroke-linecap="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              </div>
+              <div>
+                <div class="font-semibold text-gray-900 dark:text-white text-sm">24/7 Dedicated Support</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Round-the-clock monitoring and rapid response.</div>
+              </div>
+            </div>
+            <div class="why-card flex items-center gap-4 p-5 bg-white dark:bg-gray-800 rounded-2xl border-l-4 border-brand-200 dark:border-brand-800 shadow-sm">
+              <div class="w-10 h-10 rounded-xl bg-cyan-50 dark:bg-cyan-900/30 flex items-center justify-center flex-shrink-0">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#06b6d4" stroke-width="2.2"><path stroke-linecap="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div>
+                <div class="font-semibold text-gray-900 dark:text-white text-sm">Transparent Pricing</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">No hidden fees. Flexible engagement models.</div>
+              </div>
+            </div>
+          {% endfor %}
         </div>
+      </div>
 
-        <div x-show="mobileMenu" x-cloak x-transition.opacity class="fixed inset-0 bg-proxyDark z-40 md:hidden flex flex-col items-center justify-center gap-8 text-2xl text-white font-bold">
-            <button @click="mobileMenu = false" type="button" class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full border-2 border-white/30 hover:bg-white/10 hover:border-proxyCyan text-white transition-colors" aria-label="Close menu">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <a @click="mobileMenu = false" href="{% url 'core:home' %}#home">Home</a>
-            <a @click="mobileMenu = false" href="{% url 'core:home' %}#about">About</a>
-            <a @click="mobileMenu = false" href="{% url 'core:home' %}#services">Services</a>
-            <a @click="mobileMenu = false" href="{% url 'blog:list' %}">Blog</a>
-            {% for p in nav_pages %}
-            <a @click="mobileMenu = false" href="{{ p.get_absolute_url }}">{{ p.title }}</a>
-            {% endfor %}
-            <a @click="mobileMenu = false" href="{% url 'core:home' %}#contact" class="text-proxyCyan">Contact</a>
+      <div class="reveal-right">
+        <div class="rounded-3xl bg-gradient-to-br from-brand-600 to-brand-900 p-10 text-center relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+          <div class="absolute bottom-0 left-0 w-60 h-60 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+          <div class="relative z-10">
+            <div class="text-7xl font-black text-white mb-2" data-counter="{{ site_config.stats_client_satisfaction_rate|default:98 }}" data-suffix="%">0</div>
+            <div class="text-blue-200 font-semibold mb-8">Client Satisfaction Rate</div>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="glass rounded-2xl p-4">
+                <div class="text-2xl font-black text-white mb-1" data-counter="{{ site_config.stats_projects_completed|default:150 }}" data-suffix="+">0</div>
+                <div class="text-blue-300 text-xs">Projects</div>
+              </div>
+              <div class="glass rounded-2xl p-4">
+                <div class="text-2xl font-black text-white mb-1" data-counter="{{ site_config.stats_happy_clients|default:80 }}" data-suffix="+">0</div>
+                <div class="text-blue-300 text-xs">Clients</div>
+              </div>
+              <div class="glass rounded-2xl p-4">
+                <div class="text-2xl font-black text-white mb-1" data-counter="{{ site_config.stats_awards_count|default:15 }}" data-suffix="+">0</div>
+                <div class="text-blue-300 text-xs">Awards</div>
+              </div>
+            </div>
+            <div class="mt-8 flex items-center justify-center gap-3">
+              <div class="flex -space-x-3">
+                <div class="w-10 h-10 rounded-full bg-brand-400 border-2 border-white flex items-center justify-center text-white font-bold text-xs">JD</div>
+                <div class="w-10 h-10 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-white font-bold text-xs">MK</div>
+                <div class="w-10 h-10 rounded-full bg-violet-500 border-2 border-white flex items-center justify-center text-white font-bold text-xs">AS</div>
+                <div class="w-10 h-10 rounded-full bg-orange-500 border-2 border-white flex items-center justify-center text-white font-bold text-xs">+</div>
+              </div>
+              <span class="text-blue-200 text-sm font-medium">{{ site_config.stats_team_members|default:25 }}+ team experts</span>
+            </div>
+          </div>
         </div>
-    </nav>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section id="home" class="relative min-h-screen flex items-center pt-20 hero-gradient text-white overflow-hidden">
-        <div class="absolute inset-0 circuit-bg"></div>
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
-            <div class="animate__animated animate__fadeInLeft">
-                <div class="inline-block px-4 py-1 rounded-full bg-proxyCyan/20 text-proxyCyan text-sm font-bold mb-6 border border-proxyCyan/30 flex items-center gap-2 w-fit">
-                    <i class="fa-solid fa-lightbulb"></i> {{ site_config.hero_badge_text|default:"Innovative Tech Solutions" }}
-                </div>
-                <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-6">
-                    {% if site_config and site_config.hero_title %}{{ site_config.hero_title|highlight:site_config.hero_title_highlight }}{% else %}Securing Your <span class="text-proxyCyan">Digital</span> Future{% endif %}
-                </h1>
-                <p class="text-lg text-slate-300 mb-8 max-w-lg">
-                    {{ site_config.hero_description|default:"Proxy Soft Pvt. Ltd. provides scalable, result-oriented solutions in Web, Mobile, and Software Development for international growth." }}
-                </p>
-                <div class="flex flex-wrap hero-cta-gap pt-1">
-                    <a href="#services" class="bg-proxyCyan text-proxyDark px-8 py-4 rounded-xl font-bold hover:scale-105 transition shadow-xl shadow-proxyCyan/20 flex items-center gap-2"><i class="fa-solid fa-arrow-right"></i> {{ site_config.hero_cta_primary_text|default:"Explore Services" }}</a>
-                    <a href="#contact" class="border border-white/30 hover:bg-white/10 px-8 py-4 rounded-xl font-bold transition flex items-center gap-2"><i class="fa-solid fa-envelope"></i> {{ site_config.hero_cta_secondary_text|default:"Contact Us" }}</a>
-                </div>
-            </div>
-            <div class="relative animate__animated animate__zoomIn">
-                <div class="relative z-0 rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-                    {% if site_config.hero_image %}<img src="{{ site_config.hero_image.url }}" alt="Hero" class="w-full h-full object-cover opacity-80" loading="lazy">
-                    {% elif site_config.hero_image_url %}<img src="{{ site_config.hero_image_url }}" alt="Hero" class="w-full h-full object-cover opacity-80" loading="lazy">
-                    {% else %}<img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80" alt="Cyber Security" class="w-full h-full object-cover opacity-80" loading="lazy">{% endif %}
-                </div>
-                <div class="absolute -bottom-10 -left-10 z-20 bg-white p-6 rounded-2xl shadow-2xl animate-bounce" style="animation-duration: 4s">
-                    <p class="text-proxyDark font-bold text-3xl flex items-center gap-2"><i class="fa-solid fa-chart-line text-proxyCyan"></i> {{ site_config.hero_stat_value|default:"100%" }}</p>
-                    <p class="text-proxySilver text-xs uppercase tracking-widest font-bold">{{ site_config.hero_stat_label|default:"Result Oriented" }}</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- TESTIMONIALS -->
+<section class="py-24 bg-white dark:bg-gray-950" x-data="{
+  current: 0,
+  testimonials: {{ testimonials_json|safe }},
+  next() { this.current = (this.current + 1) % this.testimonials.length; },
+  prev() { this.current = (this.current - 1 + this.testimonials.length) % this.testimonials.length; }
+}" x-init="setInterval(() => { if (testimonials.length) next(); }, 6000)">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 reveal">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-xs font-semibold tracking-widest uppercase mb-4">Testimonials</span>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4">What Our <span class="gradient-text">Clients Say</span></h2>
+    </div>
 
-    <section id="about" class="bg-white relative section-top-space pb-24">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center about-heading-spacing">
-                <h2 class="text-proxySilver font-bold tracking-widest uppercase text-sm about-label-to-title flex items-center justify-center gap-2"><i class="fa-solid fa-building-columns"></i> {{ site_config.about_section_label|default:"Our Foundation" }}</h2>
-                <h3 class="text-4xl font-bold about-title-spacing">{{ site_config.about_section_heading|default:"The Proxy Soft Vision" }}</h3>
-            </div>
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div class="space-y-6 text-lg text-slate-600">
-                    <p class="border-l-4 border-proxyBlue pl-6 italic font-medium text-proxyDark">"{{ site_config.about_vision_quote|default:"To establish a technology-driven company providing innovative, scalable, and result-oriented digital solutions." }}"</p>
-                    <p>Owned by <strong>{{ site_config.about_owner_name|default:"Shekhar Dhakal" }}</strong>, {{ site_config.about_body|default:"our company aims to operate as a bridge for foreign projects into Nepal, contributing to local economic growth and employment." }}</p>
-                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm font-bold text-proxyBlue">
-                        {% for bullet in site_config.about_bullets_list %}
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-proxyCyan text-lg"></i> {{ bullet }}</li>
-                        {% empty %}
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-proxyCyan text-lg"></i> International Clients</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-proxyCyan text-lg"></i> Tech R&D</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-proxyCyan text-lg"></i> Remote Operations</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-proxyCyan text-lg"></i> SaaS Platforms</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="bg-slate-100 p-8 rounded-3xl shadow-inner border border-slate-200">
-                    <h4 class="font-bold text-xl mb-4 text-proxyBlue">{{ site_config.about_core_values_heading|default:"Our Core Values" }}</h4>
-                    <div class="space-y-4">
-                        {% for value in site_config.core_values.all %}
-                        <div class="flex gap-4">
-                            <div class="w-12 h-12 bg-proxyBlue shield-clip flex-shrink-0 flex items-center justify-center text-white">{{ forloop.counter|stringformat:"02d" }}</div>
-                            <p class="text-sm">{{ value.description }}</p>
-                        </div>
-                        {% empty %}
-                        <div class="flex gap-4">
-                            <div class="w-12 h-12 bg-proxyBlue shield-clip flex-shrink-0 flex items-center justify-center text-white">01</div>
-                            <p class="text-sm">Comprehensive Social Media & Content Marketing strategy.</p>
-                        </div>
-                        <div class="flex gap-4">
-                            <div class="w-12 h-12 bg-proxyBlue shield-clip flex-shrink-0 flex items-center justify-center text-white">02</div>
-                            <p class="text-sm">Responsive E-commerce and dynamic platform development.</p>
-                        </div>
-                        <div class="flex gap-4">
-                            <div class="w-12 h-12 bg-proxyBlue shield-clip flex-shrink-0 flex items-center justify-center text-white">03</div>
-                            <p class="text-sm">Collaboration with domestic and international institutions.</p>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="services" class="py-24 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
-                <div>
-                    <h2 class="text-4xl font-bold mb-2 flex items-center gap-3"><i class="fa-solid fa-layer-group text-proxyBlue"></i> {{ site_config.services_section_heading|default:"Service Stack" }}</h2>
-                    <p class="text-proxySilver font-medium">{{ site_config.services_section_subheading|default:"Expert solutions for every digital need." }}</p>
-                </div>
-                <div class="hidden md:block h-[2px] bg-proxySilver/20 flex-grow mx-8 mb-4"></div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {% for service in site_config.services.all %}
-                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
-                    <div class="w-14 h-14 bg-blue-50 text-proxyBlue rounded-xl flex items-center justify-center mb-6 group-hover:bg-proxyBlue group-hover:text-white transition">
-                        <i class="{{ service.icon_class }} text-2xl"></i>
-                    </div>
-                    <h4 class="text-xl font-bold mb-3">{{ service.title }}</h4>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-4">{{ service.description }}</p>
-                </div>
-                {% empty %}
-                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
-                    <div class="w-14 h-14 bg-blue-50 text-proxyBlue rounded-xl flex items-center justify-center mb-6 group-hover:bg-proxyBlue group-hover:text-white transition"><i class="fa-solid fa-laptop-code text-2xl"></i></div>
-                    <h4 class="text-xl font-bold mb-3">Development</h4>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Web applications, responsive websites, and mobile apps for Android, iOS, and cross-platform environments.</p>
-                </div>
-                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
-                    <div class="w-14 h-14 bg-cyan-50 text-proxyCyan rounded-xl flex items-center justify-center mb-6 group-hover:bg-proxyCyan group-hover:text-white transition"><i class="fa-solid fa-chart-pie text-2xl"></i></div>
-                    <h4 class="text-xl font-bold mb-3">Digital Strategy</h4>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Comprehensive Social Media Marketing, SEO (Technical/On-page), and detailed keyword analytics.</p>
-                </div>
-                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
-                    <div class="w-14 h-14 bg-slate-50 text-proxyDark rounded-xl flex items-center justify-center mb-6 group-hover:bg-proxyDark group-hover:text-white transition"><i class="fa-solid fa-palette text-2xl"></i></div>
-                    <h4 class="text-xl font-bold mb-3">Creative UI/UX</h4>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Expert logo design, branding materials, and user-centric multimedia creatives.</p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-
-    <section id="tech-stack" class="py-24 bg-white relative">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-14">
-                <h2 class="text-proxySilver font-bold tracking-widest uppercase text-sm mb-2 flex items-center justify-center gap-2"><i class="fa-solid fa-microchip"></i> {{ site_config.tech_section_label|default:"Technologies We Use" }}</h2>
-                <h3 class="text-4xl font-bold text-proxyDark">{{ site_config.tech_section_heading|default:"The Tech Stack" }}</h3>
-            </div>
-            <div class="flex flex-wrap justify-center gap-4 md:gap-6">
-                {% for item in site_config.tech_stack_items.all %}
-                <div class="flex items-center gap-3 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-proxyCyan hover:shadow-lg hover:shadow-proxyCyan/10 transition-all duration-300 group">
-                    <i class="{{ item.icon_class }} text-3xl text-proxyBlue group-hover:scale-110 transition-transform"></i>
-                    <span class="font-bold text-proxyDark">{{ item.name }}</span>
-                </div>
-                {% empty %}
-                <div class="flex items-center gap-3 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-proxyCyan hover:shadow-lg transition-all duration-300 group">
-                    <i class="fa-brands fa-python text-3xl text-proxyBlue group-hover:scale-110 transition-transform"></i>
-                    <span class="font-bold text-proxyDark">Python</span>
-                </div>
-                <div class="flex items-center gap-3 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-proxyCyan hover:shadow-lg transition-all duration-300 group">
-                    <i class="fa-solid fa-bolt text-2xl text-proxyBlue group-hover:scale-110 transition-transform"></i>
-                    <span class="font-bold text-proxyDark">Django</span>
-                </div>
-                <div class="flex items-center gap-3 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-proxyCyan hover:shadow-lg transition-all duration-300 group">
-                    <i class="fa-solid fa-wind text-2xl text-proxyCyan group-hover:scale-110 transition-transform"></i>
-                    <span class="font-bold text-proxyDark">Tailwind</span>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-
-    {# x-data must use single-quoted HTML attribute: JSON arrays use double quotes and would break x-data="..." #}
-    <section class="py-24 bg-proxyDark text-white overflow-hidden" x-data='{ "active": 0, "testimonials": {{ testimonials_json|safe }} }' x-init="setInterval(() => { if ($data.testimonials && $data.testimonials.length) { $data.active = ($data.active + 1) % $data.testimonials.length } }, 4000)">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            {% if site_config.testimonials_heading %}<h2 class="text-proxySilver font-bold tracking-widest uppercase text-sm mb-6">{{ site_config.testimonials_heading }}</h2>{% endif %}
-            <i class="fa-solid fa-quote-left text-5xl text-proxyCyan mx-auto mb-8 opacity-50 block"></i>
-            <div class="relative min-h-[8rem] mb-8" x-show="testimonials.length">
-                <template x-for="(t, index) in testimonials" :key="index">
-                    <p x-show="active === index" x-transition.opacity class="text-2xl md:text-3xl font-medium italic absolute inset-0 flex items-center justify-center px-2" x-text="t"></p>
-                </template>
-            </div>
-            <p class="text-slate-400 text-lg" x-show="!testimonials.length">Add testimonials in the admin to show quotes here.</p>
-            <div class="flex justify-center gap-3" x-show="testimonials.length > 1">
-                <template x-for="(t, index) in testimonials" :key="index">
-                    <button type="button" @click="active = index" :class="active === index ? 'bg-proxyCyan w-8' : 'bg-slate-600 w-3'" class="h-3 rounded-full transition-all duration-300"></button>
-                </template>
-            </div>
-        </div>
-    </section>
-
-    <section id="clients" class="py-24 bg-slate-50 relative">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-14">
-                <h2 class="text-proxySilver font-bold tracking-widest uppercase text-sm mb-2 flex items-center justify-center gap-2"><i class="fa-solid fa-handshake"></i> {{ site_config.clients_section_label|default:"Trusted Partnerships" }}</h2>
-                <h3 class="text-4xl font-bold text-proxyDark">{{ site_config.clients_section_heading|default:"Our Valued Clients" }}</h3>
-                <p class="text-slate-600 mt-4 max-w-2xl mx-auto">{{ site_config.clients_section_subheading|default:"We are proud to partner with businesses worldwide, delivering solutions that drive growth and innovation." }}</p>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-                {% for client in site_config.clients.all %}
-                <div class="bg-white rounded-2xl border border-slate-200 p-8 flex items-center justify-center min-h-[140px] hover:border-proxyCyan hover:shadow-lg hover:shadow-proxyCyan/5 transition-all duration-300 group">
-                    <div class="text-center">
-                        {% if client.logo %}<img src="{{ client.logo.url }}" alt="{{ client.name }}" class="max-h-16 mx-auto object-contain group-hover:opacity-80">
-                        {% else %}<i class="fa-solid fa-building text-4xl text-proxySilver group-hover:text-proxyBlue transition-colors mb-2"></i>{% endif %}
-                        <span class="text-sm font-bold text-proxyDark">{{ client.name }}</span>
-                    </div>
-                </div>
-                {% empty %}
-                {% for i in "1234" %}
-                <div class="bg-white rounded-2xl border border-slate-200 p-8 flex items-center justify-center min-h-[140px] hover:border-proxyCyan hover:shadow-lg transition-all duration-300 group">
-                    <div class="text-center">
-                        <i class="fa-solid fa-building text-4xl text-proxySilver group-hover:text-proxyBlue transition-colors mb-2"></i>
-                        <span class="text-sm font-bold text-proxyDark">Client</span>
-                    </div>
-                </div>
-                {% endfor %}
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="py-24 bg-white relative">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16">
+    <div class="relative max-w-3xl mx-auto reveal">
+      <template x-for="(t, index) in testimonials" :key="index">
+        <div x-show="current === index" x-transition:enter="transition duration-500 ease-out" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition duration-300 ease-in" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="glass-light dark:glass rounded-3xl p-8 md:p-12">
+          <div class="flex gap-1 mb-6">
+            <template x-for="i in 5"><svg width="18" height="18" fill="#f59e0b" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></template>
+          </div>
+          <blockquote class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-8 italic" x-text="'&quot;' + t.text + '&quot;'"></blockquote>
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0" :class="t.color" x-text="t.avatar"></div>
             <div>
-                <h2 class="text-4xl font-bold mb-6">{{ site_config.contact_heading|default:"Let's Connect" }}</h2>
-                <p class="text-slate-600 mb-10">{{ site_config.contact_intro|default:"Generate foreign currency revenue in Nepal with our outsourcing services." }}</p>
-                <div class="space-y-8">
-                    <div class="flex items-start gap-6">
-                        <div class="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-proxyBlue flex-shrink-0"><i class="fa-solid fa-location-dot text-2xl"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Address</h4>
-                            <p class="text-slate-500">{{ site_config.address|default:"Likhu -1, Nuwakot Dhikure, Nepal" }}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-6">
-                        <div class="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-proxyBlue flex-shrink-0"><i class="fa-solid fa-envelope text-2xl"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Email</h4>
-                            <p class="text-slate-500">{{ site_config.email|default:"proxysoft2026@gmail.com" }}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-6">
-                        <div class="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-proxyBlue flex-shrink-0"><i class="fa-solid fa-phone text-2xl"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Phone</h4>
-                            <p class="text-slate-500">{{ site_config.phone|default:"9840177381" }}</p>
-                        </div>
-                    </div>
-                </div>
+              <div class="font-bold text-gray-900 dark:text-white" x-text="t.name"></div>
+              <div class="text-sm text-gray-500 dark:text-gray-400" x-text="t.role"></div>
             </div>
-
-            <form class="bg-slate-50 p-10 rounded-3xl border border-slate-200 shadow-sm" method="post" action="{% url 'core:home' %}#contact">
-                {% csrf_token %}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <label class="block text-sm font-bold mb-2">Name</label>
-                        <input type="text" name="name" class="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-proxyBlue outline-none transition" required autocomplete="name">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-2">Email</label>
-                        <input type="email" name="email" class="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-proxyBlue outline-none transition" required autocomplete="email" placeholder="you@example.com">
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-bold mb-2">Subject</label>
-                    <select name="subject" class="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-proxyBlue outline-none transition">
-                        {% for choice in site_config.contact_form_subject_list %}
-                        <option value="{{ choice }}">{{ choice }}</option>
-                        {% empty %}
-                        <option>Development</option>
-                        <option>Digital Marketing</option>
-                        <option>Outsourcing</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-bold mb-2">Message</label>
-                    <textarea name="message" rows="4" class="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-proxyBlue outline-none transition" required></textarea>
-                </div>
-                <button type="submit" class="w-full bg-proxyBlue text-white font-bold py-5 rounded-xl hover:bg-proxyDark transition-all shadow-lg shadow-proxyBlue/20 flex items-center justify-center gap-2"><i class="fa-solid fa-paper-plane"></i> Send Inquiry</button>
-            </form>
+          </div>
         </div>
-    </section>
+      </template>
 
-    <footer class="bg-proxyDark py-16 text-slate-400 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-12 mb-12">
-                <div class="col-span-2">
-                    <div class="text-white mb-6">
-                        {% if site_config.logo %}
-                        <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[240px] object-contain object-left">
-                        {% elif site_config.logo_url %}
-                        <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[240px] object-contain object-left">
-                        {% else %}
-                        <img src="{% static 'img/logo.png' %}" alt="{{ site_config.site_name|default:'Proxy Soft' }}" class="h-12 w-auto max-w-[240px] object-contain object-left">
-                        {% endif %}
-                    </div>
-                    <p class="max-w-xs mb-6">{{ site_config.footer_tagline|default:"Contributing to economic growth and employment opportunities within Nepal." }}</p>
-                    <div class="flex gap-4">
-                        {% if site_config.linkedin_url %}<a href="{{ site_config.linkedin_url }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-proxyBlue hover:border-proxyBlue transition text-white"><i class="fa-brands fa-linkedin-in"></i></a>{% endif %}
-                        {% if site_config.facebook_url %}<a href="{{ site_config.facebook_url }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-proxyBlue hover:border-proxyBlue transition text-white"><i class="fa-brands fa-facebook-f"></i></a>{% endif %}
-                        {% if site_config.twitter_url %}<a href="{{ site_config.twitter_url }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-proxyBlue hover:border-proxyBlue transition text-white"><i class="fa-brands fa-twitter"></i></a>{% endif %}
-                        {% if site_config.instagram_url %}<a href="{{ site_config.instagram_url }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-proxyBlue hover:border-proxyBlue transition text-white"><i class="fa-brands fa-instagram"></i></a>{% endif %}
-                    </div>
-                </div>
-                <div>
-                    <h5 class="text-white font-bold mb-6">Quick Links</h5>
-                    <ul class="space-y-4 text-sm font-medium">
-                        <li><a href="{% url 'core:home' %}#about" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> About Us</a></li>
-                        <li><a href="{% url 'core:home' %}#services" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> Services</a></li>
-                        <li><a href="{% url 'blog:list' %}" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> Blog</a></li>
-                        <li><a href="{% url 'core:home' %}#contact" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> Contact</a></li>
-                        {% for p in footer_pages %}
-                        <li><a href="{{ p.get_absolute_url }}" class="hover:text-proxyCyan transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-proxyCyan/70 text-xs"></i> {{ p.title }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div>
-                    <h5 class="text-white font-bold mb-6">Compliance</h5>
-                    {% if site_config.company_registration_number %}
-                    <p class="text-xs mb-2">Registration No.: {{ site_config.company_registration_number }}</p>
-                    {% endif %}
-                    {% if site_config.pan_number %}
-                    <p class="text-xs mb-2">PAN: {{ site_config.pan_number }}</p>
-                    {% endif %}
-                    {% if site_config.compliance_number %}<p class="text-xs mb-2 italic">{{ site_config.compliance_number }}</p>{% endif %}
-                    <p class="text-xs">Establishment Year: {{ site_config.establishment_year|default:"2026" }}</p>
-                </div>
-            </div>
-            <div class="pt-8 border-t border-white/5 text-center text-sm">
-                &copy; {% now "Y" %} {{ site_config.site_name|default:"Proxy Soft" }} Pvt. Ltd. {{ site_config.footer_copyright|default:"All Rights Reserved. | Designed for Global Growth." }}
-            </div>
+      <div class="flex items-center justify-center gap-4 mt-8" x-show="testimonials.length > 1">
+        <button @click="prev()" class="w-12 h-12 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-brand-50 hover:border-brand-300 hover:text-brand-600 transition-all shadow-sm" aria-label="Previous">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="flex gap-2">
+          <template x-for="(t, i) in testimonials" :key="i">
+            <button @click="current = i" class="rounded-full transition-all duration-300" :class="current === i ? 'w-8 h-3 bg-brand-500' : 'w-3 h-3 bg-gray-300 dark:bg-gray-600 hover:bg-brand-300'"></button>
+          </template>
         </div>
-    </footer>
+        <button @click="next()" class="w-12 h-12 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-brand-50 hover:border-brand-300 hover:text-brand-600 transition-all shadow-sm" aria-label="Next">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- CTA BAND -->
+<section class="py-24 relative overflow-hidden">
+  <div class="hero-bg absolute inset-0"></div>
+  <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle at 2px 2px, white 1px, transparent 0);background-size:32px 32px;"></div>
+  <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+    <h2 class="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
+      Let's Build Something<br/><span class="gradient-text-white">Amazing Together</span>
+    </h2>
+    <p class="text-blue-200 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
+      Ready to take your digital presence to the next level? Let's discuss your project and turn your vision into reality.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="{% url 'core:home' %}#contact" class="bg-white text-brand-700 font-bold px-8 py-4 rounded-2xl text-base hover:bg-blue-50 transition-all hover:shadow-2xl hover:-translate-y-1 inline-flex items-center gap-2.5 justify-center">
+        Start Your Project
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+      </a>
+      {% if site_config.phone %}
+        <a href="tel:{{ site_config.phone }}" class="btn-outline font-bold px-8 py-4 rounded-2xl text-base inline-flex items-center gap-2.5 justify-center">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          Schedule a Call
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-24 bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 reveal">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-xs font-semibold tracking-widest uppercase mb-4">Get In Touch</span>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4">{{ site_config.contact_heading|default:"Let's Connect" }}</h2>
+      <p class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">{{ site_config.contact_intro|default:"Have a project in mind or just want to explore possibilities? We'd love to hear from you." }}</p>
+    </div>
+
+    <div class="grid lg:grid-cols-5 gap-10">
+      <div class="lg:col-span-2 space-y-6 reveal-left">
+        {% if site_config.email %}
+          <div class="glass-light dark:glass rounded-3xl p-7">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center mb-4">
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <div class="font-semibold text-gray-900 dark:text-white mb-1 text-sm">Email Us</div>
+            <a href="mailto:{{ site_config.email }}" class="text-brand-600 dark:text-brand-400 text-sm hover:underline">{{ site_config.email }}</a>
+          </div>
+        {% endif %}
+        {% if site_config.phone %}
+          <div class="glass-light dark:glass rounded-3xl p-7">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center mb-4">
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            </div>
+            <div class="font-semibold text-gray-900 dark:text-white mb-1 text-sm">Call Us</div>
+            <a href="tel:{{ site_config.phone }}" class="text-brand-600 dark:text-brand-400 text-sm hover:underline">{{ site_config.phone }}</a>
+          </div>
+        {% endif %}
+        {% if site_config.address %}
+          <div class="glass-light dark:glass rounded-3xl p-7">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center mb-4">
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <div class="font-semibold text-gray-900 dark:text-white mb-1 text-sm">Our Office</div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">{{ site_config.address }}</p>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="lg:col-span-3 reveal-right">
+        <form method="post" action="{% url 'core:home' %}#contact" class="glass-light dark:glass rounded-3xl p-8">
+          {% csrf_token %}
+          <div class="grid sm:grid-cols-2 gap-5 mb-5">
+            <div>
+              <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-2">Your Name</label>
+              <input type="text" name="name" required autocomplete="name" placeholder="John Doe" class="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 transition-all"/>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-2">Email Address</label>
+              <input type="email" name="email" required autocomplete="email" placeholder="john@example.com" class="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 transition-all"/>
+            </div>
+          </div>
+          <div class="mb-5">
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-2">Subject</label>
+            <input type="text" name="subject" placeholder="How can we help you?" class="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 transition-all"/>
+          </div>
+          <div class="mb-7">
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-2">Message</label>
+            <textarea name="message" rows="5" required placeholder="Tell us about your project..." class="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 transition-all resize-none"></textarea>
+          </div>
+          <button type="submit" class="w-full btn-primary text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-3 text-sm">
+            Send Message
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-gray-950 dark:bg-black text-gray-400 pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
+      <div class="lg:col-span-1">
+        <div class="flex items-center gap-2.5 mb-4">
+          {% if site_config.logo %}
+            <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-8 w-auto object-contain">
+          {% elif site_config.logo_url %}
+            <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-8 w-auto object-contain">
+          {% else %}
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          {% endif %}
+          <span class="font-bold text-xl text-white">{{ site_config.site_name|default:"ProxySoft" }}</span>
+        </div>
+        <p class="text-sm leading-relaxed mb-6">{{ site_config.footer_tagline|default:"Transforming ideas into digital solutions that drive growth and innovation." }}</p>
+        <div class="flex gap-3">
+          {% if site_config.twitter_url %}
+            <a href="{{ site_config.twitter_url }}" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-brand-700 flex items-center justify-center text-gray-400 hover:text-white transition-all" aria-label="Twitter">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557a9.83 9.83 0 01-2.828.775 4.932 4.932 0 002.165-2.724c-.951.555-2.005.959-3.127 1.184a4.916 4.916 0 00-8.384 4.482C7.691 8.094 4.066 6.13 1.64 3.161a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.061a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.937 4.937 0 004.604 3.417 9.868 9.868 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63a9.936 9.936 0 002.46-2.548l-.047-.02z"/></svg>
+            </a>
+          {% endif %}
+          {% if site_config.linkedin_url %}
+            <a href="{{ site_config.linkedin_url }}" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-brand-700 flex items-center justify-center text-gray-400 hover:text-white transition-all" aria-label="LinkedIn">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+          {% endif %}
+          {% if site_config.facebook_url %}
+            <a href="{{ site_config.facebook_url }}" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-brand-700 flex items-center justify-center text-gray-400 hover:text-white transition-all" aria-label="Facebook">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+          {% endif %}
+          {% if site_config.instagram_url %}
+            <a href="{{ site_config.instagram_url }}" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-brand-700 flex items-center justify-center text-gray-400 hover:text-white transition-all" aria-label="Instagram">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-5">Quick Links</h4>
+        <ul class="space-y-3">
+          <li><a href="{% url 'core:home' %}#home" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">Home</a></li>
+          <li><a href="{% url 'core:home' %}#services" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">Services</a></li>
+          <li><a href="{% url 'core:home' %}#about" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">About Us</a></li>
+          <li><a href="{% url 'core:home' %}#projects" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">Projects</a></li>
+          <li><a href="{% url 'blog:list' %}" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">Blog</a></li>
+          {% for p in footer_pages %}
+            <li><a href="{{ p.get_absolute_url }}" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">{{ p.title }}</a></li>
+          {% endfor %}
+          <li><a href="{% url 'core:home' %}#contact" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-5">Services</h4>
+        <ul class="space-y-3">
+          {% for service in site_config.services.all %}
+            <li><a href="{% url 'core:home' %}#services" class="text-sm hover:text-brand-400 transition-colors hover:translate-x-1 inline-block">{{ service.title }}</a></li>
+          {% empty %}
+            <li class="text-sm">Web Development</li>
+            <li class="text-sm">Digital Marketing</li>
+            <li class="text-sm">IT Consulting</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-5">Contact</h4>
+        <ul class="space-y-4 text-sm">
+          {% if site_config.email %}<li><a href="mailto:{{ site_config.email }}" class="hover:text-brand-400 transition-colors">{{ site_config.email }}</a></li>{% endif %}
+          {% if site_config.phone %}<li><a href="tel:{{ site_config.phone }}" class="hover:text-brand-400 transition-colors">{{ site_config.phone }}</a></li>{% endif %}
+          {% if site_config.address %}<li>{{ site_config.address }}</li>{% endif %}
+        </ul>
+        {% if site_config.company_registration_number or site_config.pan_number %}
+          <div class="mt-6 pt-6 border-t border-gray-800">
+            <h5 class="text-white font-semibold text-xs uppercase tracking-wider mb-3">Compliance</h5>
+            {% if site_config.company_registration_number %}<p class="text-xs mb-1">Reg. No.: {{ site_config.company_registration_number }}</p>{% endif %}
+            {% if site_config.pan_number %}<p class="text-xs mb-1">PAN: {{ site_config.pan_number }}</p>{% endif %}
+            <p class="text-xs">Est. {{ site_config.establishment_year|default:"2026" }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-xs">© {% now "Y" %} <span class="text-brand-400 font-semibold">{{ site_config.site_name|default:"Proxy Soft" }}</span>. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => { document.getElementById('loader')?.classList.add('hidden'); }, 900);
+  });
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        entry.target.querySelectorAll('[data-counter]').forEach(animateCounter);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+    revealObserver.observe(el);
+  });
+
+  function animateCounter(el) {
+    if (el.dataset.animated) return;
+    el.dataset.animated = 'true';
+    const target = parseInt(el.dataset.counter || '0', 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 2000;
+    const step = target / (duration / 16);
+    let current = 0;
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = Math.floor(current) + suffix;
+      if (current >= target) clearInterval(timer);
+    }, 16);
+  }
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) animateCounter(entry.target); });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-counter]').forEach(el => counterObserver.observe(el));
+</script>
 </body>
 </html>

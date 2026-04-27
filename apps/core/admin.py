@@ -8,6 +8,9 @@ from .models import (
     TechStackItem,
     Testimonial,
     Client,
+    Project,
+    WhyChooseUsItem,
+    HeroBadge,
     ContactSubmission,
 )
 
@@ -42,6 +45,24 @@ class ClientInline(admin.TabularInline):
     ordering = ["order"]
 
 
+class ProjectInline(admin.TabularInline):
+    model = Project
+    extra = 0
+    ordering = ["order"]
+
+
+class WhyChooseUsItemInline(admin.TabularInline):
+    model = WhyChooseUsItem
+    extra = 0
+    ordering = ["order"]
+
+
+class HeroBadgeInline(admin.TabularInline):
+    model = HeroBadge
+    extra = 0
+    ordering = ["order"]
+
+
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(admin.ModelAdmin):
     list_display = ["site_name", "email", "phone"]
@@ -51,6 +72,9 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
         TechStackItemInline,
         TestimonialInline,
         ClientInline,
+        ProjectInline,
+        WhyChooseUsItemInline,
+        HeroBadgeInline,
     ]
 
     fieldsets = (
@@ -97,10 +121,18 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
                     "about_body",
                     "about_bullets",
                     "about_core_values_heading",
+                    "stats_projects_completed",
+                    "stats_happy_clients",
+                    "stats_years_experience",
+                    "stats_team_members",
+                    "stats_client_satisfaction_rate",
+                    "stats_awards_count",
                 )
             },
         ),
         ("Services Section", {"fields": ("services_section_heading", "services_section_subheading")}),
+        ("Projects Section", {"fields": ("projects_section_heading", "projects_section_subheading")}),
+        ("Why Choose Us Section", {"fields": ("why_section_label", "why_section_heading", "why_section_body")}),
         ("Tech Stack Section", {"fields": ("tech_section_label", "tech_section_heading")}),
         ("Testimonials", {"fields": ("testimonials_heading",)}),
         (

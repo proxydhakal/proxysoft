@@ -45,6 +45,16 @@ urlpatterns = [
     path("tech-stack/new/", iamadmin_views.iam_techstack_form, name="techstack_create"),
     path("tech-stack/<int:pk>/edit/", iamadmin_views.iam_techstack_form, name="techstack_edit"),
     path("tech-stack/<int:pk>/delete/", iamadmin_views.iam_techstack_delete, name="techstack_delete"),
+    # Why Choose Us
+    path("why-choose-us/", iamadmin_views.iam_whychooseus_list, name="whychooseus_list"),
+    path("why-choose-us/new/", iamadmin_views.iam_whychooseus_form, name="whychooseus_create"),
+    path("why-choose-us/<int:pk>/edit/", iamadmin_views.iam_whychooseus_form, name="whychooseus_edit"),
+    path("why-choose-us/<int:pk>/delete/", iamadmin_views.iam_whychooseus_delete, name="whychooseus_delete"),
+    # Hero Badges
+    path("hero-badges/", iamadmin_views.iam_herobadge_list, name="herobadge_list"),
+    path("hero-badges/new/", iamadmin_views.iam_herobadge_form, name="herobadge_create"),
+    path("hero-badges/<int:pk>/edit/", iamadmin_views.iam_herobadge_form, name="herobadge_edit"),
+    path("hero-badges/<int:pk>/delete/", iamadmin_views.iam_herobadge_delete, name="herobadge_delete"),
     # Contact submissions
     path("submissions/", iamadmin_views.iam_submissions_list, name="submissions_list"),
     path("submissions/<int:pk>/delete/", iamadmin_views.iam_submission_delete, name="submission_delete"),

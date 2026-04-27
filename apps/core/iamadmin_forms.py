@@ -13,6 +13,8 @@ from .models import (
     CoreValue,
     Testimonial,
     TechStackItem,
+    WhyChooseUsItem,
+    HeroBadge,
     ContactSubmission,
 )
 
@@ -70,6 +72,8 @@ class SiteConfigForm(forms.ModelForm):
             "footer_tagline", "establishment_year",
             "company_registration_number", "pan_number", "compliance_number", "footer_copyright",
             "nav_get_started_text",
+            "why_section_label", "why_section_heading", "why_section_body",
+            "projects_section_heading", "projects_section_subheading",
         ]
         widgets = {
             "tagline": forms.TextInput(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200"}),
@@ -87,6 +91,7 @@ class SiteConfigForm(forms.ModelForm):
             "about_vision_quote": forms.Textarea(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200", "rows": 2}),
             "about_body": forms.Textarea(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200", "rows": 3}),
             "footer_tagline": forms.Textarea(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200", "rows": 2}),
+            "why_section_body": forms.Textarea(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200", "rows": 3}),
         }
 
 
@@ -97,13 +102,14 @@ def _input_class():
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
-        fields = ["order", "title", "description", "icon_class", "icon_style"]
+        fields = ["order", "title", "description", "icon_class", "icon_style", "tags"]
         widgets = {
             "order": forms.NumberInput(attrs={"class": _input_class(), "min": 0}),
             "title": forms.TextInput(attrs={"class": _input_class()}),
             "description": forms.Textarea(attrs={"class": _input_class(), "rows": 3}),
             "icon_class": forms.TextInput(attrs={"class": _input_class(), "placeholder": "fa-solid fa-laptop-code"}),
-            "icon_style": forms.TextInput(attrs={"class": _input_class(), "placeholder": "blue"}),
+            "icon_style": forms.Select(choices=[("blue","Blue (Brand)"),("emerald","Emerald"),("violet","Violet"),("orange","Orange"),("cyan","Cyan")], attrs={"class": _input_class()}),
+            "tags": forms.TextInput(attrs={"class": _input_class(), "placeholder": "React, Node.js, AWS"}),
         }
 
 
@@ -208,3 +214,31 @@ class BlogPostForm(forms.ModelForm):
         self.fields["author"].queryset = User.objects.filter(is_staff=True).order_by("username")
         self.fields["author"].required = False
         self.fields["excerpt"].required = False
+
+
+class WhyChooseUsItemForm(forms.ModelForm):
+    class Meta:
+        model = WhyChooseUsItem
+        fields = ["order", "title", "description", "color_theme", "icon_svg_path"]
+        widgets = {
+            "order": forms.NumberInput(attrs={"class": _input_class(), "min": 0}),
+            "title": forms.TextInput(attrs={"class": _input_class()}),
+            "description": forms.TextInput(attrs={"class": _input_class()}),
+            "color_theme": forms.Select(attrs={"class": _input_class()}),
+            "icon_svg_path": forms.Textarea(attrs={"class": _input_class(), "rows": 2, "placeholder": "M13 10V3L4 14h7v7l9-11h-7z"}),
+        }
+
+
+class HeroBadgeForm(forms.ModelForm):
+    class Meta:
+        model = HeroBadge
+        fields = ["order", "label", "bg_color", "icon_svg_path"]
+        widgets = {
+            "order": forms.NumberInput(attrs={"class": _input_class(), "min": 1, "max": 4}),
+            "label": forms.TextInput(attrs={"class": _input_class(), "placeholder": "Web Dev"}),
+            "bg_color": forms.Select(choices=[
+                ("bg-blue-500","Blue"),("bg-emerald-500","Emerald"),
+                ("bg-violet-500","Violet"),("bg-orange-500","Orange"),("bg-cyan-500","Cyan"),
+            ], attrs={"class": _input_class()}),
+            "icon_svg_path": forms.Textarea(attrs={"class": _input_class(), "rows": 2, "placeholder": "M12 2L2 7l10 5 10-5-10-5z..."}),
+        }

@@ -14,3 +14,11 @@ def highlight(value, word):
         return value
     before, _, after = value.partition(word)
     return mark_safe(f"{before}<span class='text-proxyCyan'>{word}</span>{after}")
+
+
+@register.filter
+def csv_list(value):
+    """Split a comma-separated string into a list of trimmed items."""
+    if not value:
+        return []
+    return [s.strip() for s in str(value).split(",") if s and s.strip()]

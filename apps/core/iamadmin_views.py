@@ -14,6 +14,8 @@ from .models import (
     CoreValue,
     Testimonial,
     TechStackItem,
+    WhyChooseUsItem,
+    HeroBadge,
     ContactSubmission,
 )
 from apps.blog.models import BlogPost
@@ -27,6 +29,8 @@ from .iamadmin_forms import (
     CoreValueForm,
     TestimonialForm,
     TechStackItemForm,
+    WhyChooseUsItemForm,
+    HeroBadgeForm,
     PageForm,
     BlogPostForm,
 )
@@ -396,6 +400,90 @@ def iam_blog_delete(request, pk):
     obj.delete()
     messages.success(request, "Blog post deleted.")
     return redirect("iamadmin:blog_list")
+
+
+# ---------- Why Choose Us ----------
+@login_required(login_url="/iamadmin/login/")
+def iam_whychooseus_list(request):
+    config = SiteConfiguration.load()
+    return render(request, "iamadmin/whychooseus_list.html", {
+        **_dashboard_context(request, "why-choose-us"),
+        "items": config.why_items.all(),
+    })
+
+
+@login_required(login_url="/iamadmin/login/")
+@require_http_methods(["GET", "POST"])
+def iam_whychooseus_form(request, pk=None):
+    config = SiteConfiguration.load()
+    instance = get_object_or_404(WhyChooseUsItem, pk=pk, site_config=config) if pk else None
+    if request.method == "POST":
+        form = WhyChooseUsItemForm(request.POST, instance=instance)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.site_config_id = 1
+            obj.save()
+            messages.success(request, "Why Choose Us item saved.")
+            return redirect("iamadmin:whychooseus_list")
+    else:
+        form = WhyChooseUsItemForm(instance=instance)
+    return render(request, "iamadmin/whychooseus_form.html", {
+        **_dashboard_context(request, "why-choose-us"),
+        "form": form,
+        "instance": instance,
+    })
+
+
+@login_required(login_url="/iamadmin/login/")
+@require_http_methods(["POST"])
+def iam_whychooseus_delete(request, pk):
+    config = SiteConfiguration.load()
+    obj = get_object_or_404(WhyChooseUsItem, pk=pk, site_config=config)
+    obj.delete()
+    messages.success(request, "Why Choose Us item deleted.")
+    return redirect("iamadmin:whychooseus_list")
+
+
+# ---------- Hero Badges ----------
+@login_required(login_url="/iamadmin/login/")
+def iam_herobadge_list(request):
+    config = SiteConfiguration.load()
+    return render(request, "iamadmin/herobadge_list.html", {
+        **_dashboard_context(request, "hero-badges"),
+        "items": config.hero_badges.all(),
+    })
+
+
+@login_required(login_url="/iamadmin/login/")
+@require_http_methods(["GET", "POST"])
+def iam_herobadge_form(request, pk=None):
+    config = SiteConfiguration.load()
+    instance = get_object_or_404(HeroBadge, pk=pk, site_config=config) if pk else None
+    if request.method == "POST":
+        form = HeroBadgeForm(request.POST, instance=instance)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.site_config_id = 1
+            obj.save()
+            messages.success(request, "Hero badge saved.")
+            return redirect("iamadmin:herobadge_list")
+    else:
+        form = HeroBadgeForm(instance=instance)
+    return render(request, "iamadmin/herobadge_form.html", {
+        **_dashboard_context(request, "hero-badges"),
+        "form": form,
+        "instance": instance,
+    })
+
+
+@login_required(login_url="/iamadmin/login/")
+@require_http_methods(["POST"])
+def iam_herobadge_delete(request, pk):
+    config = SiteConfiguration.load()
+    obj = get_object_or_404(HeroBadge, pk=pk, site_config=config)
+    obj.delete()
+    messages.success(request, "Hero badge deleted.")
+    return redirect("iamadmin:herobadge_list")
 
 
 # ---------- Contact Submissions ----------

@@ -71,13 +71,44 @@ def home(request):
                     )
                 return redirect(reverse("core:home") + "#contact")
 
-    raw_quotes = config.testimonials.values_list("quote", flat=True)
-    testimonials = [q.strip() for q in raw_quotes if q and str(q).strip()]
+    testimonials_qs = config.testimonials.all()
+    testimonials = []
+    for t in testimonials_qs:
+        quote = (t.quote or "").strip()
+        if not quote:
+            continue
+        testimonials.append(
+            {
+                "name": (t.name or "").strip() or "Client",
+                "role": (t.role or "").strip(),
+                "text": quote,
+                "avatar": (t.avatar or "").strip() or "PS",
+                "color": (t.color or "").strip() or "from-brand-400 to-brand-700",
+            }
+        )
     if not testimonials:
         testimonials = [
-            "Delivering results that matter for global clients.",
-            "Pioneering technical SEO and responsive design in Nepal.",
-            "Leading the way in SaaS and enterprise innovation.",
+            {
+                "name": "Client",
+                "role": "",
+                "text": "Delivering results that matter for global clients.",
+                "avatar": "PS",
+                "color": "from-brand-400 to-brand-700",
+            },
+            {
+                "name": "Client",
+                "role": "",
+                "text": "Pioneering technical SEO and responsive design in Nepal.",
+                "avatar": "PS",
+                "color": "from-emerald-400 to-teal-700",
+            },
+            {
+                "name": "Client",
+                "role": "",
+                "text": "Leading the way in SaaS and enterprise innovation.",
+                "avatar": "PS",
+                "color": "from-violet-400 to-purple-700",
+            },
         ]
     return render(
         request,

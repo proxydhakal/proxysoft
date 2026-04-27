@@ -1,0 +1,36 @@
+{% extends "iamadmin/base_dashboard.html" %}
+{% block title %}Hero Badges | Proxy Soft Portal{% endblock %}
+{% block page_heading %}Hero Badges{% endblock %}
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <p class="text-slate-500 text-sm">{{ items.count }} badge(s) — max 4 shown. Order 1=top, 2=right, 3=left, 4=bottom of the hero illustration.</p>
+    <a href="{% url 'iamadmin:herobadge_create' %}" class="bg-proxyBlue text-white font-bold py-2 px-6 rounded-xl hover:bg-proxyDark transition">Add Badge</a>
+</div>
+<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    <table class="w-full text-left">
+        <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+            <tr>
+                <th class="px-6 py-4">Position (order)</th>
+                <th class="px-6 py-4">Label</th>
+                <th class="px-6 py-4">Color</th>
+                <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="text-sm">
+            {% for item in items %}
+            <tr class="border-b border-slate-50">
+                <td class="px-6 py-4">{{ item.order }} {% if item.order == 1 %}(top){% elif item.order == 2 %}(right){% elif item.order == 3 %}(left){% elif item.order == 4 %}(bottom){% endif %}</td>
+                <td class="px-6 py-4 font-medium">{{ item.label }}</td>
+                <td class="px-6 py-4">{{ item.bg_color }}</td>
+                <td class="px-6 py-4 text-right">
+                    <a href="{% url 'iamadmin:herobadge_edit' item.pk %}" class="text-proxyBlue hover:underline mr-3">Edit</a>
+                    <form method="post" action="{% url 'iamadmin:herobadge_delete' item.pk %}" class="inline" onsubmit="return confirm('Delete this badge?');">{% csrf_token %}<button type="submit" class="text-red-600 hover:underline">Delete</button></form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="px-6 py-8 text-slate-400 text-center">No badges yet. <a href="{% url 'iamadmin:herobadge_create' %}" class="text-proxyBlue">Add one</a> — fallback static badges will show until at least 1 is added.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
