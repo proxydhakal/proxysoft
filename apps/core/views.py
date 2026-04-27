@@ -1,5 +1,4 @@
 """Home page and any other public views."""
-import json
 import logging
 
 from django.contrib import messages
@@ -115,6 +114,6 @@ def home(request):
         "index.html",
         {
             "site_config": config,
-            "testimonials_json": json.dumps(testimonials),
+            "testimonials_data": testimonials,
         },
     )
