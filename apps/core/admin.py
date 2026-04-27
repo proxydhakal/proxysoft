@@ -127,6 +127,7 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
                     "stats_team_members",
                     "stats_client_satisfaction_rate",
                     "stats_awards_count",
+                    "watch_story_youtube_url",
                 )
             },
         ),

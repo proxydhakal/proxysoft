@@ -65,6 +65,13 @@ class SiteConfigForm(forms.ModelForm):
             "hero_stat_value", "hero_stat_label",
             "about_section_label", "about_section_heading", "about_vision_quote",
             "about_owner_name", "about_body", "about_bullets", "about_core_values_heading",
+            "stats_projects_completed",
+            "stats_happy_clients",
+            "stats_years_experience",
+            "stats_team_members",
+            "stats_client_satisfaction_rate",
+            "stats_awards_count",
+            "watch_story_youtube_url",
             "services_section_heading", "services_section_subheading",
             "tech_section_label", "tech_section_heading",
             "clients_section_label", "clients_section_heading", "clients_section_subheading",
@@ -92,6 +99,7 @@ class SiteConfigForm(forms.ModelForm):
             "about_body": forms.Textarea(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200", "rows": 3}),
             "footer_tagline": forms.Textarea(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200", "rows": 2}),
             "why_section_body": forms.Textarea(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200", "rows": 3}),
+            "watch_story_youtube_url": forms.URLInput(attrs={"class": "w-full px-4 py-2 rounded-lg border border-slate-200", "placeholder": "https://www.youtube.com/watch?v=…"}),
         }
 
 

@@ -93,6 +93,11 @@ class SiteConfiguration(models.Model):
     stats_team_members = models.PositiveIntegerField(default=25)
     stats_client_satisfaction_rate = models.PositiveIntegerField(default=98, help_text="Percentage without % sign")
     stats_awards_count = models.PositiveIntegerField(default=15)
+    watch_story_youtube_url = models.URLField(
+        max_length=500,
+        blank=True,
+        help_text="YouTube URL for the 'Watch Our Story' modal (e.g. https://www.youtube.com/watch?v=XXXX)",
+    )
 
     # Services section
     services_section_heading = models.CharField(max_length=200, default="Service Stack")

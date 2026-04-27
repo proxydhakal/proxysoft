@@ -1,4 +1,4 @@
-{% load static %}
+{% load static core_filters %}
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -7,24 +7,9 @@
     <title>{% block title %}{{ meta_title|default:"Proxy Soft" }}{% endblock %}</title>
     {% if meta_description %}<meta name="description" content="{{ meta_description }}">{% endif %}
     {% include "includes/favicon_links.html" %}
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'dist/styles.css' %}"/>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        proxyDark: '#0a1d37',
-                        proxyBlue: '#1e40af',
-                        proxyCyan: '#38bdf8',
-                        proxySilver: '#94a3b8',
-                    },
-                    fontFamily: { poppins: ['Poppins', 'sans-serif'] },
-                }
-            }
-        }
-    </script>
     <style>
         .glass-nav { background: rgba(10, 29, 55, 0.92); backdrop-filter: blur(12px); }
         .nav-padding { padding-top: 1.25rem; padding-bottom: 1.25rem; }
@@ -41,6 +26,16 @@
 <main class="max-w-4xl mx-auto px-6 py-12 pt-28 min-h-[60vh]">
     {% block content %}{% endblock %}
 </main>
+
+{% if site_config and site_config.phone %}
+<a href="https://wa.me/{{ site_config.phone|digits_only }}" target="_blank" rel="noopener"
+   style="position:fixed; right:24px; bottom:24px; z-index:999;"
+   class="w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-2xl flex items-center justify-center transition"
+   aria-label="Chat on WhatsApp">
+  <i class="fa-brands fa-whatsapp text-3xl leading-none"></i>
+</a>
+{% endif %}
+
 {% include "includes/public_footer_inner.html" %}
 </body>
 </html>

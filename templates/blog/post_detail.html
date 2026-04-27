@@ -7,39 +7,9 @@
   <title>{{ meta_title|default:post.title }} | {{ site_config.site_name|default:"Proxy Soft" }}</title>
   {% if meta_description %}<meta name="description" content="{{ meta_description }}">{% endif %}
   {% include "includes/favicon_links.html" %}
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="{% static 'dist/styles.css' %}"/>
+  <script defer src="{% static 'dist/app.js' %}"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
-          colors: {
-            brand: {
-              50:'#eff8ff', 100:'#dbeffe', 200:'#bfe3fe', 300:'#93d1fd',
-              400:'#60b6fa', 500:'#3b97f6', 600:'#2579eb', 700:'#1d63d8',
-              800:'#1e50af', 900:'#1e448a',
-            }
-          },
-          animation: {
-            'float':'float 6s ease-in-out infinite',
-            'float2':'float 8s ease-in-out infinite 1s',
-            'gradient':'gradientShift 8s ease infinite',
-            'slide-up':'slideUp 0.6s ease forwards',
-            'fade-in':'fadeIn 0.8s ease forwards',
-          },
-          keyframes: {
-            float: { '0%,100%':{ transform:'translateY(0px)' }, '50%':{ transform:'translateY(-14px)' } },
-            gradientShift: { '0%,100%':{ backgroundPosition:'0% 50%' }, '50%':{ backgroundPosition:'100% 50%' } },
-            slideUp: { from:{ opacity:0, transform:'translateY(30px)' }, to:{ opacity:1, transform:'translateY(0)' } },
-            fadeIn: { from:{ opacity:0 }, to:{ opacity:1 } },
-          },
-        }
-      }
-    }
-  </script>
   <style>
     * { scroll-behavior: smooth; }
     body { font-family: 'Poppins', sans-serif; }

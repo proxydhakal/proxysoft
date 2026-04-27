@@ -6,13 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Proxy Soft | Portal{% endblock %}</title>
     {% include "includes/favicon_links.html" %}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="{% static 'dist/styles.css' %}"/>
+    <script defer src="{% static 'dist/app.js' %}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script>
-        tailwind.config = { theme: { extend: { colors: { proxyDark: '#0a1d37', proxyBlue: '#1e40af', proxyCyan: '#38bdf8', proxySilver: '#94a3b8' }, fontFamily: { poppins: ['Poppins', 'sans-serif'] } } } }
-    </script>
     <style>
         [x-cloak]{display:none!important}
         .shield-clip{clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
