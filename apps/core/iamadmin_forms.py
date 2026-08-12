@@ -161,7 +161,10 @@ class TechStackItemForm(forms.ModelForm):
             "order": forms.NumberInput(attrs={"class": _input_class(), "min": 0}),
             "name": forms.TextInput(attrs={"class": _input_class()}),
             "icon_class": forms.TextInput(attrs={"class": _input_class()}),
-            "icon_style": forms.TextInput(attrs={"class": _input_class()}),
+            "icon_style": forms.Select(
+                choices=TechStackItem.ICON_STYLE_CHOICES,
+                attrs={"class": _input_class()},
+            ),
         }
 
 

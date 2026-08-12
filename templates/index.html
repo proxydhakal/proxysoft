@@ -415,10 +415,10 @@
       {% for tech in site_config.tech_stack_items.all %}
         <div class="reveal glass-light dark:glass rounded-2xl p-5 flex flex-col items-center gap-3 group hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
           <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-md
-            {% if tech.icon_style == 'emerald' %}bg-gradient-to-br from-emerald-400 to-emerald-700
-            {% elif tech.icon_style == 'orange' %}bg-gradient-to-br from-orange-400 to-orange-700
-            {% elif tech.icon_style == 'violet' %}bg-gradient-to-br from-violet-400 to-violet-700
-            {% elif tech.icon_style == 'cyan' %}bg-gradient-to-br from-cyan-400 to-brand-600
+            {% if tech.display_icon_style == 'emerald' %}bg-gradient-to-br from-emerald-400 to-emerald-700
+            {% elif tech.display_icon_style == 'orange' %}bg-gradient-to-br from-orange-400 to-orange-700
+            {% elif tech.display_icon_style == 'violet' %}bg-gradient-to-br from-violet-400 to-violet-700
+            {% elif tech.display_icon_style == 'cyan' %}bg-gradient-to-br from-cyan-400 to-cyan-700
             {% else %}bg-gradient-to-br from-brand-400 to-brand-700{% endif %} tech-icon-wrap">
             {% if tech.icon_class %}
               <i class="{{ tech.icon_class }} text-white text-2xl tech-fa-icon" aria-hidden="true"></i>

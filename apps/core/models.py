@@ -251,6 +251,45 @@ class Service(models.Model):
 
 class TechStackItem(models.Model):
     """Technology item (name + icon) for Tech Stack section."""
+
+    ICON_STYLE_CHOICES = (
+        ("blue", "Blue (Brand)"),
+        ("emerald", "Emerald"),
+        ("violet", "Violet"),
+        ("orange", "Orange"),
+        ("cyan", "Cyan"),
+    )
+    # Brand-colored backgrounds when admin left the default "blue"
+    BRAND_ICON_STYLES = {
+        "python": "blue",
+        "django": "emerald",
+        "tailwind": "cyan",
+        "tailwindcss": "cyan",
+        "php": "violet",
+        "laravel": "orange",
+        "react": "cyan",
+        "docker": "cyan",
+        "aws": "orange",
+        "digitalocean": "blue",
+        "nodejs": "emerald",
+        "node": "emerald",
+        "postgresql": "blue",
+        "postgres": "blue",
+        "flutter": "cyan",
+        "typescript": "blue",
+        "nextjs": "blue",
+        "next": "blue",
+        "bootstrap": "violet",
+        "vue": "emerald",
+        "angular": "orange",
+        "mongodb": "emerald",
+        "mysql": "blue",
+        "redis": "orange",
+        "kubernetes": "cyan",
+        "firebase": "orange",
+        "graphql": "violet",
+    }
+
     site_config = models.ForeignKey(
         SiteConfiguration, on_delete=models.CASCADE, related_name="tech_stack_items", editable=False, default=1
     )
@@ -261,10 +300,34 @@ class TechStackItem(models.Model):
         default="fa-brands fa-python",
         help_text="Font Awesome class",
     )
-    icon_style = models.CharField(max_length=50, default="blue", help_text="blue or cyan for color")
+    icon_style = models.CharField(
+        max_length=50,
+        default="blue",
+        choices=ICON_STYLE_CHOICES,
+        help_text="Background color for the tech icon",
+    )
 
     class Meta:
         ordering = ["order"]
+
+    def _normalized_name(self):
+        return "".join(ch for ch in (self.name or "").lower() if ch.isalnum())
+
+    @property
+    def display_icon_style(self):
+        """Resolve a colorful style: explicit choice, brand map, or rotate by order."""
+        style = (self.icon_style or "blue").strip().lower()
+        valid = {c[0] for c in self.ICON_STYLE_CHOICES}
+        brand = self.BRAND_ICON_STYLES.get(self._normalized_name())
+        # Prefer brand color when still on default blue so production items look varied
+        if brand and (style == "blue" or style not in valid):
+            return brand
+        if style in valid and style != "blue":
+            return style
+        if brand:
+            return brand
+        palette = [c[0] for c in self.ICON_STYLE_CHOICES]
+        return palette[self.order % len(palette)]
 
     def save(self, *args, **kwargs):
         if not self.site_config_id:
