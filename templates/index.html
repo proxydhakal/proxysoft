@@ -419,12 +419,11 @@
             {% elif tech.icon_style == 'orange' %}bg-gradient-to-br from-orange-400 to-orange-700
             {% elif tech.icon_style == 'violet' %}bg-gradient-to-br from-violet-400 to-violet-700
             {% elif tech.icon_style == 'cyan' %}bg-gradient-to-br from-cyan-400 to-brand-600
-            {% else %}bg-gradient-to-br from-brand-400 to-brand-700{% endif %}">
+            {% else %}bg-gradient-to-br from-brand-400 to-brand-700{% endif %} tech-icon-wrap">
             {% if tech.icon_class %}
-              <i class="{{ tech.icon_class }} text-white text-2xl"></i>
-            {% else %}
-              <span class="text-white font-black text-lg leading-none select-none">{{ tech.name|slice:":2"|upper }}</span>
+              <i class="{{ tech.icon_class }} text-white text-2xl tech-fa-icon" aria-hidden="true"></i>
             {% endif %}
+            <span class="text-white font-black text-xl leading-none select-none tech-letter-fallback {% if tech.icon_class %}hidden{% endif %}">{{ tech.name|slice:":1"|upper }}</span>
           </div>
           <span class="text-sm font-semibold text-gray-700 dark:text-gray-200 text-center leading-tight">{{ tech.name }}</span>
         </div>
@@ -961,8 +960,22 @@
 {% endif %}
 
 <script>
+  function fixBrokenTechIcons() {
+    document.querySelectorAll('.tech-fa-icon').forEach((icon) => {
+      const before = window.getComputedStyle(icon, '::before').getPropertyValue('content');
+      const broken = !before || before === 'none' || before === 'normal' || before === '""' || before === "''" || icon.offsetWidth === 0;
+      if (!broken) return;
+      icon.classList.add('hidden');
+      const letter = icon.closest('.tech-icon-wrap')?.querySelector('.tech-letter-fallback');
+      if (letter) letter.classList.remove('hidden');
+    });
+  }
+
   window.addEventListener('load', () => {
     setTimeout(() => { document.getElementById('loader')?.classList.add('hidden'); }, 900);
+    const run = () => fixBrokenTechIcons();
+    if (document.fonts?.ready) document.fonts.ready.then(run).catch(run);
+    else run();
   });
 
   const revealObserver = new IntersectionObserver((entries) => {

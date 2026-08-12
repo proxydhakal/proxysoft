@@ -18,8 +18,9 @@
             <tr class="border-b border-slate-50">
                 <td class="px-6 py-4">{{ i.order }}</td>
                 <td class="px-6 py-4 font-medium">
-                    <span class="inline-flex items-center gap-2">
-                        {% if i.icon_class %}<i class="{{ i.icon_class }}"></i>{% endif %}
+                    <span class="inline-flex items-center gap-2 tech-icon-wrap">
+                        {% if i.icon_class %}<i class="{{ i.icon_class }} tech-fa-icon" aria-hidden="true"></i>{% endif %}
+                        <span class="tech-letter-fallback inline-flex items-center justify-center w-5 h-5 rounded bg-slate-100 text-proxyDark text-xs font-bold {% if i.icon_class %}hidden{% endif %}">{{ i.name|slice:":1"|upper }}</span>
                         {{ i.name }}
                     </span>
                 </td>
@@ -37,4 +38,23 @@
         </tbody>
     </table>
 </div>
+<script>
+(function () {
+  function fixBrokenTechIcons() {
+    document.querySelectorAll('.tech-fa-icon').forEach(function (icon) {
+      var before = window.getComputedStyle(icon, '::before').getPropertyValue('content');
+      var broken = !before || before === 'none' || before === 'normal' || before === '""' || before === "''" || icon.offsetWidth === 0;
+      if (!broken) return;
+      icon.classList.add('hidden');
+      var letter = icon.closest('.tech-icon-wrap') && icon.closest('.tech-icon-wrap').querySelector('.tech-letter-fallback');
+      if (letter) letter.classList.remove('hidden');
+    });
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(fixBrokenTechIcons).catch(fixBrokenTechIcons);
+  } else {
+    window.addEventListener('load', fixBrokenTechIcons);
+  }
+})();
+</script>
 {% endblock %}
