@@ -223,7 +223,11 @@ class Service(models.Model):
     )
     order = models.PositiveSmallIntegerField(default=0)
     title = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(help_text="Short card summary shown on the homepage grid.")
+    details = models.TextField(
+        blank=True,
+        help_text="Full service details shown in the popup modal (supports multiple paragraphs).",
+    )
     icon_class = models.CharField(
         max_length=100,
         default="fa-solid fa-laptop-code",
@@ -232,12 +236,16 @@ class Service(models.Model):
     icon_style = models.CharField(
         max_length=50,
         default="blue",
-        help_text="One of: blue, cyan, dark, silver (for Tailwind group hover)",
+        help_text="One of: blue, emerald, violet, orange, cyan",
     )
     tags = models.CharField(
         max_length=500,
         blank=True,
         help_text="Comma-separated tech tags shown on the home page, e.g. React, Next.js, Node.js",
+    )
+    is_cta = models.BooleanField(
+        default=False,
+        help_text="If checked, render as the highlighted 'Custom Solutions' call-to-action card.",
     )
 
     class Meta:
@@ -247,6 +255,9 @@ class Service(models.Model):
         if not self.site_config_id:
             self.site_config_id = 1
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
 
 
 class TechStackItem(models.Model):
@@ -258,6 +269,10 @@ class TechStackItem(models.Model):
         ("violet", "Violet"),
         ("orange", "Orange"),
         ("cyan", "Cyan"),
+    )
+    CATEGORY_CHOICES = (
+        ("core", "Core Tech Stack"),
+        ("automation", "Automation Tech Stack"),
     )
     # Brand-colored backgrounds when admin left the default "blue"
     BRAND_ICON_STYLES = {
@@ -288,6 +303,16 @@ class TechStackItem(models.Model):
         "kubernetes": "cyan",
         "firebase": "orange",
         "graphql": "violet",
+        "playwright": "emerald",
+        "robocorp": "orange",
+        "n8n": "violet",
+        "selenium": "cyan",
+        "puppeteer": "blue",
+        "cypress": "emerald",
+        "zapier": "orange",
+        "make": "violet",
+        "airflow": "cyan",
+        "ansible": "orange",
     }
 
     site_config = models.ForeignKey(
@@ -295,6 +320,12 @@ class TechStackItem(models.Model):
     )
     order = models.PositiveSmallIntegerField(default=0)
     name = models.CharField(max_length=100)
+    category = models.CharField(
+        max_length=30,
+        default="core",
+        choices=CATEGORY_CHOICES,
+        help_text="Core product stack or automation / RPA stack",
+    )
     icon_class = models.CharField(
         max_length=100,
         default="fa-brands fa-python",

@@ -1,0 +1,95 @@
+{# Shared hanging-logo navbar styles (homepage + blog) #}
+.nav-blur {
+  background:#ffffff;
+  border-bottom:1px solid rgba(15,23,42,0.12);
+}
+.dark .nav-blur {
+  background:#0a1228;
+  border-bottom:1px solid rgba(96,182,250,0.18);
+}
+.nav-bar-bg {
+  top: 0;
+  height: 3.5rem;
+  box-sizing: border-box;
+}
+@media (min-width: 768px) { .nav-bar-bg { height: 3.75rem; } }
+.nav-row { height: 3.5rem; }
+@media (min-width: 768px) { .nav-row { height: 3.75rem; } }
+.nav-logo-plate {
+  --nav-h: 3.5rem;
+  --nav-line: rgba(15,23,42,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  position: relative;
+  z-index: 20;
+  height: 5rem;
+  width: auto;
+  max-width: 420px;
+  padding: 0.4rem 0.55rem;
+  background: #ffffff;
+  border-left: 1px solid var(--nav-line);
+  border-right: 1px solid var(--nav-line);
+  border-bottom: 1px solid var(--nav-line);
+  border-top: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+@media (min-width: 768px) {
+  .nav-logo-plate {
+    --nav-h: 3.75rem;
+    height: 6rem;
+    padding: 0.45rem 0.65rem;
+  }
+}
+.nav-logo-plate::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  top: 0;
+  height: calc(var(--nav-h) - 1px);
+  background: #ffffff;
+  pointer-events: none;
+  z-index: 1;
+}
+.dark .nav-logo-plate {
+  --nav-line: rgba(96,182,250,0.18);
+  background: #0a1228;
+}
+.dark .nav-logo-plate::before {
+  background: #0a1228;
+}
+.nav-logo-img {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  transition: filter 0.3s ease;
+}
+.dark .nav-logo-img {
+  filter: brightness(0) invert(1);
+}
+@media (max-width: 767px) {
+  .nav-bar-bg, .nav-row { height: 3.25rem; }
+  .nav-logo-plate {
+    --nav-h: 3.25rem;
+    height: 3.75rem;
+    max-width: min(42vw, 9.5rem);
+    padding: 0.25rem 0.35rem;
+  }
+  .nav-logo-plate::before { height: calc(var(--nav-h) - 1px); }
+}
+@media (max-width: 379px) {
+  .nav-logo-plate { max-width: 7.5rem; height: 3.5rem; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nav-desktop-links { gap: 1.25rem; }
+  .nav-desktop-links a { font-size: 0.8125rem; }
+}

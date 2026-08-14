@@ -25,18 +25,21 @@ class ServiceInline(admin.TabularInline):
     model = Service
     extra = 0
     ordering = ["order"]
+    fields = ["order", "title", "description", "details", "icon_class", "icon_style", "tags", "is_cta"]
 
 
 class TechStackItemInline(admin.TabularInline):
     model = TechStackItem
     extra = 0
     ordering = ["order"]
+    fields = ["order", "name", "category", "icon_class", "icon_style"]
 
 
 class TestimonialInline(admin.TabularInline):
     model = Testimonial
     extra = 0
     ordering = ["order"]
+    fields = ["order", "name", "role", "avatar", "color", "quote"]
 
 
 class ClientInline(admin.TabularInline):

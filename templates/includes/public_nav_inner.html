@@ -1,13 +1,13 @@
 {% load static %}
-<nav class="fixed w-full z-50 glass-nav nav-padding border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center min-h-[4rem]">
-        <a href="{% url 'core:home' %}" class="flex items-center gap-3">
+<nav class="fixed w-full z-50 glass-nav border-b border-white/10" x-data="{ open: false }">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center min-h-[3.75rem] sm:min-h-[4rem] py-2">
+        <a href="{% url 'core:home' %}" class="flex items-center gap-3 min-w-0 max-w-[75%]">
             {% if site_config.logo %}
-            <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[220px] object-contain object-left">
+            <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-10 sm:h-12 w-auto max-w-[160px] sm:max-w-[220px] object-contain object-left">
             {% elif site_config.logo_url %}
-            <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[220px] object-contain object-left">
+            <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-10 sm:h-12 w-auto max-w-[160px] sm:max-w-[220px] object-contain object-left">
             {% else %}
-            <img src="{% static 'img/logo.png' %}" alt="{{ site_config.site_name|default:'Proxy Soft' }}" class="h-12 w-auto max-w-[220px] object-contain object-left">
+            <img src="{% static 'img/logo.png' %}" alt="{{ site_config.site_name|default:'Proxy Soft' }}" class="h-10 sm:h-12 w-auto max-w-[160px] sm:max-w-[220px] object-contain object-left">
             {% endif %}
         </a>
         <div class="hidden md:flex items-center gap-6 lg:gap-8 text-white/90 font-medium flex-wrap justify-end">
@@ -20,6 +20,23 @@
             <a href="{{ p.get_absolute_url }}" class="hover:text-proxyCyan transition">{{ p.title }}</a>
             {% endfor %}
             <a href="{% url 'core:home' %}#contact" class="bg-proxyCyan hover:bg-white hover:text-proxyBlue text-proxyDark px-6 py-2 rounded-full transition-all shadow-lg font-bold flex items-center gap-2"><i class="fa-solid fa-rocket"></i> {{ site_config.nav_get_started_text|default:"Get Started" }}</a>
+        </div>
+        <button type="button" class="md:hidden w-10 h-10 rounded-lg flex items-center justify-center text-white/90 hover:bg-white/10 transition" @click="open = !open" :aria-expanded="open.toString()" aria-label="Toggle menu">
+            <i class="fa-solid fa-bars text-lg" x-show="!open"></i>
+            <i class="fa-solid fa-xmark text-lg" x-show="open" x-cloak></i>
+        </button>
+    </div>
+    <div x-show="open" x-cloak x-transition.opacity class="md:hidden border-t border-white/10 bg-[#0a1d37]/95 px-4 pb-4">
+        <div class="flex flex-col gap-1 pt-2 text-white/90">
+            <a href="{% url 'core:home' %}" @click="open=false" class="px-3 py-3 rounded-lg hover:bg-white/10 transition">Home</a>
+            <a href="{% url 'core:home' %}#about" @click="open=false" class="px-3 py-3 rounded-lg hover:bg-white/10 transition">About</a>
+            <a href="{% url 'core:home' %}#services" @click="open=false" class="px-3 py-3 rounded-lg hover:bg-white/10 transition">Services</a>
+            <a href="{% url 'core:home' %}#outsourcing" @click="open=false" class="px-3 py-3 rounded-lg hover:bg-white/10 transition">Outsourcing</a>
+            <a href="{% url 'blog:list' %}" @click="open=false" class="px-3 py-3 rounded-lg hover:bg-white/10 transition">Blog</a>
+            {% for p in nav_pages %}
+            <a href="{{ p.get_absolute_url }}" @click="open=false" class="px-3 py-3 rounded-lg hover:bg-white/10 transition">{{ p.title }}</a>
+            {% endfor %}
+            <a href="{% url 'core:home' %}#contact" @click="open=false" class="mt-2 bg-proxyCyan text-proxyDark font-bold px-4 py-3 rounded-full text-center">{{ site_config.nav_get_started_text|default:"Get Started" }}</a>
         </div>
     </div>
 </nav>

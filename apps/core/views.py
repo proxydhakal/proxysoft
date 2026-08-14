@@ -88,24 +88,24 @@ def home(request):
     if not testimonials:
         testimonials = [
             {
-                "name": "Client",
-                "role": "",
-                "text": "Delivering results that matter for global clients.",
-                "avatar": "PS",
+                "name": "Sandeep Shrestha",
+                "role": "CTO, F1Soft International",
+                "text": "Proxy Soft rebuilt our payment dashboard with reliability we can trust during peak traffic.",
+                "avatar": "SS",
                 "color": "from-brand-400 to-brand-700",
             },
             {
-                "name": "Client",
-                "role": "",
-                "text": "Pioneering technical SEO and responsive design in Nepal.",
-                "avatar": "PS",
+                "name": "Anjali Thapa",
+                "role": "Product Manager, LogPoint",
+                "text": "Their automation work cut our regression cycle from days to hours.",
+                "avatar": "AT",
                 "color": "from-emerald-400 to-teal-700",
             },
             {
-                "name": "Client",
-                "role": "",
-                "text": "Leading the way in SaaS and enterprise innovation.",
-                "avatar": "PS",
+                "name": "Binod Tamang",
+                "role": "Founder & CEO, Deerhold",
+                "text": "They plugged in as an extension of our engineering team — quality delivery from Nepal.",
+                "avatar": "BT",
                 "color": "from-violet-400 to-purple-700",
             },
         ]

@@ -110,14 +110,16 @@ def _input_class():
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
-        fields = ["order", "title", "description", "icon_class", "icon_style", "tags"]
+        fields = ["order", "title", "description", "details", "icon_class", "icon_style", "tags", "is_cta"]
         widgets = {
             "order": forms.NumberInput(attrs={"class": _input_class(), "min": 0}),
             "title": forms.TextInput(attrs={"class": _input_class()}),
             "description": forms.Textarea(attrs={"class": _input_class(), "rows": 3}),
+            "details": forms.Textarea(attrs={"class": _input_class(), "rows": 8, "placeholder": "Full details for the modal popup…"}),
             "icon_class": forms.TextInput(attrs={"class": _input_class(), "placeholder": "fa-solid fa-laptop-code"}),
             "icon_style": forms.Select(choices=[("blue","Blue (Brand)"),("emerald","Emerald"),("violet","Violet"),("orange","Orange"),("cyan","Cyan")], attrs={"class": _input_class()}),
             "tags": forms.TextInput(attrs={"class": _input_class(), "placeholder": "React, Node.js, AWS"}),
+            "is_cta": forms.CheckboxInput(attrs={"class": "h-4 w-4 rounded border-slate-300 text-proxyBlue focus:ring-proxyBlue"}),
         }
 
 
@@ -146,9 +148,13 @@ class CoreValueForm(forms.ModelForm):
 class TestimonialForm(forms.ModelForm):
     class Meta:
         model = Testimonial
-        fields = ["order", "quote"]
+        fields = ["order", "name", "role", "avatar", "color", "quote"]
         widgets = {
             "order": forms.NumberInput(attrs={"class": _input_class(), "min": 0}),
+            "name": forms.TextInput(attrs={"class": _input_class(), "placeholder": "e.g. Sandeep Shrestha"}),
+            "role": forms.TextInput(attrs={"class": _input_class(), "placeholder": "e.g. CTO, F1Soft International"}),
+            "avatar": forms.TextInput(attrs={"class": _input_class(), "placeholder": "e.g. SS"}),
+            "color": forms.TextInput(attrs={"class": _input_class(), "placeholder": "from-brand-400 to-brand-700"}),
             "quote": forms.Textarea(attrs={"class": _input_class(), "rows": 3}),
         }
 
@@ -156,10 +162,14 @@ class TestimonialForm(forms.ModelForm):
 class TechStackItemForm(forms.ModelForm):
     class Meta:
         model = TechStackItem
-        fields = ["order", "name", "icon_class", "icon_style"]
+        fields = ["order", "name", "category", "icon_class", "icon_style"]
         widgets = {
             "order": forms.NumberInput(attrs={"class": _input_class(), "min": 0}),
             "name": forms.TextInput(attrs={"class": _input_class()}),
+            "category": forms.Select(
+                choices=TechStackItem.CATEGORY_CHOICES,
+                attrs={"class": _input_class()},
+            ),
             "icon_class": forms.TextInput(attrs={"class": _input_class()}),
             "icon_style": forms.Select(
                 choices=TechStackItem.ICON_STYLE_CHOICES,

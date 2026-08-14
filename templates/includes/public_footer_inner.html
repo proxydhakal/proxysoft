@@ -1,15 +1,15 @@
 {% load static %}
-<footer class="bg-proxyDark py-16 text-slate-400 border-t border-white/5">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="grid md:grid-cols-4 gap-12 mb-12">
-            <div class="col-span-2">
+<footer class="bg-proxyDark py-10 sm:py-16 text-slate-400 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-10 sm:mb-12">
+            <div class="sm:col-span-2">
                 <div class="text-white mb-6">
                     {% if site_config.logo %}
-                    <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[240px] object-contain object-left">
+                    <img src="{{ site_config.logo.url }}" alt="{{ site_config.site_name }}" class="h-10 sm:h-12 w-auto max-w-[200px] sm:max-w-[240px] object-contain object-left">
                     {% elif site_config.logo_url %}
-                    <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-12 w-auto max-w-[240px] object-contain object-left">
+                    <img src="{{ site_config.logo_url }}" alt="{{ site_config.site_name }}" class="h-10 sm:h-12 w-auto max-w-[200px] sm:max-w-[240px] object-contain object-left">
                     {% else %}
-                    <img src="{% static 'img/logo.png' %}" alt="{{ site_config.site_name|default:'Proxy Soft' }}" class="h-12 w-auto max-w-[240px] object-contain object-left">
+                    <img src="{% static 'img/logo.png' %}" alt="{{ site_config.site_name|default:'Proxy Soft' }}" class="h-10 sm:h-12 w-auto max-w-[200px] sm:max-w-[240px] object-contain object-left">
                     {% endif %}
                 </div>
                 <p class="max-w-xs mb-6">{{ site_config.footer_tagline|default:"Contributing to economic growth and employment opportunities within Nepal." }}</p>

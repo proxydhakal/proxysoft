@@ -8,6 +8,11 @@ Usage
   python manage.py seed_content --section hero
   python manage.py seed_content --section services --flush
 
+  # Production-safe: sync curated tech stack / Nepali testimonials & clients
+  python manage.py seed_content --section techstack
+  python manage.py seed_content --section testimonials
+  python manage.py seed_content --section clients
+
 Available sections
 ------------------
   config | services | corevalues | techstack | projects |
@@ -78,28 +83,29 @@ SITE_CONFIG_DATA = {
     "hero_stat_value": "100%",
     "hero_stat_label": "Result Oriented",
     # Stats
-    "stats_projects_completed": 150,
-    "stats_happy_clients": 80,
-    "stats_years_experience": 8,
-    "stats_team_members": 25,
+    "stats_projects_completed": 15,
+    "stats_happy_clients": 8,
+    "stats_years_experience": 1,
+    "stats_team_members": 6,
     "stats_client_satisfaction_rate": 98,
-    "stats_awards_count": 15,
+    "stats_awards_count": 3,
     # About
-    "about_section_label": "Our Foundation",
-    "about_section_heading": "We Turn Vision Into Reality",
+    "about_section_label": "About Proxy Soft",
+    "about_section_heading": "Built for Real Work, Not Just Demos",
     "about_vision_quote": (
-        "To establish a technology-driven company providing innovative, scalable, and "
-        "result-oriented digital solutions that bridge global opportunity with Nepal's talent."
+        "Proxy Soft designs and delivers custom digital products and automation — "
+        "from focused tools for growing teams to enterprise-grade systems that run around the clock."
     ),
     "about_owner_name": "Shekhar Dhakal",
     "about_body": (
-        "Founded in 2016, Proxy Soft has been at the forefront of digital innovation, "
-        "helping businesses of all sizes transform their ideas into powerful digital products. "
-        "Our team of passionate engineers, designers, and strategists work together to deliver "
-        "exceptional results that drive real business growth."
+        "Established in 2026 and based in Nepal, we help businesses replace fragile, "
+        "manual processes with software that is clear, reliable, and easy to own. "
+        "Whether you need a custom-designed web or mobile experience, a workflow automation "
+        "across your existing tools, or a full platform built for scale, we stay close "
+        "from discovery through launch — with 24/7 support when something needs attention."
     ),
-    "about_bullets": "International Clients, Tech R&D, Quality Delivery, Agile Teams",
-    "about_core_values_heading": "Our Core Values",
+    "about_bullets": "Custom Design, Small to Enterprise Automation, 24/7 Support, Nepal-based Delivery",
+    "about_core_values_heading": "What Guides Us",
     # Services section
     "services_section_heading": "Service Stack",
     "services_section_subheading": "Expert, end-to-end digital solutions for every stage of your growth.",
@@ -134,10 +140,10 @@ SITE_CONFIG_DATA = {
     "contact_form_subject_choices": "Web Development, Digital Marketing, IT Consulting, Project Outsourcing, General Inquiry",
     # Footer
     "footer_tagline": (
-        "Transforming ideas into digital solutions that drive growth and innovation "
-        "for businesses worldwide. Contributing to economic growth in Nepal."
+        "Custom design and automation solutions for teams of every size — "
+        "backed by responsive, 24/7 support."
     ),
-    "establishment_year": "2016",
+    "establishment_year": "2026",
     "company_registration_number": "387235/82/83",
     "pan_number": "623565535",
     "footer_copyright": "Proxy Soft Pvt. Ltd. All Rights Reserved. | Designed for Global Growth.",
@@ -147,160 +153,236 @@ SITE_CONFIG_DATA = {
 SERVICES_DATA = [
     {
         "order": 1,
-        "title": "Web Development",
+        "title": "Web/App Development",
         "description": (
-            "Modern, scalable web applications built with React, Next.js, Django, and the latest "
-            "frameworks. Fast, accessible, and beautifully crafted to convert visitors into customers."
+            "End-to-end product engineering across backend, frontend, mobile, and desktop — "
+            "built to scale with your business and ship with confidence."
+        ),
+        "details": (
+            "We design and build full-stack web and application products from discovery through launch "
+            "and ongoing improvement.\n\n"
+            "What we cover:\n"
+            "• Backend APIs and business logic with Django, Node.js, and related frameworks\n"
+            "• Modern frontend experiences with React, Next.js, and accessible UI patterns\n"
+            "• Mobile apps for iOS and Android using Flutter and React Native\n"
+            "• Desktop tooling when your workflow needs a native-feeling app\n\n"
+            "You get clear milestones, maintainable code, and a product your team can grow without "
+            "starting over every year."
         ),
         "icon_class": "fa-solid fa-laptop-code",
         "icon_style": "blue",
-        "tags": "React, Next.js, Django, Node.js",
+        "tags": "Backend, Frontend, Mobile, Desktop",
+        "is_cta": False,
     },
     {
         "order": 2,
-        "title": "Digital Marketing",
+        "title": "Robotic Process Automation",
         "description": (
-            "Data-driven strategies that boost your online presence, drive quality traffic, "
-            "and convert visitors into loyal customers through SEO, SEM, and social campaigns."
+            "Automate repetitive work with agentic workflows, n8n, Robocorp, and Playwright — "
+            "so your team spends time on decisions, not copy-paste."
         ),
-        "icon_class": "fa-solid fa-chart-line",
-        "icon_style": "emerald",
-        "tags": "SEO, SEM, Social Media, Analytics",
+        "details": (
+            "We help you identify high-friction processes and replace them with reliable automation "
+            "that fits the tools you already use.\n\n"
+            "Typical outcomes:\n"
+            "• Agentic assistants that gather context and complete multi-step tasks\n"
+            "• n8n workflows that connect CRMs, emails, sheets, and internal APIs\n"
+            "• Robocorp bots for structured back-office and ERP-style operations\n"
+            "• Playwright-powered browser automation for portals that lack clean APIs\n\n"
+            "We focus on auditability, error handling, and handoff documentation so automations "
+            "stay trustworthy after go-live."
+        ),
+        "icon_class": "fa-solid fa-robot",
+        "icon_style": "violet",
+        "tags": "Agentic, n8n, Robocorp, Playwright",
+        "is_cta": False,
     },
     {
         "order": 3,
-        "title": "UI/UX Design",
+        "title": "Project Outsourcing",
         "description": (
-            "Stunning, intuitive designs that captivate users. From wireframes to pixel-perfect "
-            "interfaces — we craft experiences that stand out and convert."
+            "Extend your capacity with a dedicated Proxy Soft team — transparent communication, "
+            "agile delivery, and ownership from kickoff to handoff."
         ),
-        "icon_class": "fa-solid fa-pen-ruler",
-        "icon_style": "violet",
-        "tags": "Figma, UI/UX, Branding, Prototyping",
+        "details": (
+            "When deadlines are tight or your in-house bench is full, we plug in as an extension of "
+            "your product and engineering organization.\n\n"
+            "Engagement models:\n"
+            "• Dedicated squads for product builds and feature roadmaps\n"
+            "• Staff augmentation for backend, frontend, QA, and DevOps roles\n"
+            "• Fixed-scope delivery for MVPs, migrations, and internal tools\n\n"
+            "You keep visibility through weekly demos, shared boards, and a single point of contact. "
+            "We optimize for long-term maintainability — not short-term shortcuts."
+        ),
+        "icon_class": "fa-solid fa-people-group",
+        "icon_style": "cyan",
+        "tags": "Agile, Dedicated Team, Remote, Delivery",
+        "is_cta": False,
     },
     {
         "order": 4,
-        "title": "IT Consulting",
+        "title": "IT Consultation",
         "description": (
-            "Strategic IT guidance to align technology with your business goals. "
-            "Architecture planning, security audits, and end-to-end digital transformation."
+            "Practical technology guidance for architecture, cloud, security, and digital "
+            "transformation — aligned to business outcomes, not buzzwords."
         ),
-        "icon_class": "fa-solid fa-briefcase",
+        "details": (
+            "We partner with founders and IT leaders who need a clear path through complex "
+            "technology decisions.\n\n"
+            "How we help:\n"
+            "• Architecture reviews and technology selection for new or existing products\n"
+            "• Cloud readiness, cost control, and migration planning\n"
+            "• Security and compliance baselines that match your risk profile\n"
+            "• Roadmaps that balance quick wins with sustainable scale\n\n"
+            "You leave with prioritized recommendations, estimated effort, and an implementation "
+            "plan your team can execute — with or without us."
+        ),
+        "icon_class": "fa-solid fa-comments",
         "icon_style": "orange",
         "tags": "Strategy, Cloud, Security, Architecture",
+        "is_cta": False,
     },
     {
         "order": 5,
-        "title": "Project Outsourcing",
+        "title": "Need a Custom Solution?",
         "description": (
-            "Extend your team with our expert engineers. Flexible engagement models, "
-            "transparent communication, and consistent delivery — at Nepal-competitive rates."
+            "Have a unique workflow, industry constraint, or product idea that doesn’t fit a "
+            "standard package? We’ll shape a tailored solution around your goals."
         ),
-        "icon_class": "fa-solid fa-users",
-        "icon_style": "cyan",
-        "tags": "Agile, Remote, Scalable, Dedicated Teams",
-    },
-    {
-        "order": 6,
-        "title": "Mobile Development",
-        "description": (
-            "Cross-platform and native mobile apps for iOS and Android. From MVP to "
-            "production-grade apps — performant, offline-capable, and beautifully designed."
+        "details": (
+            "Not every challenge fits neatly into a catalog service — and that’s okay.\n\n"
+            "Bring us problems like:\n"
+            "• Integrating legacy systems with modern web or mobile fronts\n"
+            "• Building internal platforms that connect sales, ops, and finance\n"
+            "• Combining automation, AI agents, and custom software into one workflow\n"
+            "• Rebuilding an aging product without disrupting day-to-day operations\n\n"
+            "We start with a short discovery conversation, map constraints and success metrics, "
+            "then propose a scoped approach with timeline and investment options."
         ),
-        "icon_class": "fa-solid fa-mobile-screen",
+        "icon_class": "fa-solid fa-lightbulb",
         "icon_style": "blue",
-        "tags": "React Native, Flutter, iOS, Android",
+        "tags": "Discovery, Tailored Build, Partnership",
+        "is_cta": True,
     },
 ]
 
 CORE_VALUES_DATA = [
     {
         "order": 1,
-        "title": "Innovation First",
-        "description": "We stay ahead of industry trends to bring you cutting-edge solutions that give you a competitive edge.",
+        "title": "Custom by Default",
+        "description": (
+            "We don’t force your process into a template. We design interfaces and systems "
+            "around how your people actually work."
+        ),
     },
     {
         "order": 2,
-        "title": "Reliability You Can Count On",
-        "description": "On-time delivery, transparent communication, and consistent quality — every single project.",
+        "title": "Automation That Scales",
+        "description": (
+            "From a single workflow for a small team to enterprise-grade automation across "
+            "departments — we build solutions that grow with you."
+        ),
     },
     {
         "order": 3,
-        "title": "Client-Centered Approach",
-        "description": "Your success is our success. We go the extra mile to understand your business and exceed expectations.",
-    },
-    {
-        "order": 4,
-        "title": "Continuous Improvement",
-        "description": "We invest in R&D and team development so our solutions stay modern, secure, and ahead of the curve.",
+        "title": "Support When You Need It",
+        "description": (
+            "Production systems don’t wait for office hours. Our team provides 24/7 support "
+            "so issues are handled quickly and clearly."
+        ),
     },
 ]
 
 TECH_STACK_DATA = [
-    {"order": 1, "name": "Python", "icon_class": "fa-brands fa-python", "icon_style": "blue"},
-    {"order": 2, "name": "Django", "icon_class": "fa-solid fa-d", "icon_style": "blue"},
-    {"order": 3, "name": "React", "icon_class": "fa-brands fa-react", "icon_style": "cyan"},
-    {"order": 4, "name": "Next.js", "icon_class": "fa-solid fa-n", "icon_style": "blue"},
-    {"order": 5, "name": "Node.js", "icon_class": "fa-brands fa-node-js", "icon_style": "emerald"},
-    {"order": 6, "name": "PostgreSQL", "icon_class": "fa-solid fa-database", "icon_style": "blue"},
-    {"order": 7, "name": "AWS", "icon_class": "fa-brands fa-aws", "icon_style": "orange"},
-    {"order": 8, "name": "Docker", "icon_class": "fa-brands fa-docker", "icon_style": "cyan"},
-    {"order": 9, "name": "Flutter", "icon_class": "fa-solid fa-mobile-screen", "icon_style": "blue"},
-    {"order": 10, "name": "TypeScript", "icon_class": "fa-solid fa-t", "icon_style": "blue"},
+    # Combined core + automation — most used / popular only
+    {"order": 1, "name": "Python", "icon_class": "fa-brands fa-python", "icon_style": "blue", "category": "core"},
+    {"order": 2, "name": "Django", "icon_class": "fa-solid fa-d", "icon_style": "emerald", "category": "core"},
+    {"order": 3, "name": "React", "icon_class": "fa-brands fa-react", "icon_style": "cyan", "category": "core"},
+    {"order": 4, "name": "Node.js", "icon_class": "fa-brands fa-node-js", "icon_style": "emerald", "category": "core"},
+    {"order": 5, "name": "PostgreSQL", "icon_class": "fa-solid fa-database", "icon_style": "blue", "category": "core"},
+    {"order": 6, "name": "AWS", "icon_class": "fa-brands fa-aws", "icon_style": "orange", "category": "core"},
+    {"order": 7, "name": "Docker", "icon_class": "fa-brands fa-docker", "icon_style": "cyan", "category": "core"},
+    {"order": 8, "name": "TypeScript", "icon_class": "fa-solid fa-t", "icon_style": "blue", "category": "core"},
+    {"order": 9, "name": "Playwright", "icon_class": "fa-solid fa-masks-theater", "icon_style": "emerald", "category": "core"},
+    {"order": 10, "name": "Robocorp", "icon_class": "fa-solid fa-robot", "icon_style": "orange", "category": "core"},
+    {"order": 11, "name": "n8n", "icon_class": "fa-solid fa-diagram-project", "icon_style": "violet", "category": "core"},
+    {"order": 12, "name": "Selenium", "icon_class": "fa-solid fa-flask-vial", "icon_style": "cyan", "category": "core"},
 ]
+
+# Names previously seeded / managed by this command (removed items get deleted on sync)
+TECH_STACK_MANAGED_NAMES = {
+    *(item["name"] for item in TECH_STACK_DATA),
+    "Next.js",
+    "Flutter",
+    "Puppeteer",
+    "Cypress",
+    "Zapier",
+    "Make",
+    "Php",
+    "PHP",
+    "Laravel",
+    "Tailwind",
+    "Digital Ocean",
+    "DigitalOcean",
+}
 
 PROJECTS_DATA = [
     {
         "order": 1,
-        "category": "Web Development",
-        "title": "FinanceFlow Dashboard",
+        "category": "E-Commerce",
+        "title": "Commerce Platform (React + FastAPI)",
         "description": (
-            "A comprehensive financial analytics platform for real-time portfolio "
-            "management, reporting, and multi-currency support for a German fintech startup."
+            "A modern online storefront with a React storefront and FastAPI backend — "
+            "product catalogs, cart and checkout, order tracking, and an admin panel "
+            "built for day-to-day retail operations."
         ),
         "theme": "brand",
         "url": "",
     },
     {
         "order": 2,
-        "category": "Digital Marketing",
-        "title": "GreenLeaf E-Commerce",
+        "category": "EdTech",
+        "title": "School Management System",
         "description": (
-            "Boosted organic traffic by 320% in 4 months with a targeted SEO and "
-            "content marketing campaign for an Australian e-commerce brand."
+            "An all-in-one school platform covering student attendance, billing, ledgers, "
+            "fee schedules, academic records, and parent-facing updates — so offices spend "
+            "less time on paperwork and more time with students."
         ),
         "theme": "emerald",
         "url": "",
     },
     {
         "order": 3,
-        "category": "UI/UX Design",
-        "title": "MediCare Patient Portal",
+        "category": "RPA / Automation",
+        "title": "RPA Orchestration Platform",
         "description": (
-            "Redesigned patient-doctor interaction portal reducing booking friction by 60% "
-            "and improving overall satisfaction scores for a UK healthcare provider."
+            "A control center to monitor robotic process automation at scale — live bot "
+            "activity, run history, log monitoring, and process records so teams can spot "
+            "failures early and keep automations trustworthy."
         ),
         "theme": "violet",
         "url": "",
     },
     {
         "order": 4,
-        "category": "IT Consulting",
-        "title": "RetailMax Cloud Migration",
+        "category": "Network Infrastructure",
+        "title": "Enterprise Network Management",
         "description": (
-            "Complete AWS cloud migration cutting infrastructure costs by 45% with zero "
-            "downtime for a 12-store retail chain operating across Southeast Asia."
+            "Manage routers, switches, and firewalls from one place — network monitoring, "
+            "VLAN configuration, MAC binding, and device health views built for IT teams "
+            "that need clarity across the whole campus or office network."
         ),
         "theme": "orange",
         "url": "",
     },
     {
         "order": 5,
-        "category": "Project Outsourcing",
-        "title": "TalentBridge HR Platform",
+        "category": "Retail / POS",
+        "title": "Inventory & Billing for Retail Shops",
         "description": (
-            "Full-stack HR management platform built for a Berlin-based startup — "
-            "delivered in 4 months with a 6-developer team, fully tested and deployed."
+            "A retail billing and stock system with VAT calculation, ledger entries, "
+            "inventory tracking, and day-end billing — designed for shops that need "
+            "accurate books without complicated enterprise software."
         ),
         "theme": "cyan",
         "url": "",
@@ -310,60 +392,61 @@ PROJECTS_DATA = [
 TESTIMONIALS_DATA = [
     {
         "order": 1,
-        "name": "Sarah Johnson",
-        "role": "CEO, TechVenture Inc.",
-        "avatar": "SJ",
+        "name": "Sandeep Shrestha",
+        "role": "CTO, F1Soft International",
+        "avatar": "SS",
         "color": "from-brand-400 to-brand-700",
         "quote": (
-            "Proxy Soft delivered our platform 2 weeks ahead of schedule with exceptional quality. "
-            "The team was responsive, professional, and truly understood our vision. "
-            "I couldn't recommend them more highly for any complex project."
+            "Proxy Soft rebuilt our payment dashboard from the ground up. "
+            "The new platform handles peak festival traffic without a hitch, and our ops team finally has the visibility they needed. "
+            "A reliable engineering partner for Nepal's fintech space."
         ),
     },
     {
         "order": 2,
-        "name": "Marcus Chen",
-        "role": "CTO, FinanceFlow",
-        "avatar": "MC",
+        "name": "Anjali Thapa",
+        "role": "Product Manager, LogPoint",
+        "avatar": "AT",
         "color": "from-emerald-400 to-teal-700",
         "quote": (
-            "The digital marketing strategy they implemented tripled our organic traffic in just 4 months. "
-            "Their data-driven approach and constant optimisation made all the difference "
-            "for our startup's early growth."
+            "Their automation work with Playwright and n8n cut our regression cycle from days to hours. "
+            "Clear communication, solid documentation, and delivery that matched what we scoped. "
+            "We continue to bring them in for critical releases."
         ),
     },
     {
         "order": 3,
-        "name": "Amelia Rodriguez",
-        "role": "Founder, StyleCraft",
-        "avatar": "AR",
+        "name": "Binod Tamang",
+        "role": "Founder & CEO, Deerhold",
+        "avatar": "BT",
         "color": "from-violet-400 to-purple-700",
         "quote": (
-            "Our e-commerce redesign saw a 78% boost in conversions within 6 weeks. "
-            "The UI/UX team at Proxy Soft has an incredible eye for detail and user experience. "
-            "Best investment we've made this year."
+            "We needed a scalable web product for our US clients without growing a huge in-house team. "
+            "Proxy Soft plugged in as an extension of our engineering org — quality code, weekly demos, and zero drama. "
+            "Exactly the outsourcing experience we wanted from Nepal."
         ),
     },
     {
         "order": 4,
-        "name": "David Kim",
-        "role": "VP Engineering, RetailMax",
-        "avatar": "DK",
+        "name": "Pratima Adhikari",
+        "role": "Head of Digital, Nabil Bank",
+        "avatar": "PA",
         "color": "from-orange-400 to-red-600",
         "quote": (
-            "The cloud migration project was flawless — zero downtime, 45% cost reduction, "
-            "and our team was fully productive on day one. Proxy Soft exceeded every benchmark we set."
+            "The cloud migration and Django rewrite were handled with care around compliance and uptime. "
+            "Zero unplanned downtime during cutover, and our internal teams were trained properly. "
+            "Proxy Soft understands both enterprise constraints and modern delivery."
         ),
     },
 ]
 
 CLIENTS_DATA = [
-    {"order": 1, "name": "TechVenture Inc.", "url": ""},
-    {"order": 2, "name": "FinanceFlow GmbH", "url": ""},
-    {"order": 3, "name": "StyleCraft", "url": ""},
-    {"order": 4, "name": "RetailMax Asia", "url": ""},
-    {"order": 5, "name": "TalentBridge", "url": ""},
-    {"order": 6, "name": "GreenLeaf AU", "url": ""},
+    {"order": 1, "name": "F1Soft International", "url": ""},
+    {"order": 2, "name": "LogPoint", "url": ""},
+    {"order": 3, "name": "Deerhold", "url": ""},
+    {"order": 4, "name": "Nabil Bank", "url": ""},
+    {"order": 5, "name": "Fusemachines", "url": ""},
+    {"order": 6, "name": "CloudFactory", "url": ""},
 ]
 
 WHY_CHOOSE_US_DATA = [
@@ -662,18 +745,48 @@ class Command(BaseCommand):
         self._ok(label, created)
 
     def _seed_techstack(self, config, flush):
+        """
+        Sync curated tech stack (core + popular automation in one list).
+        Production-safe without --flush: upserts seed items and removes
+        obsolete managed names; keeps unknown custom admin-added items.
+        """
         label = "Tech Stack"
+        seed_names = {item["name"] for item in TECH_STACK_DATA}
         qs = config.tech_stack_items.all()
-        if qs.exists() and not flush:
-            self._skip(label, qs.count())
-            return
+
         if flush:
             qs.delete()
+
         created = 0
+        updated = 0
         for data in TECH_STACK_DATA:
-            TechStackItem.objects.create(site_config=config, **data)
-            created += 1
-        self._ok(label, created)
+            payload = {**data}
+            name = payload.pop("name")
+            obj, was_created = TechStackItem.objects.update_or_create(
+                site_config=config,
+                name=name,
+                defaults=payload,
+            )
+            if was_created:
+                created += 1
+            else:
+                updated += 1
+
+        # Drop old managed items no longer in the curated popular list
+        removed, _ = (
+            config.tech_stack_items.filter(name__in=TECH_STACK_MANAGED_NAMES)
+            .exclude(name__in=seed_names)
+            .delete()
+        )
+
+        if created:
+            self._ok(label, created, "created")
+        if updated:
+            self._ok(label, updated, "updated")
+        if removed:
+            self._ok(label, removed, "removed")
+        if not created and not updated and not removed:
+            self._skip(label, qs.count())
 
     def _seed_projects(self, config, flush):
         label = "Projects"
@@ -690,32 +803,96 @@ class Command(BaseCommand):
         self._ok(label, created)
 
     def _seed_testimonials(self, config, flush):
+        """Upsert testimonials by name so production can refresh Nepali reviews safely."""
         label = "Testimonials"
         qs = config.testimonials.all()
-        if qs.exists() and not flush:
-            self._skip(label, qs.count())
-            return
+        seed_names = {item["name"] for item in TESTIMONIALS_DATA}
+        managed_names = seed_names | {
+            "Sarah Johnson",
+            "Marcus Chen",
+            "Amelia Rodriguez",
+            "David Kim",
+        }
+
         if flush:
             qs.delete()
+
         created = 0
+        updated = 0
         for data in TESTIMONIALS_DATA:
-            Testimonial.objects.create(site_config=config, **data)
-            created += 1
-        self._ok(label, created)
+            payload = {**data}
+            name = payload.pop("name")
+            obj, was_created = Testimonial.objects.update_or_create(
+                site_config=config,
+                name=name,
+                defaults=payload,
+            )
+            if was_created:
+                created += 1
+            else:
+                updated += 1
+
+        removed, _ = (
+            config.testimonials.filter(name__in=managed_names)
+            .exclude(name__in=seed_names)
+            .delete()
+        )
+
+        if created:
+            self._ok(label, created, "created")
+        if updated:
+            self._ok(label, updated, "updated")
+        if removed:
+            self._ok(label, removed, "removed")
+        if not created and not updated and not removed:
+            self._skip(label, qs.count())
 
     def _seed_clients(self, config, flush):
+        """Upsert clients by name for production-safe Nepal company list."""
         label = "Clients"
         qs = config.clients.all()
-        if qs.exists() and not flush:
-            self._skip(label, qs.count())
-            return
+        seed_names = {item["name"] for item in CLIENTS_DATA}
+        managed_names = seed_names | {
+            "TechVenture Inc.",
+            "FinanceFlow GmbH",
+            "StyleCraft",
+            "RetailMax Asia",
+            "TalentBridge",
+            "GreenLeaf AU",
+        }
+
         if flush:
             qs.delete()
+
         created = 0
+        updated = 0
         for data in CLIENTS_DATA:
-            Client.objects.create(site_config=config, **data)
-            created += 1
-        self._ok(label, created)
+            payload = {**data}
+            name = payload.pop("name")
+            obj, was_created = Client.objects.update_or_create(
+                site_config=config,
+                name=name,
+                defaults=payload,
+            )
+            if was_created:
+                created += 1
+            else:
+                updated += 1
+
+        removed, _ = (
+            config.clients.filter(name__in=managed_names)
+            .exclude(name__in=seed_names)
+            .delete()
+        )
+
+        if created:
+            self._ok(label, created, "created")
+        if updated:
+            self._ok(label, updated, "updated")
+        if removed:
+            self._ok(label, removed, "removed")
+        if not created and not updated and not removed:
+            self._skip(label, qs.count())
 
     def _seed_whychooseus(self, config, flush):
         label = "Why Choose Us"

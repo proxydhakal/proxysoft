@@ -9,6 +9,7 @@
             <tr>
                 <th class="px-6 py-4">Order</th>
                 <th class="px-6 py-4">Name</th>
+                <th class="px-6 py-4">Category</th>
                 <th class="px-6 py-4">Icon class</th>
                 <th class="px-6 py-4">Color</th>
                 <th class="px-6 py-4 text-right">Actions</th>
@@ -25,6 +26,7 @@
                         {{ i.name }}
                     </span>
                 </td>
+                <td class="px-6 py-4 text-xs capitalize text-slate-600">{{ i.get_category_display }}</td>
                 <td class="px-6 py-4 font-mono text-xs text-slate-600">
                     {{ i.icon_class|default:"—" }}
                 </td>

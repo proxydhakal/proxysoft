@@ -1,6 +1,6 @@
 {% load static core_filters %}
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth" x-data="{ darkMode: false }">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +8,11 @@
     {% if meta_description %}<meta name="description" content="{{ meta_description }}">{% endif %}
     {% include "includes/favicon_links.html" %}
     <link rel="stylesheet" href="{% static 'dist/styles.css' %}"/>
+    <script defer src="{% static 'dist/app.js' %}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
     <style>
+        [x-cloak] { display: none !important; }
         .glass-nav { background: rgba(10, 29, 55, 0.92); backdrop-filter: blur(12px); }
         .nav-padding { padding-top: 1.25rem; padding-bottom: 1.25rem; }
         .prose-content h1, .prose-content h2, .prose-content h3 { font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #0a1d37; }
@@ -18,19 +20,25 @@
         .prose-content ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
         .prose-content a { color: #1e40af; text-decoration: underline; }
         .prose-content img { max-width: 100%; height: auto; border-radius: 0.5rem; }
+        .prose-content table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .wa-float { position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 999; }
+        html { -webkit-text-size-adjust: 100%; }
+        @media (max-width: 767px) {
+          .wa-float { right: 1rem; bottom: 1rem; width: 3.25rem; height: 3.25rem; }
+          .wa-float i { font-size: 1.5rem !important; }
+        }
     </style>
     {% block extra_head %}{% endblock %}
 </head>
-<body class="font-poppins bg-slate-50 text-proxyDark">
+<body class="font-poppins bg-slate-50 text-proxyDark overflow-x-hidden">
 {% include "includes/public_nav_inner.html" %}
-<main class="max-w-4xl mx-auto px-6 py-12 pt-28 min-h-[60vh]">
+<main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-12 pt-24 sm:pt-28 min-h-[60vh]">
     {% block content %}{% endblock %}
 </main>
 
 {% if site_config and site_config.phone %}
 <a href="https://wa.me/{{ site_config.phone|digits_only }}" target="_blank" rel="noopener"
-   style="position:fixed; right:24px; bottom:24px; z-index:999;"
-   class="w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-2xl flex items-center justify-center transition"
+   class="wa-float w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-2xl flex items-center justify-center transition"
    aria-label="Chat on WhatsApp">
   <i class="fa-brands fa-whatsapp text-3xl leading-none"></i>
 </a>
