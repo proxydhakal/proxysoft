@@ -651,7 +651,7 @@ BLOG_POSTS_DATA = [
         "is_published": True,
         "published_at": timezone.now() - timezone.timedelta(days=35),
         "meta_title": "Django Tech Stack & Digital Solutions | Proxy Soft",
-        "meta_description": "How Proxy Soft builds digital products with Django, React, PostgreSQL, AWS, and automation using n8n, Robocorp, and Playwright — practical, maintainable solutions.",
+        "meta_description": "How Proxy Soft builds products with Django, React, PostgreSQL, AWS, and automation via n8n, Robocorp, and Playwright.",
     },
     {
         "title": "When to Choose Django for Your Next Web Product (And When Not To)",
@@ -1137,9 +1137,17 @@ class Command(BaseCommand):
         created = 0
         updated = 0
         for data in BLOG_POSTS_DATA:
+            payload = {**data, "author": author}
+            # MySQL enforces CharField max_length strictly (SQLite often does not)
+            if payload.get("meta_title"):
+                payload["meta_title"] = payload["meta_title"][:70]
+            if payload.get("meta_description"):
+                payload["meta_description"] = payload["meta_description"][:160]
+            if payload.get("title"):
+                payload["title"] = payload["title"][:200]
             obj, was_created = BlogPost.objects.update_or_create(
-                slug=data["slug"],
-                defaults={**data, "author": author},
+                slug=payload["slug"],
+                defaults=payload,
             )
             if was_created:
                 created += 1
