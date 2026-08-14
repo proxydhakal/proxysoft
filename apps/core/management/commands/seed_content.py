@@ -523,131 +523,328 @@ HERO_BADGES_DATA = [
 
 BLOG_POSTS_DATA = [
     {
-        "title": "How We Cut Cloud Infrastructure Costs by 45% for a Retail Client",
-        "slug": "cut-cloud-costs-retail-client",
+        "title": "Building Reliable Digital Products with Django, Modern Frontends, and Practical Automation",
+        "slug": "django-tech-stack-digital-products-automation-proxy-soft",
         "excerpt": (
-            "When RetailMax approached us with ballooning AWS bills, we developed a systematic "
-            "rightsizing and reserved instance strategy that slashed their monthly spend nearly in half "
-            "— with zero downtime during the migration."
+            "A practical look at how Proxy Soft designs and ships software — from Django and "
+            "PostgreSQL backends to React interfaces and automation with n8n, Robocorp, and "
+            "Playwright — so teams get systems they can trust and grow."
         ),
-        "content": """<h2>The Challenge</h2>
-<p>RetailMax, a 12-store retail chain operating across Southeast Asia, was spending over $18,000/month on AWS infrastructure that had grown organically over five years. Resources were over-provisioned, environments weren't separated cleanly, and there was no tagging strategy — making cost attribution nearly impossible.</p>
+        "content": """<p>Most software projects don’t fail because a framework is “wrong.” They fail because the stack, the process, and the business problem never line up. At Proxy Soft, we treat technology as a set of tools with jobs to do — not as a badge of modernity. That is why our day-to-day work sits on a familiar, battle-tested foundation: <strong>Python and Django</strong> for durable backends, <strong>React and TypeScript</strong> for clear interfaces, <strong>PostgreSQL</strong> for data that must stay consistent, and a practical automation layer with <strong>n8n, Robocorp, Playwright, and Selenium</strong> when people should not be doing the same click-and-copy work twice.</p>
 
-<h2>Our Approach</h2>
-<p>We began with a two-week discovery phase, using AWS Cost Explorer and Trusted Advisor to identify waste:</p>
+<p>This article is a longer walk through that approach. If you are a founder, product owner, or IT lead evaluating a custom build, a rewrite, or an outsourcing partnership, it should give you a concrete sense of how we think — and what you can expect when you work with us.</p>
+
+<h2>What “product and solution” really means for us</h2>
+<p>Proxy Soft is a Nepal-based team that helps organizations replace fragile manual processes with software that is clear, reliable, and easy to own. Our services are deliberately broad enough to cover a full journey, but focused enough that we do not pretend every engagement is the same:</p>
 <ul>
-  <li>Over 60% of EC2 instances were running at under 15% CPU utilisation</li>
-  <li>Multiple development databases were running production-grade Multi-AZ RDS instances</li>
-  <li>S3 lifecycle rules were absent, leaving terabytes of infrequently accessed data in Standard storage</li>
-  <li>No use of Savings Plans or Reserved Instances despite predictable baseline workloads</li>
+  <li><strong>Web and app development</strong> — backend APIs, modern frontends, mobile and desktop when the workflow needs them</li>
+  <li><strong>Robotic process automation</strong> — agentic workflows, n8n integrations, Robocorp bots, and browser automation with Playwright</li>
+  <li><strong>Project outsourcing</strong> — dedicated squads or staff augmentation with transparent communication and agile delivery</li>
+  <li><strong>IT consultation</strong> — architecture, cloud, security, and roadmaps tied to business outcomes</li>
+</ul>
+<p>Underneath those offerings is one preference: ship something maintainable. Fancy demos that nobody can operate six months later are not a win. Documentation, error handling, and a stack your team can hire for matter as much as the first release.</p>
+
+<h2>Why Django still earns its place in 2026</h2>
+<p>Django is not new, and that is part of the point. When you need authentication, admin tooling, forms, permissions, migrations, and a clear project structure, Django gives you a coherent default instead of a shopping cart of packages glued together late at night.</p>
+
+<p>We reach for Django when clients need:</p>
+<ul>
+  <li>Business logic that will grow beyond a simple CRUD prototype</li>
+  <li>Admin surfaces that non-engineers can use without a separate “ops app”</li>
+  <li>Security-conscious defaults for sessions, CSRF protection, and password handling</li>
+  <li>A codebase that mid-level engineers can read without a two-week archaeology project</li>
 </ul>
 
-<h2>The Solution</h2>
-<p>We delivered a phased migration plan across six weeks:</p>
+<p>Python sits beside Django for good reason. Data work, automation scripts, API clients, and machine-assisted workflows all speak the same language. That reduces handoffs between “the web team” and “the automation team,” which is often where projects quietly leak time.</p>
+
+<h3>What Django is not for</h3>
+<p>We are honest about boundaries. If you only need a marketing brochure with almost no backend logic, a lighter CMS or static site may be enough. If you need ultra-specialized real-time event streaming at massive scale from day one, we may layer Node.js services or dedicated workers beside a Django core rather than forcing every concern into one process. The goal is fit, not ideology.</p>
+
+<h2>The frontend people actually use: React and TypeScript</h2>
+<p>A strong backend without a usable interface is unfinished work. We build modern frontend experiences with <strong>React</strong>, and we prefer <strong>TypeScript</strong> when the UI has enough moving parts that plain JavaScript starts to hide bugs until production.</p>
+
+<p>In practice that means:</p>
+<ul>
+  <li>Component patterns that stay consistent across pages</li>
+  <li>Accessible forms and navigation, not only polished visuals</li>
+  <li>Clear contracts between API responses and UI state</li>
+  <li>Performance habits that respect Core Web Vitals instead of shipping megabytes of unused script</li>
+</ul>
+
+<p><strong>Node.js</strong> shows up when we need API gateways, realtime helpers, build tooling, or services that sit comfortably in the JavaScript ecosystem. We do not force every backend into Node, and we do not force every UI into React. We choose what your team can support after we leave.</p>
+
+<h2>PostgreSQL: the quiet hero of reliable products</h2>
+<p>If Django is the application spine, <strong>PostgreSQL</strong> is often the memory that keeps the business honest. Relational integrity, transactions, and mature tooling beat “we’ll fix the data later” almost every time for operational systems.</p>
+
+<p>We design schemas with growth in mind: indexing for the queries you will actually run, constraints that prevent invalid states, and migrations that can be reviewed like any other change. Fancy database choices are interesting. Predictable backups and restore drills are what save weekends.</p>
+
+<h2>Shipping and running it: Docker and AWS</h2>
+<p>Code that only works on one laptop is not a product. We containerize with <strong>Docker</strong> so environments stay closer between development, staging, and production. On the cloud side, <strong>AWS</strong> is a common home for our clients — compute, managed databases, object storage, networking, and monitoring — but we size resources to the workload instead of copying a generic enterprise diagram.</p>
+
+<p>Consultation engagements often start here: what do you already run, what is overbuilt, what is under-observed, and what would a sensible next six months look like? Cost control and security baselines are part of that conversation, not an afterthought sold as a separate package.</p>
+
+<h2>Automation that respects how people work</h2>
+<p>Custom software is not the only lever. Many organizations already have CRMs, spreadsheets, email inboxes, ERP screens, and partner portals. Connecting those systems — or automating the boring path between them — can unlock more value than a brand-new app.</p>
+
+<p>Our automation toolkit is intentional:</p>
+<ul>
+  <li><strong>n8n</strong> for visual, maintainable workflows that connect APIs, email, sheets, and internal services</li>
+  <li><strong>Robocorp</strong> for structured back-office and ERP-style bots where reliability and audit trails matter</li>
+  <li><strong>Playwright</strong> for modern browser automation when a portal has no clean API</li>
+  <li><strong>Selenium</strong> when existing suites or legacy environments still need browser coverage</li>
+</ul>
+
+<p>We care about failure modes. Automations should retry thoughtfully, log clearly, and escalate to a human when something looks wrong. A silent bot that “usually works” is a liability wearing a productivity costume.</p>
+
+<h2>How these pieces become solutions, not a pile of tools</h2>
+<p>Here is a simplified picture of how engagements often land:</p>
+
+<h3>1. Custom web platforms and internal tools</h3>
+<p>Django + PostgreSQL power the domain logic. React + TypeScript deliver the day-to-day interface. Docker packages the app. AWS hosts it with monitoring and backups. The result might be a client portal, an operations dashboard, a content-backed marketing site with a real admin, or a multi-tenant SaaS MVP.</p>
+
+<h3>2. Process automation beside the product</h3>
+<p>Once the system of record exists, n8n and Robocorp can move data between tools, generate documents, sync statuses, or prepare reports. Playwright steps in when a third-party website is the only interface available. The product and the automation reinforce each other instead of competing.</p>
+
+<h3>3. Outsourcing and dedicated delivery</h3>
+<p>Some clients do not need advice about frameworks; they need capacity. We plug in as a dedicated squad or as staff augmentation for backend, frontend, QA, and DevOps roles. You keep visibility through shared boards, demos, and a clear point of contact. The same stack preferences apply: maintainability over clever shortcuts.</p>
+
+<h3>4. Consultation before a big bet</h3>
+<p>If you are mid-rewrite, mid-migration, or unsure whether to automate or rebuild, we help you choose. Architecture reviews, cloud readiness, security baselines, and prioritized roadmaps are useful precisely because they reduce expensive thrash later.</p>
+
+<h2>A human process, not a slide deck</h2>
+<p>Tools do not replace conversation. Our delivery rhythm is deliberately plain:</p>
 <ol>
-  <li><strong>Rightsizing:</strong> Downgraded 34 EC2 instances to appropriate sizes, saving $3,800/month immediately.</li>
-  <li><strong>Reserved Instances:</strong> Converted baseline workloads to 1-year Convertible RIs, locking in a 40% discount.</li>
-  <li><strong>S3 Intelligent Tiering:</strong> Enabled lifecycle rules moving objects to Glacier after 30 days of inactivity.</li>
-  <li><strong>Dev/Staging separation:</strong> Moved non-production RDS to Single-AZ and scaled down instance classes.</li>
-  <li><strong>Tagging strategy:</strong> Implemented a mandatory cost-centre tagging policy enforced via AWS Config rules.</li>
+  <li><strong>Discovery</strong> — goals, constraints, success metrics, and what “done” should feel like</li>
+  <li><strong>Architecture and stack fit</strong> — what to build, what to integrate, what to automate</li>
+  <li><strong>Iterative delivery</strong> — working software in short cycles, not a big reveal after months of silence</li>
+  <li><strong>Hardening</strong> — tests, accessibility, performance, and security checks that match the risk</li>
+  <li><strong>Launch and ownership</strong> — documentation, handoff, and support options including responsive help when production needs attention</li>
+</ol>
+<p>We are Nepal-based and oriented toward international collaboration. That means overlapping hours where they help, async updates where they do not, and communication habits that treat your product as shared work — not a black box.</p>
+
+<h2>SEO and content systems: why the stack matters beyond “features”</h2>
+<p>Many of our clients care about discoverability as much as functionality. A Django-backed site can own clean URLs, structured metadata, sitemaps, and editorial workflows without bolting five plugins onto a fragile theme. Pair that with a fast React experience where interactivity is needed, and you get pages that are both useful to humans and understandable to search engines.</p>
+<p>The same discipline applies to blog and knowledge content: clear titles, honest excerpts, readable headings, and internal links to services and contact paths. This article itself is written that way on purpose.</p>
+
+<h2>Common questions we hear</h2>
+<h3>Can you work with an existing codebase?</h3>
+<p>Yes. Many projects start with a review of what you already have. Sometimes the right move is a careful Django upgrade and cleanup. Sometimes it is extracting an automation layer before touching the core app. We prefer evidence over a rewrite-for-rewrite’s-sake.</p>
+
+<h3>Do you only use Django?</h3>
+<p>No. Django is a strong default for many product backends, but Node.js, React, Flutter or React Native for mobile, and automation-first stacks are all in play depending on the problem. The homepage tech stack you see — Python, Django, React, Node.js, PostgreSQL, AWS, Docker, TypeScript, Playwright, Robocorp, n8n, Selenium — is a map of what we use most often, not a prison.</p>
+
+<h3>How do you handle support after launch?</h3>
+<p>Production systems do not wait for office hours. We offer support models that match how critical the system is, with clear escalation paths so issues are handled quickly and documented.</p>
+
+<h2>When you should talk to us</h2>
+<p>Reach out if any of these sound familiar:</p>
+<ul>
+  <li>You need a custom web or mobile product and want a team that will still care about the code next year</li>
+  <li>Your staff are drowning in repetitive portal work that could be automated safely</li>
+  <li>You want an outsourcing partner who communicates like a teammate, not a ticket queue</li>
+  <li>You need architecture or cloud advice before committing budget to a rewrite</li>
+</ul>
+<p>We are glad to start with a short discovery conversation, map constraints and success metrics, then propose a scoped approach with timeline and investment options.</p>
+
+<h2>Closing thought</h2>
+<p>Technology choices are easy to romanticize and hard to live with. Django, React, PostgreSQL, Docker, AWS, and a thoughtful automation layer have earned their place in our work because they help real teams ship, sleep, and iterate. If that is the kind of partnership you want, <a href="/#contact">contact Proxy Soft</a> and tell us what you are trying to make more reliable.</p>""",
+        "is_published": True,
+        "published_at": timezone.now() - timezone.timedelta(days=35),
+        "meta_title": "Django Tech Stack & Digital Solutions | Proxy Soft",
+        "meta_description": "How Proxy Soft builds digital products with Django, React, PostgreSQL, AWS, and automation using n8n, Robocorp, and Playwright — practical, maintainable solutions.",
+    },
+    {
+        "title": "When to Choose Django for Your Next Web Product (And When Not To)",
+        "slug": "when-to-choose-django-for-web-product",
+        "excerpt": (
+            "Django is powerful, but it is not magic for every brief. Here is how Proxy Soft "
+            "decides when Django is the right backbone for a product — and when a lighter or "
+            "different approach will serve you better."
+        ),
+        "content": """<p>Choosing a backend framework can feel like picking a personality for your company. Teams argue about speed, “modern stacks,” and what looks impressive on a hiring post. At Proxy Soft we try to ask a quieter question first: <strong>what must this system still be able to do in eighteen months?</strong></p>
+
+<p><strong>Django</strong> is often our answer for serious web products — not because it is trendy, but because it is coherent. Authentication, admin, forms, migrations, permissions, and a clear project layout arrive as a shared language instead of a pile of disconnected packages.</p>
+
+<h2>Django is a strong fit when…</h2>
+<ul>
+  <li>You need a real domain model (users, roles, workflows, approvals) that will keep growing</li>
+  <li>Non-engineers must manage content or operations through an admin without a second custom CMS</li>
+  <li>Security defaults matter: sessions, CSRF protection, password hashing, and predictable permission checks</li>
+  <li>You want Python continuity for APIs, scripts, reporting, and later automation work</li>
+  <li>You expect multiple developers to join the codebase and understand it without tribal folklore</li>
+</ul>
+
+<p>In those cases we typically pair Django with <strong>PostgreSQL</strong>, containerize with <strong>Docker</strong>, and host on <strong>AWS</strong> with monitoring and backups that match the risk of the product.</p>
+
+<h2>Consider something else when…</h2>
+<ul>
+  <li>The site is mostly static marketing pages with almost no business logic</li>
+  <li>You need an ultra-specialized realtime service that is cleaner as a focused Node.js worker beside a smaller core</li>
+  <li>The primary problem is integration between existing tools, not a new system of record — automation with n8n or Robocorp may come first</li>
+</ul>
+
+<h2>How we decide with clients</h2>
+<p>We start with discovery: users, constraints, compliance, integrations, and what “done” means. Then we propose a stack that your team can hire for and maintain. Sometimes that is Django + React. Sometimes it is Django for the core and Node.js for a narrow service. Sometimes it is automation first, product second.</p>
+
+<p>If you are weighing a rewrite or a greenfield build, <a href="/#contact">talk to Proxy Soft</a>. We would rather help you choose the boring right option than sell you the exciting wrong one.</p>""",
+        "is_published": True,
+        "published_at": timezone.now() - timezone.timedelta(days=28),
+        "meta_title": "When to Choose Django for Your Web Product | Proxy Soft",
+        "meta_description": "Practical guidance from Proxy Soft on when Django is the right backend for a web product — and when a lighter or automation-first approach is smarter.",
+    },
+    {
+        "title": "React and TypeScript Frontends That Stay Maintainable",
+        "slug": "react-typescript-maintainable-frontends",
+        "excerpt": (
+            "Pretty interfaces age badly when the component tree becomes a maze. Learn how "
+            "Proxy Soft builds React and TypeScript frontends that stay clear, accessible, "
+            "and connected cleanly to Django APIs."
+        ),
+        "content": """<p>A backend can be perfect and still feel broken if the interface fights the people using it. That is why our product work treats the frontend as part of the solution — not a coat of paint applied at the end.</p>
+
+<p>At Proxy Soft we build many client-facing and internal interfaces with <strong>React</strong>, and we reach for <strong>TypeScript</strong> when the UI has enough state and API surface that plain JavaScript starts hiding bugs until a user finds them.</p>
+
+<h2>What “maintainable” looks like in practice</h2>
+<ul>
+  <li><strong>Consistent components</strong> — buttons, forms, tables, and empty states behave the same across pages</li>
+  <li><strong>Typed contracts</strong> — API responses and UI models stay aligned so refactors do not become archaeology</li>
+  <li><strong>Accessible defaults</strong> — keyboard flows, labels, contrast, and focus states are not optional polish</li>
+  <li><strong>Performance habits</strong> — ship what the page needs; respect Core Web Vitals instead of bundling everything “just in case”</li>
+</ul>
+
+<h2>Working with Django backends</h2>
+<p>Most of our React apps talk to Django (or Django REST-style APIs) as the system of record. That split keeps business rules close to the data while letting the UI iterate quickly. We document endpoints, error shapes, and auth expectations so frontend and backend work does not drift into conflicting assumptions.</p>
+
+<p><strong>Node.js</strong> still appears where it earns its keep: build tooling, lightweight gateways, or realtime helpers. We do not force every concern into React or every API into Node.</p>
+
+<h2>Mobile and beyond</h2>
+<p>When the workflow needs pockets and offline moments, we extend into mobile with approaches like Flutter or React Native — chosen for the product, not for a portfolio checklist. The principle stays the same: clear ownership, readable code, and a handoff your team can live with.</p>
+
+<p>Need a frontend partner who will still care about the component library next year? <a href="/#contact">Start a conversation with Proxy Soft</a>.</p>""",
+        "is_published": True,
+        "published_at": timezone.now() - timezone.timedelta(days=21),
+        "meta_title": "Maintainable React & TypeScript Frontends | Proxy Soft",
+        "meta_description": "How Proxy Soft designs React and TypeScript frontends that stay accessible, performant, and cleanly integrated with Django-powered products.",
+    },
+    {
+        "title": "Practical RPA: n8n, Robocorp, and Playwright Without the Hype",
+        "slug": "practical-rpa-n8n-robocorp-playwright",
+        "excerpt": (
+            "Automation should save hours, not create a second job babysitting bots. "
+            "Here is how Proxy Soft uses n8n, Robocorp, Playwright, and Selenium to "
+            "automate real work with audit trails and human fallbacks."
+        ),
+        "content": """<p>Every company has a process that looks harmless on a whiteboard and expensive in real life: copy from portal A, paste into spreadsheet B, upload to system C, then ping someone on Slack. Robotic process automation is useful when it removes that grind without inventing a fragile robot that only one contractor understands.</p>
+
+<p>Proxy Soft’s automation work is deliberately practical. We match the tool to the problem:</p>
+<ul>
+  <li><strong>n8n</strong> — visual workflows that connect CRMs, email, sheets, webhooks, and internal APIs</li>
+  <li><strong>Robocorp</strong> — structured bots for back-office and ERP-style operations where reliability matters</li>
+  <li><strong>Playwright</strong> — modern browser automation when a partner portal has no usable API</li>
+  <li><strong>Selenium</strong> — coverage for legacy suites and environments that still depend on it</li>
+</ul>
+
+<h2>What we optimize for</h2>
+<p>Speed demos are easy. Trust is harder. We design automations with:</p>
+<ol>
+  <li>Clear inputs and outputs so failures are obvious</li>
+  <li>Retries that are thoughtful instead of infinite</li>
+  <li>Logs someone can read during an incident</li>
+  <li>Escalation to a human when data looks wrong</li>
+  <li>Documentation so the bot is not tribal knowledge</li>
 </ol>
 
-<h2>The Result</h2>
-<p>Monthly AWS spend dropped from $18,200 to $9,900 — a 45.6% reduction — within 8 weeks, with zero production downtime. The new tagging strategy gave RetailMax's finance team per-store cost visibility for the first time.</p>
+<h2>Automation beside custom software</h2>
+<p>Often the best answer is both: a Django or Node-backed system of record, plus n8n/Robocorp flows that move status, documents, and notifications between tools your team already uses. That combination tends to beat “rip everything out and rebuild” for mid-sized operations teams.</p>
 
-<blockquote>The cloud migration project was flawless — zero downtime, 45% cost reduction, and our team was fully productive on day one. Proxy Soft exceeded every benchmark we set. — David Kim, VP Engineering</blockquote>
-
-<h2>Key Takeaways</h2>
-<p>Cloud cost optimisation isn't a one-time task. We set up monthly Cost Anomaly Detection alerts and quarterly review cadences so RetailMax can stay lean as their infrastructure evolves.</p>""",
-        "is_published": True,
-        "published_at": timezone.now(),
-        "meta_title": "How We Cut Cloud Costs by 45% for a Retail Client | Proxy Soft",
-        "meta_description": "A detailed case study on how Proxy Soft reduced AWS infrastructure spend by 45% for a Southeast Asian retail chain — with zero downtime.",
-    },
-    {
-        "title": "Why Nepal Is Becoming a Top Destination for Software Outsourcing",
-        "slug": "nepal-software-outsourcing-destination",
-        "excerpt": (
-            "Cost-competitive talent, strong English proficiency, a growing developer community, "
-            "and a time zone that overlaps with both Europe and Asia — here's why more global "
-            "companies are choosing Nepal for their technology outsourcing needs."
-        ),
-        "content": """<h2>The Shifting Landscape of Outsourcing</h2>
-<p>For years, India, the Philippines, and Eastern Europe dominated the global software outsourcing market. But the landscape is shifting. Rising salaries in Bangalore, Manila, and Warsaw, combined with a new generation of highly skilled developers in Nepal, are creating a compelling alternative.</p>
-
-<h2>Talent Quality and Availability</h2>
-<p>Nepal produces over 8,000 engineering graduates annually, with the majority in computer science and IT disciplines. Institutions like Tribhuvan University, Kathmandu University, and a growing number of private colleges are turning out developers who are fluent in modern stacks — React, Django, Flutter, Node.js, and cloud platforms.</p>
-
-<p>Critically, Nepal's developer community has strong ties to the international tech ecosystem. Many senior engineers have worked remotely for US, UK, German, and Australian companies for years, building communication habits and code quality standards that match global expectations.</p>
-
-<h2>The Cost Advantage</h2>
-<p>Senior full-stack developers in Nepal command salaries of $12,000–$24,000/year — a fraction of equivalent talent in Western markets, and still competitive with India and the Philippines when you factor in quality and communication overhead.</p>
-
-<h2>Time Zone Advantages</h2>
-<p>Nepal Standard Time (UTC+5:45) offers genuine overlap with:</p>
+<h2>A simple discovery checklist</h2>
 <ul>
-  <li><strong>Europe:</strong> 3–4 hours of shared business hours with the UK and Central Europe</li>
-  <li><strong>Australia:</strong> 4–5 hours of overlap with AEDT, making handoffs smooth</li>
-  <li><strong>US East Coast:</strong> Async-first with morning handoffs that work well for agile sprints</li>
+  <li>How often does the process run, and what is the cost of a mistake?</li>
+  <li>Is there an API, or only a browser UI?</li>
+  <li>Who owns the process after go-live?</li>
+  <li>What should happen when the third-party site changes overnight?</li>
 </ul>
 
-<h2>How Proxy Soft Bridges the Gap</h2>
-<p>At Proxy Soft, we've built our processes around international collaboration from day one. We use Jira for sprint management, Slack for communication, GitHub for code review, and Loom for async video updates — ensuring our clients feel as though their Nepal-based team is down the corridor, not across the globe.</p>
-
-<p>If you're considering outsourcing your next project, <a href="/#contact">get in touch</a> — we'd be happy to discuss how we can become your engineering partner.</p>""",
+<p>If your team is drowning in repetitive portal work, <a href="/#contact">tell us about the workflow</a>. We will help you decide what to automate, what to rebuild, and what to leave alone.</p>""",
         "is_published": True,
-        "published_at": timezone.now(),
-        "meta_title": "Why Nepal Is a Top Destination for Software Outsourcing | Proxy Soft",
-        "meta_description": "Explore why Nepal is emerging as a premier software outsourcing destination — competitive talent, English proficiency, and a favourable time zone.",
+        "published_at": timezone.now() - timezone.timedelta(days=14),
+        "meta_title": "Practical RPA with n8n, Robocorp & Playwright | Proxy Soft",
+        "meta_description": "Proxy Soft’s practical approach to RPA using n8n, Robocorp, Playwright, and Selenium — reliable automation with logs, retries, and human fallbacks.",
     },
     {
-        "title": "From Wireframe to Launch: Our 6-Step Web Development Process",
-        "slug": "web-development-process-6-steps",
+        "title": "Project Outsourcing That Feels Like an Extension of Your Team",
+        "slug": "project-outsourcing-dedicated-team-proxy-soft",
         "excerpt": (
-            "Great websites don't happen by accident. Behind every fast, accessible, and "
-            "conversion-optimised site is a disciplined process. Here's exactly how we take "
-            "a project from the first conversation to a live, production-ready product."
+            "Outsourcing fails when communication becomes a ticket queue. See how Proxy Soft "
+            "runs dedicated squads and staff augmentation with agile delivery, shared boards, "
+            "and ownership from kickoff to handoff."
         ),
-        "content": """<h2>Why Process Matters</h2>
-<p>We've seen what happens when web projects lack structure: scope creep, missed deadlines, unclear ownership, and products that don't match the original vision. Our 6-step process exists to prevent exactly that — giving clients full visibility at every stage while keeping our team aligned and moving fast.</p>
+        "content": """<p>“Outsourcing” has earned a mixed reputation — sometimes deserved. Black-box vendors, timezone silence, and surprise rewrites can make leaders swear they will never try again. Our view at Proxy Soft is simpler: <strong>remote delivery works when it behaves like teamwork</strong>.</p>
 
-<h2>Step 1: Discovery & Requirements</h2>
-<p>Every project starts with a structured kick-off: we map your business objectives, target audience, competitive landscape, and technical constraints. We use this phase to surface the questions that kill projects later — what does success look like? Who approves decisions? What integrations are non-negotiable?</p>
-<p>Deliverable: a <strong>Project Brief</strong> document signed off by both parties.</p>
-
-<h2>Step 2: Information Architecture & Wireframes</h2>
-<p>Before a single pixel of design is committed, we map the site's structure, user flows, and content hierarchy. Low-fidelity wireframes let us move quickly and iterate without the cost of changing polished designs.</p>
-<p>Deliverable: annotated wireframes in Figma, reviewed and approved by the client.</p>
-
-<h2>Step 3: UI/UX Design</h2>
-<p>With structure agreed, our designers bring the wireframes to life. We build a design system (colours, typography, spacing, component library) before designing individual pages — ensuring consistency and making handoff to development frictionless.</p>
-<p>Deliverable: high-fidelity Figma prototype with a linked component library.</p>
-
-<h2>Step 4: Development</h2>
-<p>We work in two-week sprints, shipping working software at the end of each cycle. Our tech stack defaults — Django/Next.js for most web projects — are chosen for performance, developer productivity, and long-term maintainability, not trends.</p>
-<p>Code review is mandatory. Every pull request is reviewed by a senior engineer before merging.</p>
-
-<h2>Step 5: QA & Testing</h2>
-<p>Testing isn't a phase at the end — it runs in parallel with development. We write unit and integration tests as we build, and run a dedicated QA cycle before launch covering:</p>
+<h2>Engagement models we offer</h2>
 <ul>
-  <li>Cross-browser and cross-device testing (Chrome, Firefox, Safari, Edge; iOS and Android)</li>
-  <li>Performance profiling (Core Web Vitals, Lighthouse scores)</li>
-  <li>Accessibility audit (WCAG 2.1 AA compliance)</li>
-  <li>Security scan (OWASP Top 10 checklist)</li>
+  <li><strong>Dedicated squads</strong> for product builds and feature roadmaps</li>
+  <li><strong>Staff augmentation</strong> for backend, frontend, QA, and DevOps roles</li>
+  <li><strong>Fixed-scope delivery</strong> for MVPs, migrations, and internal tools</li>
 </ul>
 
-<h2>Step 6: Launch & Handover</h2>
-<p>Launch day isn't the end — it's a milestone. We deploy to production with a rollback plan ready, monitor error rates and performance for 48 hours post-launch, and then hand over full documentation: architecture overview, deployment guide, admin manual, and a recorded walkthrough for your team.</p>
-<p>Post-launch support is available as a monthly retainer or on an ad-hoc basis.</p>
+<p>You keep visibility through weekly demos, shared boards, and a single point of contact. We optimize for long-term maintainability — not short-term shortcuts that look fast in month one and expensive in month six.</p>
 
-<h2>Ready to Start?</h2>
-<p>If you'd like to discuss your next web project, <a href="/#contact">reach out here</a> — we'll schedule a free 30-minute discovery call to see if we're a good fit.</p>""",
+<h2>How we collaborate day to day</h2>
+<p>We are Nepal-based and oriented toward international clients. That means overlapping hours where they help, async updates where they do not, and habits that make progress inspectable: pull requests, written decisions, and demos of working software.</p>
+
+<p>Technically, outsourcing engagements still sit on the same stack preferences you see across our work — Django and Python for durable backends, React and TypeScript for interfaces, PostgreSQL for data integrity, Docker and AWS for deployable environments, plus automation tools when process work should not stay manual.</p>
+
+<h2>What good handoff looks like</h2>
+<p>When a phase ends, you should own more than a zip file. Architecture notes, environment setup, admin guides, and a clear map of what is automated versus what is custom code are part of delivery. If you want us to stay for support, we can. If you want your internal team to take over, we plan for that from the start.</p>
+
+<p>If your roadmap is full and your bench is not, <a href="/#contact">explore an outsourcing partnership with Proxy Soft</a>.</p>""",
         "is_published": True,
-        "published_at": timezone.now(),
-        "meta_title": "From Wireframe to Launch: Our 6-Step Process | Proxy Soft",
-        "meta_description": "A detailed look at how Proxy Soft takes a web project from discovery through to a live, production-ready product in six structured steps.",
+        "published_at": timezone.now() - timezone.timedelta(days=7),
+        "meta_title": "Software Project Outsourcing & Dedicated Teams | Proxy Soft",
+        "meta_description": "How Proxy Soft delivers project outsourcing with dedicated squads, staff augmentation, agile demos, and maintainable Django and React codebases.",
+    },
+    {
+        "title": "IT Consultation That Prioritizes Outcomes Over Buzzwords",
+        "slug": "it-consultation-architecture-cloud-security",
+        "excerpt": (
+            "Need clarity before a rewrite, cloud move, or security push? Proxy Soft’s "
+            "IT consultation pairs architecture reviews with practical roadmaps — cloud, "
+            "cost, and risk included — so you invest with eyes open."
+        ),
+        "content": """<p>Technology advice is cheap when it is vague. “Move to the cloud,” “add AI,” and “microservices everything” sound decisive in a meeting and expensive in a budget. Proxy Soft’s consultation work is built for founders and IT leaders who need a path they can execute — with or without us building the whole thing.</p>
+
+<h2>Where we typically help</h2>
+<ul>
+  <li><strong>Architecture reviews</strong> for new products or aging systems that feel brittle</li>
+  <li><strong>Technology selection</strong> — when Django, Node.js, React, or an automation-first approach is the better bet</li>
+  <li><strong>Cloud readiness and cost control</strong> on platforms like AWS</li>
+  <li><strong>Security and compliance baselines</strong> matched to your actual risk, not a generic checklist printout</li>
+  <li><strong>Roadmaps</strong> that balance quick wins with sustainable scale</li>
+</ul>
+
+<h2>What you leave with</h2>
+<p>A useful consultation ends with prioritized recommendations, estimated effort, and an implementation sequence. Sometimes that means stabilize PostgreSQL backups before rewriting the UI. Sometimes it means extract an n8n workflow before touching the monolith. Sometimes it means Dockerize what you have so staging stops lying to you.</p>
+
+<h2>Consultation into delivery</h2>
+<p>Many clients start with advice and continue into build: web/app development, RPA, or a dedicated outsourcing squad. That continuity helps because the people who mapped the constraints are not strangers to the people writing the code. Still, you are never locked in — the point of good consultation is optionality.</p>
+
+<p>If you are mid-decision on a rewrite, migration, or automation program, <a href="/#contact">book a discovery conversation</a>. We will help you spend the next quarter on the work that actually moves the business.</p>""",
+        "is_published": True,
+        "published_at": timezone.now() - timezone.timedelta(days=2),
+        "meta_title": "IT Consultation: Architecture, Cloud & Security | Proxy Soft",
+        "meta_description": "Outcome-focused IT consultation from Proxy Soft — architecture reviews, AWS cloud guidance, security baselines, and roadmaps you can actually execute.",
     },
 ]
+
+# Previous blog slugs managed by this seeder (removed on sync)
+BLOG_MANAGED_SLUGS = {
+    *(p["slug"] for p in BLOG_POSTS_DATA),
+    "cut-cloud-costs-retail-client",
+    "nepal-software-outsourcing-destination",
+    "web-development-process-6-steps",
+}
+
 
 
 # ─────────────────────────── command ──────────────────────────────────────────
@@ -924,22 +1121,30 @@ class Command(BaseCommand):
 
     def _seed_blog(self, flush):
         label = "Blog Posts"
-        qs = BlogPost.objects.filter(slug__in=[p["slug"] for p in BLOG_POSTS_DATA])
-        if qs.exists() and not flush:
-            self._skip(label, qs.count())
-            return
+        managed_qs = BlogPost.objects.filter(slug__in=BLOG_MANAGED_SLUGS)
         if flush:
-            qs.delete()
+            managed_qs.delete()
+        else:
+            # Always remove obsolete managed posts so old seed articles disappear
+            obsolete = BLOG_MANAGED_SLUGS - {p["slug"] for p in BLOG_POSTS_DATA}
+            if obsolete:
+                BlogPost.objects.filter(slug__in=obsolete).delete()
 
-        # Use first superuser as author if available, otherwise None
         author = User.objects.filter(is_superuser=True).order_by("date_joined").first()
         if not author:
             author = User.objects.filter(is_staff=True).order_by("date_joined").first()
 
         created = 0
+        updated = 0
         for data in BLOG_POSTS_DATA:
-            BlogPost.objects.create(author=author, **data)
-            created += 1
+            obj, was_created = BlogPost.objects.update_or_create(
+                slug=data["slug"],
+                defaults={**data, "author": author},
+            )
+            if was_created:
+                created += 1
+            else:
+                updated += 1
 
         author_label = author.username if author else "no author (create a superuser)"
-        self._ok(label, created, f"created  [author: {author_label}]")
+        self._ok(label, created + updated, f"created={created} updated={updated}  [author: {author_label}]")
